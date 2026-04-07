@@ -2075,6 +2075,103 @@ function copyPrompt(btn, id) {
   });
 }
 
+// ===== SECURITY DATA =====
+const securityRulesData = [
+  {"id":"sec_001","category":"NG入力","title":"設備ID・製造番号・シリアル番号","detail":"受変電設備・PLC・計装機器等の個体を特定できる番号は入力禁止。設備種別レベルの表現に置き換えること。","example":"「インバータ INV-2301」→NG。「インバータ（動力ライン用）」→OK","risk":"設備構成の特定・サイバー攻撃の足がかりになる可能性がある"},
+  {"id":"sec_002","category":"NG入力","title":"個人情報（氏名・社員番号・連絡先）","detail":"社員・取引先担当者の氏名、社員番号、メールアドレス、電話番号は入力禁止。","example":"「担当の山田太郎（社員番号12345）に連絡」→NG。「担当者へ連絡」→OK","risk":"個人情報保護法違反・情報漏洩による本人への被害"},
+  {"id":"sec_003","category":"NG入力","title":"未決裁の設備投資金額・稟議内容","detail":"承認前の投資額・比較見積金額・発注先候補など、意思決定プロセス中の情報は入力禁止。","example":"「A社見積500万円、B社480万円で稟議中」→NG","risk":"競合他社への情報流出・取引上の不利益・コンプライアンス違反"},
+  {"id":"sec_004","category":"NG入力","title":"取引先名・契約金額・見積金額","detail":"仕入先・メーカー・工事業者の社名と、そこへの発注金額・見積金額の組み合わせは入力禁止。","example":"「〇〇電機への年間保守契約額は120万円」→NG","risk":"取引情報の漏洩・競合他社への情報流出・取引先との信頼毀損"},
+  {"id":"sec_005","category":"NG入力","title":"システムのIPアドレス・ネットワーク構成","detail":"SCADA・DCS・電力監視システムのIPアドレス、ネットワーク構成図、通信プロトコルの詳細は入力禁止。","example":"「SCADAサーバー 192.168.1.xx、PLCは同セグメント」→NG","risk":"制御システムへの不正アクセス・サイバー攻撃リスクの増大"},
+  {"id":"sec_006","category":"NG入力","title":"ログイン情報・認証情報","detail":"社内システム・設備・クラウドサービスのID・パスワード・APIキーは絶対に入力しない。","example":"「PLCプログラムログイン user: admin, pass: xxxx」→NG","risk":"システムへの不正ログイン・情報資産の全損リスク"},
+  {"id":"sec_007","category":"NG入力","title":"工場レイアウト・防爆区域の詳細位置情報","detail":"危険区域（防爆エリア）の具体的な位置、設備配置図、構内マップは入力禁止。","example":"「第2製造棟B区画が防爆Zone1。換気設備は北側」→NG","risk":"保安上の脆弱点の特定・外部からの標的型攻撃リスク"},
+  {"id":"sec_008","category":"NG入力","title":"未公表の生産数量・品質トラブル情報","detail":"未公開の生産計画・品質問題・クレーム内容・製品ロット情報は入力禁止。","example":"「〇月に〇ラインで品質逸脱が発生、ロット番号はXXX」→NG","risk":"インサイダー情報漏洩・顧客信頼の毀損・法的リスク"},
+  {"id":"sec_009","category":"OK入力","title":"設備「種別」レベルの技術情報","detail":"インバータ・モーター・保護リレーなど種別レベルの情報は、個体を特定しない範囲でOK。","example":"「三相誘導モーターの過電流保護協調について教えて」→OK","risk":null},
+  {"id":"sec_010","category":"OK入力","title":"公開済みの技術規格・法令情報","detail":"電技解釈・JIS・IEC規格・消防法・労働安全衛生法など公開情報の調査・解説依頼はOK。","example":"「電技解釈第17条の接地工事種類を整理して」→OK","risk":null},
+  {"id":"sec_011","category":"OK入力","title":"匿名化した業務シナリオ","detail":"個体ID・氏名・社名を除いた業務シナリオや課題の相談は安全に入力できる。","example":"「製造ラインのPLC通信エラーが繰り返す。原因仮説を出して」→OK","risk":null},
+  {"id":"sec_012","category":"OK入力","title":"文章校正・英語翻訳","detail":"機密情報を含まないメール文面・報告書の校正、仕様書の英訳はOK。固有名詞は事前に除くこと。","example":"「この社内連絡文を敬語に直して」「仕様条件を英訳して」→OK","risk":null},
+  {"id":"sec_013","category":"OK入力","title":"一般的な計算式・数値計算","detail":"電流・電力・絶縁抵抗・ケーブルサイズ等の計算は、一般値・仮の数値を使えばOK。","example":"「三相200V 15kWモーターの定格電流を概算して」→OK","risk":null},
+  {"id":"sec_014","category":"OK入力","title":"研修・勉強会の資料作成支援","detail":"電験3種学習・社内技術研修・安全教育の資料作成は機密情報を含まない範囲でOK。","example":"「接地工事の種類を新入社員向けにわかりやすく説明する資料を作って」→OK","risk":null},
+  {"id":"sec_015","category":"境界線","title":"過去トラブルの概要（設備ID除き）","detail":"設備IDや日時・ライン名を除いた種別レベルのトラブル事象は条件付きOK。学習目的に限る。","example":"「インバータ系のノイズでセンサーが誤動作した事例で対策を考えて」→条件付きOK","risk":null},
+  {"id":"sec_016","category":"境界線","title":"予算規模感（概算・レンジ表現）","detail":"「数百万円規模」「1000万円以下」程度の表現はOK。具体的な金額・取引先との組み合わせはNG。","example":"「数百万円の設備更新案件で稟議書の構成を考えて」→条件付きOK","risk":null},
+  {"id":"sec_017","category":"境界線","title":"社内システムの構成概要（ぼかし版）","detail":"「PLC・DCS・SCADAを併用している製造現場」程度の抽象的な構成説明は条件付きOK。IP・型番は除く。","example":"「PLCとDCSが混在する環境でのデータ収集方式を比較して」→条件付きOK","risk":null},
+  {"id":"sec_018","category":"境界線","title":"仕様要件の相談（メーカー名なし）","detail":"選定中の機器仕様要件は、メーカー名・型番・見積金額を除けば相談可。要件整理までがAIの役割。","example":"「防爆エリア用圧力センサーの選定要件を整理して」→条件付きOK","risk":null}
+];
+
+const securityFAQData = [
+  {"q":"外部AIに入力した内容は学習データとして使われる？","a":"サービスによって異なる。ChatGPT無料版はデフォルトで学習利用される。有料版（Team/Enterprise）やClaude.ai Proは設定でオフにできる。業務利用はM365 Copilotを優先し、外部AIには機密情報を入力しない運用を徹底すること。","category":"基本"},
+  {"q":"AIに入力した情報はどこに保存される？","a":"外部AI（ChatGPT・Claude等）に入力した情報はサービス提供企業のサーバーに送信・保存される。M365 Copilotは社内テナント内で処理され、Microsoftの学習データには使用されない（Enterprise契約前提）。","category":"基本"},
+  {"q":"AIが生成した内容をそのまま社外文書に使っていい？","a":"そのままの使用は禁止。AIは誤情報・古い規格情報を生成する場合がある。特に法令・技術規格・数値は必ず一次情報（電技解釈・JIS原文等）で確認・修正してから使用すること。生成内容の最終責任は使用者にある。","category":"基本"},
+  {"q":"AIツールを業務で使う前に承認は必要？","a":"会社が承認したツール（M365 Copilot等）はそのまま使用可。未承認の外部AIサービスを業務データに使用する場合は上長確認が必要。個人アカウントの無料版サービスへの機密情報入力は不可。","category":"基本"},
+  {"q":"M365 CopilotとChatGPTの情報管理の違いは？","a":"M365 Copilotは社内テナント（Azure）内で処理され、入力データはMicrosoftの学習に使われない。ChatGPT（無料版）は入力データが学習利用される場合がある。機密情報はM365 Copilotのみ使用すること。","category":"M365"},
+  {"q":"M365 CopilotはSharePointやTeamsの社内データを参照する？","a":"する。アクセス権限を持つSharePoint・Teams・Outlookのデータを参照して回答を生成する。機密ファイルのアクセス権限設定が不適切だと意図しない情報が参照される可能性がある。重要ファイルの権限を定期確認すること。","category":"M365"},
+  {"q":"CopilotでExcelの設備データを分析してもいい？","a":"M365テナント内での処理なので外部漏洩リスクは低い。ただし機密度の高いデータ（未決裁の投資額・個人情報等）を含むファイルに対して使用する場合は上長確認を推奨する。","category":"M365"},
+  {"q":"Copilot for Outlookで取引先へのメール返信を作成してもいい？","a":"社内テナント内での処理のため基本的にOK。ただし生成文には禁止表現（「させていただきます」等）が含まれる場合があるため必ず編集してから送信すること。金額・納期・技術仕様の数値は必ず自分で確認・修正すること。","category":"M365"},
+  {"q":"取引先名を出さずにメーカーへの問い合わせメールを作れる？","a":"作れる。「設備メーカーへの問い合わせ」「電気機器メーカー向け」のように抽象化して依頼すればOK。生成後に社名・担当者名・型番等を追記する。金額・納期はプレースホルダーで生成させて自分で記入すること。","category":"外部AI"},
+  {"q":"電験3種の勉強にChatGPTを使っていい？","a":"個人の資格学習は業務機密情報を含まないためOK。ただし計算問題の解法はAIが誤答を生成する場合があるため、過去問の公式解答と照合して使うこと。公式・定義の確認・フェインマン式問答には有効。","category":"外部AI"},
+  {"q":"外部AIで作った文書の著作権はどうなる？","a":"AIが生成したコンテンツの著作権帰属は現時点で法的に不明確。社内文書・稟議・技術資料として使用する場合は「AI生成を素材として担当者が作成」の位置づけで最終的な人間の編集・確認を必ず挟むこと。","category":"外部AI"},
+  {"q":"外部AIに過去トラブルの詳細を入力して原因分析してもいい？","a":"設備ID・日時・ライン名・担当者名を除いた「種別レベル」の記述ならOK。固有情報を含む場合はM365 Copilotを使用するか、情報を匿名化してから外部AIに入力すること。","category":"外部AI"}
+];
+
+let currentSecFilter = 'all';
+let currentFaqFilter = 'all';
+
+function setSecFilter(val, btn) {
+  currentSecFilter = val;
+  document.querySelectorAll('[data-sec]').forEach(b => b.classList.toggle('active', b.dataset.sec === val));
+  renderSecurity();
+}
+
+function setFaqFilter(val, btn) {
+  currentFaqFilter = val;
+  document.querySelectorAll('[data-faq]').forEach(b => b.classList.toggle('active', b.dataset.faq === val));
+  renderSecurityFAQ();
+}
+
+function renderSecurity() {
+  const grid = document.getElementById('security-rules-grid');
+  if (!grid) return;
+  const colorMap = {'NG入力': '#ef4444', 'OK入力': '#22c55e', '境界線': '#f59e0b'};
+  const labelMap = {'NG入力': '🔴 NG', 'OK入力': '🟢 OK', '境界線': '🟡 要判断'};
+  const filtered = currentSecFilter === 'all' ? securityRulesData : securityRulesData.filter(r => r.category === currentSecFilter);
+  grid.innerHTML = filtered.map(r => {
+    const col = colorMap[r.category] || '#64748b';
+    const lbl = labelMap[r.category] || r.category;
+    return `<div class="card" style="border-left:3px solid ${col}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-2)">
+        <span style="font-weight:700;font-size:var(--fs-body)">${r.title}</span>
+        <span style="font-size:var(--fs-sm);background:${col}22;color:${col};border:1px solid ${col}44;border-radius:var(--radius-sm);padding:2px 8px;white-space:nowrap">${lbl}</span>
+      </div>
+      <p style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-2)">${r.detail}</p>
+      <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-sm);padding:var(--sp-2) var(--sp-3);font-size:var(--fs-sm);margin-bottom:${r.risk ? 'var(--sp-2)' : '0'}">
+        <span style="color:var(--color-muted)">例: </span>${r.example}
+      </div>
+      ${r.risk ? `<div style="display:flex;align-items:flex-start;gap:var(--sp-2);font-size:var(--fs-sm);color:#ef4444"><i data-lucide="alert-triangle" style="width:14px;height:14px;flex-shrink:0;margin-top:2px"></i><span>${r.risk}</span></div>` : ''}
+    </div>`;
+  }).join('');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function renderSecurityFAQ() {
+  const list = document.getElementById('security-faq-list');
+  if (!list) return;
+  const catColor = {'基本': '#64748b', 'M365': '#0078d4', '外部AI': '#f59e0b'};
+  const filtered = currentFaqFilter === 'all' ? securityFAQData : securityFAQData.filter(f => f.category === currentFaqFilter);
+  list.innerHTML = filtered.map((f,i) => {
+    const col = catColor[f.category] || '#64748b';
+    return `<div class="accordion-item" onclick="toggleAccordion(this)" style="margin-bottom:var(--sp-3)">
+      <div class="accordion-header" style="display:flex;align-items:center;gap:var(--sp-3)">
+        <span style="font-size:var(--fs-sm);background:${col}22;color:${col};border:1px solid ${col}44;border-radius:var(--radius-sm);padding:2px 8px;white-space:nowrap;flex-shrink:0">${f.category}</span>
+        <span style="font-weight:600;flex:1">${f.q}</span>
+        <i data-lucide="chevron-down" class="accordion-icon" style="width:16px;height:16px;flex-shrink:0;transition:transform var(--transition)"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="font-size:var(--fs-sm);line-height:1.7">${f.a}</p>
+      </div>
+    </div>`;
+  }).join('');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
 // ===== INIT =====
 </script>
 </body>
