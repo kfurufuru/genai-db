@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>生成AI データベース</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.263.1"></script>
+<style>
+:root {
+  /* Slate Frost palette */
+  --color-bg:      #0f172a;
+  --color-bg2:     #1e293b;
+  --color-accent:  #38bdf8;
+  --color-text:    #e2e8f0;
+  --color-muted:   #64748b;
+  --color-border:  rgba(255,255,255,0.08);
+  --color-glass:   rgba(30,41,59,0.7);
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger:  #f87171;
+
+  /* Typography */
+  --font-base: 'Inter', 'Noto Sans JP', sans-serif;
+  --fs-h1:   2rem;
+  --fs-h2:   1.5rem;
+  --fs-h3:   1.25rem;
+  --fs-body: 0.95rem;
+  --fs-sm:   0.85rem;
+  --lh-body: 1.6;
+  --fw-normal: 400;
+  --fw-bold:   700;
+
+  /* Spacing (4px grid) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* Animation */
+  --transition: 0.2s ease;
+  --hover-lift: translateY(-2px);
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-base);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.site-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--sp-8) var(--sp-6);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(56,189,248,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.site-header h1 {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  background: linear-gradient(90deg, #38bdf8, #a78bfa, #38bdf8);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+  letter-spacing: -0.02em;
+}
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.site-header .subtitle {
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  margin-top: var(--sp-2);
+}
+.site-header .updated {
+  font-size: 0.78rem;
+  color: var(--color-accent);
+  margin-top: var(--sp-1);
+  opacity: 0.7;
+}
+
+/* ===== STATS BAR ===== */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  margin-top: var(--sp-4);
+  padding: 0 var(--sp-6);
+}
+.stats-item {
+  background: rgba(56,189,248,0.06);
+  border: 1px solid rgba(56,189,248,0.15);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3) var(--sp-6);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  backdrop-filter: blur(8px);
+  min-width: 130px;
+  text-align: center;
+}
+.stats-item strong {
+  color: var(--color-accent);
+  display: block;
+  font-size: 0.78rem;
+  margin-top: 2px;
+}
+@media (max-width: 768px) {
+  .stats-bar { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+  .stats-item { min-width: unset; }
+}
+
+/* ===== TABS ===== */
+.tab-nav {
+  display: flex;
+  gap: var(--sp-1);
+  padding: var(--sp-4) var(--sp-6);
+  background: var(--color-bg2);
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  font-family: var(--font-base);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+.tab-btn:hover {
+  color: var(--color-text);
+  background: rgba(255,255,255,0.05);
+}
+.tab-btn.active {
+  color: var(--color-accent);
+  background: rgba(56,189,248,0.1);
+  border-color: rgba(56,189,248,0.3);
+}
+.tab-btn svg { width: 14px; height: 14px; }
+
+.tab-panel { display: none; padding: var(--sp-6); }
+.tab-panel.active { display: block; }
+
+/* ===== COMMON COMPONENTS ===== */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--color-bg2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-2) var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+.search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text);
+  font-family: var(--font-base);
+  font-size: var(--fs-body);
+}
+.search-bar input::placeholder { color: var(--color-muted); }
+.search-bar svg { color: var(--color-muted); width: 16px; height: 16px; flex-shrink: 0; }
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-6);
+}
+.filter-btn {
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  font-family: var(--font-base);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.filter-btn:hover { color: var(--color-text); border-color: rgba(255,255,255,0.2); }
+.filter-btn.active {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: rgba(56,189,248,0.1);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--sp-4);
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--sp-4);
+}
+
+.card {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.card:hover {
+  transform: var(--hover-lift);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  border-color: rgba(56,189,248,0.2);
+}
+.card.clickable { cursor: pointer; }
+
+.badge {
+  display: inline-block;
+  padding: 2px var(--sp-2);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.badge-blue   { background: rgba(56,189,248,0.15); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); }
+.badge-green  { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+.badge-yellow { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.badge-orange { background: rgba(251,146,60,0.15); color: #fb923c; border: 1px solid rgba(251,146,60,0.3); }
+.badge-purple { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+.badge-muted  { background: rgba(100,116,139,0.2);  color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+
+/* Accordion */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+.accordion-content.open {
+  max-height: 2000px;
+  opacity: 1;
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ===== TAB 0: ROADMAP ===== */
+.roadmap-list { display: flex; flex-direction: column; gap: var(--sp-4); }
+.roadmap-card {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-6);
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.roadmap-card:hover {
+  transform: var(--hover-lift);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  border-color: rgba(56,189,248,0.2);
+}
+.roadmap-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  background: linear-gradient(180deg, var(--color-accent), #a78bfa);
+}
+.roadmap-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-3);
+}
+.step-num {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(56,189,248,0.3), rgba(167,139,250,0.3));
+  border: 1px solid rgba(56,189,248,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+.roadmap-card h3 { font-size: var(--fs-h3); font-weight: 600; }
+.duration-badge {
+  margin-left: auto;
+  background: rgba(56,189,248,0.1);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: 20px;
+  padding: 2px var(--sp-3);
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+.roadmap-desc { color: var(--color-muted); margin-bottom: var(--sp-4); font-size: var(--fs-sm); }
+.actions-title { font-size: 0.78rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2); }
+.actions-list { list-style: none; display: flex; flex-direction: column; gap: var(--sp-2); }
+.actions-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+.actions-list li input[type="checkbox"] {
+  margin-top: 3px;
+  flex-shrink: 0;
+  width: 14px; height: 14px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+.actions-list li.checked {
+  color: var(--color-muted);
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+.roadmap-progress {
+  margin: var(--sp-3) 0 var(--sp-2);
+}
+.roadmap-progress-bar-bg {
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: var(--sp-1);
+}
+.roadmap-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent), #a78bfa);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.roadmap-progress-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ===== TAB 1: TERMS ===== */
+.term-card { cursor: pointer; }
+.term-header { display: flex; align-items: flex-start; gap: var(--sp-3); }
+.term-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  background: rgba(56,189,248,0.1);
+  border: 1px solid rgba(56,189,248,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+.term-icon svg { width: 16px; height: 16px; }
+.term-title { font-weight: 600; }
+.term-en { font-size: var(--fs-sm); color: var(--color-accent); font-style: italic; }
+.term-short { font-size: var(--fs-sm); color: var(--color-muted); margin-top: var(--sp-1); }
+.term-detail { font-size: var(--fs-sm); color: var(--color-text); margin-bottom: var(--sp-3); }
+.term-example {
+  background: rgba(56,189,248,0.05);
+  border-left: 2px solid var(--color-accent);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.term-example strong { color: var(--color-accent); }
+
+/* ===== TAB 2: TOOLS ===== */
+.tool-card { cursor: pointer; }
+.tool-logo {
+  width: 48px; height: 48px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: var(--fw-bold);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  margin-bottom: var(--sp-3);
+  flex-shrink: 0;
+}
+.tool-header-row { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3); }
+.tool-name { font-size: var(--fs-h3); font-weight: 600; }
+.tool-provider { font-size: var(--fs-sm); color: var(--color-muted); }
+.tool-meta { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.tool-spec-row { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); margin-bottom: var(--sp-2); }
+.tool-spec-label { color: var(--color-muted); width: 90px; flex-shrink: 0; }
+.tool-spec-value { color: var(--color-text); }
+.plus-minus-list { list-style: none; margin-top: var(--sp-2); }
+.plus-minus-list li { display: flex; align-items: flex-start; gap: var(--sp-2); font-size: var(--fs-sm); margin-bottom: var(--sp-1); }
+.plus { color: var(--color-success); flex-shrink: 0; }
+.minus { color: var(--color-danger); flex-shrink: 0; }
+.best-for-box {
+  background: rgba(56,189,248,0.05);
+  border: 1px solid rgba(56,189,248,0.15);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  margin-top: var(--sp-3);
+}
+.best-for-box strong { color: var(--color-accent); }
+.jp-badge-good   { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 4px; padding: 1px 6px; font-size: 0.78rem; }
+.jp-badge-mid    { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); border-radius: 4px; padding: 1px 6px; font-size: 0.78rem; }
+.jp-badge-low    { background: rgba(251,146,60,0.15); color: #fb923c; border: 1px solid rgba(251,146,60,0.3); border-radius: 4px; padding: 1px 6px; font-size: 0.78rem; }
+
+/* ===== TAB 3: CASES ===== */
+.case-filters { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-bottom: var(--sp-6); }
+.filter-group label { font-size: 0.75rem; color: var(--color-muted); display: block; margin-bottom: var(--sp-1); }
+.filter-group select {
+  background: var(--color-bg2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-family: var(--font-base);
+  font-size: var(--fs-sm);
+  padding: var(--sp-2) var(--sp-3);
+  outline: none;
+  cursor: pointer;
+}
+.case-effect {
+  background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.2);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-success);
+  margin: var(--sp-3) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.case-key {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--sp-3);
+  margin-top: var(--sp-3);
+}
+.case-key strong { color: var(--color-accent); }
+.case-meta { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: var(--sp-2) 0 var(--sp-3); }
+
+/* ===== CONCEPT MAP ===== */
+.concept-map-wrap {
+  margin-bottom: var(--sp-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-glass);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+.concept-map-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-accent);
+  user-select: none;
+}
+.concept-map-toggle svg { width: 14px; height: 14px; transition: transform var(--transition); }
+.concept-map-toggle.collapsed svg { transform: rotate(-90deg); }
+.concept-map-body {
+  padding: var(--sp-4) var(--sp-6) var(--sp-6);
+  overflow-x: auto;
+}
+.cmap { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 560px; }
+.cmap-row { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: nowrap; }
+.cmap-node {
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(56,189,248,0.35);
+  background: rgba(56,189,248,0.08);
+  color: var(--color-accent);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.cmap-node:hover { background: rgba(56,189,248,0.2); border-color: var(--color-accent); transform: var(--hover-lift); }
+.cmap-node.highlighted { background: rgba(56,189,248,0.3); border-color: var(--color-accent); box-shadow: 0 0 12px rgba(56,189,248,0.4); }
+.cmap-node.purple { border-color: rgba(167,139,250,0.4); background: rgba(167,139,250,0.1); color: #a78bfa; }
+.cmap-node.purple:hover { background: rgba(167,139,250,0.25); border-color: #a78bfa; }
+.cmap-arr { color: var(--color-muted); font-size: 0.85rem; flex-shrink: 0; }
+.cmap-label { font-size: 0.72rem; color: var(--color-muted); flex-shrink: 0; }
+
+/* ===== TAB 4: CONCEPTS ===== */
+.concept-card { cursor: pointer; }
+.concept-name { font-size: 1rem; font-weight: 600; }
+.concept-name-en { font-size: var(--fs-sm); color: var(--color-accent); font-style: italic; }
+.concept-short { font-size: var(--fs-sm); color: var(--color-muted); margin: var(--sp-2) 0; }
+.concept-how {
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  margin-bottom: var(--sp-3);
+  padding: var(--sp-3);
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+.use-section { margin-bottom: var(--sp-3); }
+.use-section h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2); }
+.use-section.when { --col: #4ade80; }
+.use-section.when-not { --col: #f87171; }
+.use-section h4 { color: var(--col); }
+.use-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.use-list li { display: flex; align-items: flex-start; gap: var(--sp-2); font-size: var(--fs-sm); color: var(--color-text); }
+.use-list li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--col); margin-top: 8px; flex-shrink: 0; }
+.vs-box {
+  background: rgba(167,139,250,0.06);
+  border: 1px solid rgba(167,139,250,0.2);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  margin-bottom: var(--sp-3);
+}
+.vs-box strong { color: #a78bfa; }
+.real-example-box {
+  background: rgba(56,189,248,0.05);
+  border-left: 2px solid var(--color-accent);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* empty state */
+.empty-state {
+  text-align: center;
+  color: var(--color-muted);
+  padding: var(--sp-12);
+}
+
+/* ===== TOOL SELECTOR FLOWCHART (B1) ===== */
+.tool-selector-wrap {
+  background: var(--color-bg2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--sp-6);
+  overflow: hidden;
+}
+.tool-selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-accent);
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition);
+  user-select: none;
+}
+.tool-selector-header:hover { background: rgba(56,189,248,0.05); }
+.tool-selector-chevron { font-size: 0.7rem; transition: transform var(--transition); }
+.tool-selector-chevron.collapsed { transform: rotate(180deg); }
+.tool-selector-body { padding: var(--sp-4) var(--sp-6); overflow: hidden; }
+.tool-selector-body.hidden { display: none; }
+.ts-root { display: flex; flex-direction: column; gap: 0; }
+.ts-label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--sp-2);
+  padding-left: var(--sp-4);
+}
+.ts-branches {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 2px solid rgba(56,189,248,0.3);
+  margin-left: var(--sp-3);
+}
+.ts-branch {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 5px 0;
+}
+.ts-line {
+  width: var(--sp-4);
+  height: 2px;
+  background: rgba(56,189,248,0.3);
+  flex-shrink: 0;
+}
+.ts-node {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+  transition: background var(--transition);
+}
+.ts-node:hover { background: rgba(255,255,255,0.05); }
+.ts-condition { color: var(--color-muted); }
+.ts-arrow { color: var(--color-border); flex-shrink: 0; }
+.ts-tool {
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.ts-sub {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  font-style: italic;
+  width: 100%;
+  padding-left: 0;
+}
+.ts-node--claude .ts-tool  { background: rgba(217,119,6,0.15);  color: #d97706; border: 1px solid rgba(217,119,6,0.3); }
+.ts-node--chatgpt .ts-tool { background: rgba(16,163,127,0.15); color: #10a37f; border: 1px solid rgba(16,163,127,0.3); }
+.ts-node--copilot .ts-tool { background: rgba(0,120,212,0.15);  color: #0078d4; border: 1px solid rgba(0,120,212,0.3); }
+.ts-node--gemini .ts-tool  { background: rgba(66,133,244,0.15); color: #4285f4; border: 1px solid rgba(66,133,244,0.3); }
+.ts-tool--perplexity       { background: rgba(32,178,170,0.15); color: #20b2aa; border: 1px solid rgba(32,178,170,0.3); }
+@media (max-width: 768px) {
+  .tool-selector-body { padding: var(--sp-3); }
+}
+
+/* ===== CROSS-LINK BUTTON (A2) ===== */
+.term-crosslink {
+  margin-top: var(--sp-3);
+  display: flex;
+  justify-content: flex-end;
+}
+.crosslink-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(56,189,248,0.25);
+  border-radius: var(--radius-sm);
+  color: var(--color-accent);
+  font-size: 0.78rem;
+  font-family: var(--font-base);
+  padding: 3px var(--sp-3);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+.crosslink-btn:hover {
+  background: rgba(56,189,248,0.15);
+  border-color: rgba(56,189,248,0.5);
+}
+.crosslink-btn svg { width: 11px; height: 11px; }
+
+/* ===== TAB 5: M365 COPILOT ===== */
+.m365-subnav {
+  display: flex;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-6);
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--sp-3);
+}
+.m365-sub-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  font-family: var(--font-base);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+.m365-sub-btn:hover { color: var(--color-text); background: rgba(255,255,255,0.05); }
+.m365-sub-btn.active {
+  color: var(--color-accent);
+  background: rgba(56,189,248,0.1);
+  border-color: rgba(56,189,248,0.3);
+}
+.m365-sub-btn svg { width: 14px; height: 14px; }
+.m365-section { display: none; }
+.m365-section.active { display: block; }
+
+/* App cards */
+.m365-category-block { margin-bottom: var(--sp-8); }
+.m365-category-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  margin-bottom: var(--sp-3);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.m365-category-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+.m365-app-card {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  border-left: 3px solid var(--app-color, #38bdf8);
+}
+.m365-app-card:hover {
+  transform: var(--hover-lift);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.m365-app-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-2);
+}
+.m365-app-icon {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: var(--fw-bold);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+.m365-app-name { font-weight: 600; font-size: 1rem; }
+.m365-app-headline { font-size: var(--fs-sm); color: var(--color-muted); margin-bottom: var(--sp-3); }
+.m365-app-meta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-2); }
+.m365-badge-time { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
+.m365-badge-diff-low    { background: rgba(56,189,248,0.12); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
+.m365-badge-diff-mid    { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
+.m365-badge-diff-high   { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
+.m365-features-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-bottom: var(--sp-3);
+}
+.m365-features-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+.m365-features-list li::before {
+  content: '▸';
+  color: var(--app-color, #38bdf8);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.m365-mfg-use {
+  background: rgba(56,189,248,0.04);
+  border-left: 2px solid var(--color-accent);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-top: var(--sp-2);
+}
+.m365-mfg-use strong { color: var(--color-accent); }
+
+/* Scenario cards */
+.m365-scenario-card {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.m365-scenario-card:hover { transform: var(--hover-lift); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.m365-scenario-title { font-weight: 600; font-size: 0.95rem; margin-bottom: var(--sp-2); }
+.m365-scenario-meta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-3); }
+.m365-scenario-situation { font-size: var(--fs-sm); color: var(--color-muted); margin-bottom: var(--sp-3); }
+.m365-effect-box {
+  background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.2);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-success);
+  margin-bottom: var(--sp-3);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.m365-before-after {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+.m365-ba-col {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-3);
+}
+.m365-ba-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-2);
+}
+.m365-ba-label.before { color: var(--color-danger); }
+.m365-ba-label.after  { color: var(--color-success); }
+.m365-ba-text { font-size: var(--fs-sm); color: var(--color-text); }
+.m365-howto {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+}
+.m365-howto-label { font-size: 0.78rem; color: var(--color-accent); font-weight: 600; margin-bottom: var(--sp-2); }
+.m365-howto ol { list-style: decimal; padding-left: 1.2em; display: flex; flex-direction: column; gap: var(--sp-1); }
+.m365-howto li { font-size: var(--fs-sm); color: var(--color-text); }
+.m365-scenario-card .accordion-toggle { cursor: pointer; }
+
+/* Prompt cards */
+.m365-prompt-card {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.m365-prompt-card:hover { transform: var(--hover-lift); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.m365-prompt-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+.m365-prompt-title { font-weight: 600; font-size: 0.95rem; }
+.m365-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  background: rgba(56,189,248,0.1);
+  border: 1px solid rgba(56,189,248,0.3);
+  border-radius: var(--radius-sm);
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-family: var(--font-base);
+  padding: var(--sp-1) var(--sp-3);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+.m365-copy-btn:hover { background: rgba(56,189,248,0.2); }
+.m365-copy-btn.copied { background: rgba(74,222,128,0.15); border-color: rgba(74,222,128,0.4); color: #4ade80; }
+.m365-copy-btn svg { width: 12px; height: 12px; }
+.m365-prompt-meta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-3); }
+.m365-prompt-template {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-3) var(--sp-4);
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.7;
+  margin-bottom: var(--sp-3);
+  max-height: 180px;
+  overflow-y: auto;
+}
+.m365-prompt-template::-webkit-scrollbar { width: 4px; }
+.m365-prompt-template::-webkit-scrollbar-track { background: transparent; }
+.m365-prompt-template::-webkit-scrollbar-thumb { background: rgba(56,189,248,0.3); border-radius: 2px; }
+.m365-output-box {
+  background: rgba(74,222,128,0.05);
+  border: 1px solid rgba(74,222,128,0.15);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  margin-bottom: var(--sp-2);
+}
+.m365-output-box strong { color: #4ade80; }
+.m365-tip-box {
+  background: rgba(56,189,248,0.06);
+  border-left: 2px solid var(--color-accent);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  position: relative;
+}
+.m365-tip-box::before { content: '💡 '; }
+
+/* License table */
+.m365-license-wrap {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-6);
+  backdrop-filter: blur(12px);
+}
+.m365-license-table-wrap { overflow-x: auto; }
+.m365-license-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.m365-license-table th {
+  text-align: left;
+  padding: var(--sp-2) var(--sp-3);
+  background: rgba(255,255,255,0.04);
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.m365-license-table td {
+  padding: var(--sp-3);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+.m365-license-table tr:last-child td { border-bottom: none; }
+.m365-license-table tr.copilot-row td {
+  background: rgba(56,189,248,0.07);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.m365-price-cell { color: var(--color-text); font-weight: 600; }
+.m365-copilot-mark { color: var(--color-success); font-size: 1rem; }
+.m365-no-mark { color: var(--color-danger); opacity: 0.6; }
+
+/* ===== COPILOT TIER COMPARE ===== */
+.copilot-tier-compare {
+  margin-top: var(--sp-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.tier-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+}
+.tier-row:first-child { border-bottom: 1px solid var(--color-border); }
+.tier-badge {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  min-width: 42px;
+  text-align: center;
+}
+.tier-badge.free { background: rgba(100,116,139,0.2); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+.tier-badge.paid { background: rgba(0,120,212,0.2); color: #38bdf8; border: 1px solid rgba(0,120,212,0.4); }
+.tier-row-title { font-size: var(--fs-sm); font-weight: 600; color: var(--color-text); }
+.tier-row-detail { font-size: 0.78rem; color: var(--color-muted); margin-top: 2px; line-height: 1.5; }
+
+/* QA accordion */
+.m365-qa-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+.m365-qa-item {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+.m365-qa-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  transition: background var(--transition);
+  user-select: none;
+}
+.m365-qa-q:hover { background: rgba(255,255,255,0.03); }
+.m365-qa-q-text { display: flex; align-items: flex-start; gap: var(--sp-3); }
+.m365-qa-q-text::before { content: 'Q'; color: var(--color-accent); font-weight: 700; flex-shrink: 0; }
+.m365-qa-chevron { font-size: 0.7rem; color: var(--color-muted); transition: transform var(--transition); flex-shrink: 0; }
+.m365-qa-item.open .m365-qa-chevron { transform: rotate(180deg); }
+.m365-qa-a {
+  display: none;
+  padding: 0 var(--sp-4) var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  line-height: 1.7;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--sp-3);
+}
+.m365-qa-item.open .m365-qa-a { display: block; }
+.m365-qa-a::before { content: 'A  '; color: var(--color-success); font-weight: 700; }
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: var(--sp-8) var(--sp-6);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+footer span { color: var(--color-accent); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .site-header h1 { font-size: 1.5rem; }
+  .tab-panel { padding: var(--sp-4); }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .case-filters { flex-direction: column; }
+  .roadmap-header { flex-wrap: wrap; }
+  .duration-badge { margin-left: 0; }
+  .m365-before-after { grid-template-columns: 1fr; }
+  .m365-subnav { gap: var(--sp-1); }
+}
+@media (max-width: 480px) {
+  .site-header { padding: var(--sp-6) var(--sp-4); }
+  .tab-nav { padding: var(--sp-3) var(--sp-4); }
+  .tab-btn { padding: var(--sp-2) var(--sp-3); font-size: 0.78rem; }
+  .tool-meta { flex-direction: column; }
+  .m365-sub-btn { font-size: 0.78rem; padding: var(--sp-1) var(--sp-2); }
+  .m365-prompt-header { flex-direction: column; gap: var(--sp-2); }
+  .m365-copy-btn { align-self: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <h1>生成AI データベース</h1>
+  <p class="subtitle">製造業・AI活用推進 — ロードマップ / 用語 / ツール比較 / 活用事例 / 技術概念</p>
+  <p class="updated">最終更新: 2026-04-08</p>
+
+  <div class="stats-bar">
+    <div class="stats-item">📚 <strong>基礎用語</strong> 15語</div>
+    <div class="stats-item">🛠 <strong>ツール</strong> 8サービス</div>
+    <div class="stats-item">📋 <strong>事例</strong> 21件</div>
+    <div class="stats-item">⚙ <strong>技術概念</strong> 12件</div>
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab(0)" id="tab-btn-0">
+    <i data-lucide="map"></i> ロードマップ
+  </button>
+  <button class="tab-btn" onclick="switchTab(1)" id="tab-btn-1">
+    <i data-lucide="book-open"></i> 基礎用語
+  </button>
+  <button class="tab-btn" onclick="switchTab(2)" id="tab-btn-2">
+    <i data-lucide="layers"></i> ツール比較
+  </button>
+  <button class="tab-btn" onclick="switchTab(3)" id="tab-btn-3">
+    <i data-lucide="briefcase"></i> 活用事例
+  </button>
+  <button class="tab-btn" onclick="switchTab(4)" id="tab-btn-4">
+    <i data-lucide="cpu"></i> 技術概念
+  </button>
+  <button class="tab-btn" onclick="switchTab(5)" id="tab-btn-5">
+    <i data-lucide="layout-grid"></i> M365 Copilot
+  </button>
+  <button class="tab-btn" onclick="switchTab(6)" id="tab-btn-6">
+    <i data-lucide="shield"></i> セキュリティ
+  </button>
+</nav>
+
+<!-- ===== TAB 0: ROADMAP ===== -->
+<div class="tab-panel active" id="tab-0">
+  <div class="roadmap-list" id="roadmap-list"></div>
+</div>
+
+<!-- ===== TAB 1: TERMS ===== -->
+<div class="tab-panel" id="tab-1">
+  <div class="search-bar">
+    <i data-lucide="search"></i>
+    <input type="text" id="term-search" placeholder="用語を検索..." oninput="renderTerms()">
+  </div>
+  <div class="filter-row" id="term-level-filters">
+    <button class="filter-btn active" data-level="all" onclick="setFilter('term-level','all',this)">すべて</button>
+    <button class="filter-btn" data-level="入門" onclick="setFilter('term-level','入門',this)">入門</button>
+    <button class="filter-btn" data-level="中級" onclick="setFilter('term-level','中級',this)">中級</button>
+    <button class="filter-btn" data-level="上級" onclick="setFilter('term-level','上級',this)">上級</button>
+  </div>
+  <div class="grid-2" id="terms-grid"></div>
+</div>
+
+<!-- ===== TAB 2: TOOLS ===== -->
+<div class="tab-panel" id="tab-2">
+
+  <div class="tool-selector-wrap">
+    <div class="tool-selector-header" onclick="toggleToolSelector()">
+      <span>🗺 どのツールを選ぶ？</span>
+      <span class="tool-selector-chevron" id="tool-selector-chevron">▲</span>
+    </div>
+    <div class="tool-selector-body" id="tool-selector-body">
+      <div class="ts-root">
+        <div class="ts-label">用途は？</div>
+        <div class="ts-branches">
+          <div class="ts-branch">
+            <div class="ts-line"></div>
+            <div class="ts-node ts-node--claude">
+              <span class="ts-condition">長文ドキュメント分析・高品質報告書</span>
+              <span class="ts-arrow">→</span>
+              <span class="ts-tool">Claude</span>
+            </div>
+          </div>
+          <div class="ts-branch">
+            <div class="ts-line"></div>
+            <div class="ts-node">
+              <span class="ts-condition">最新情報・リアルタイム検索</span>
+              <span class="ts-arrow">→</span>
+              <span class="ts-tool ts-tool--perplexity">Perplexity</span>
+              <span class="ts-sub">深掘りは Claude / ChatGPT へ</span>
+            </div>
+          </div>
+          <div class="ts-branch">
+            <div class="ts-line"></div>
+            <div class="ts-node ts-node--copilot">
+              <span class="ts-condition">Microsoft 365 環境での業務効率化</span>
+              <span class="ts-arrow">→</span>
+              <span class="ts-tool">Copilot</span>
+            </div>
+          </div>
+          <div class="ts-branch">
+            <div class="ts-line"></div>
+            <div class="ts-node ts-node--gemini">
+              <span class="ts-condition">Google Workspace またはマルチモーダル</span>
+              <span class="ts-arrow">→</span>
+              <span class="ts-tool">Gemini</span>
+            </div>
+          </div>
+          <div class="ts-branch">
+            <div class="ts-line"></div>
+            <div class="ts-node ts-node--chatgpt">
+              <span class="ts-condition">汎用タスク・GPTs カスタマイズ</span>
+              <span class="ts-arrow">→</span>
+              <span class="ts-tool">ChatGPT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" id="tools-grid"></div>
+</div>
+
+<!-- ===== TAB 3: CASES ===== -->
+<div class="tab-panel" id="tab-3">
+  <div class="search-bar">
+    <i data-lucide="search"></i>
+    <input type="text" id="case-search" placeholder="キーワードで検索..." oninput="renderCases()">
+  </div>
+  <div class="case-filters">
+    <div class="filter-group">
+      <label>業界</label>
+      <select id="case-industry" onchange="renderCases()">
+        <option value="all">すべて</option>
+        <option value="製造業">製造業</option>
+        <option value="化学・素材">化学・素材</option>
+        <option value="IT・ソフトウェア">IT・ソフトウェア</option>
+        <option value="医療">医療</option>
+        <option value="金融">金融</option>
+        <option value="建設">建設</option>
+        <option value="教育">教育</option>
+        <option value="小売">小売</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>難易度</label>
+      <select id="case-diff" onchange="renderCases()">
+        <option value="all">すべて</option>
+        <option value="低">低</option>
+        <option value="中">中</option>
+        <option value="高">高</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>ツール</label>
+      <select id="case-tool" onchange="renderCases()">
+        <option value="all">すべて</option>
+        <option value="Claude">Claude</option>
+        <option value="ChatGPT">ChatGPT</option>
+        <option value="Copilot">Copilot</option>
+        <option value="Gemini">Gemini</option>
+        <option value="NotebookLM">NotebookLM</option>
+        <option value="独自LLM">独自LLM</option>
+        <option value="複合">複合</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid-2" id="cases-grid"></div>
+</div>
+
+<!-- ===== TAB 4: CONCEPTS ===== -->
+<div class="tab-panel" id="tab-4">
+
+  <div class="concept-map-wrap">
+    <div class="concept-map-toggle" id="cmap-toggle" onclick="toggleConceptMap()">
+      <span>🔗 技術概念 関係図</span>
+      <span style="font-size:0.7rem;transition:transform 0.2s ease" id="cmap-chevron">▲</span>
+    </div>
+    <div class="concept-map-body" id="cmap-body">
+      <div class="cmap">
+        <div class="cmap-row">
+          <div class="cmap-node" onclick="highlightConcept('prompt_engineering')">プロンプトエンジニアリング</div>
+          <span class="cmap-arr">↓</span><span class="cmap-label">基礎</span>
+        </div>
+        <div class="cmap-row">
+          <div class="cmap-node" onclick="highlightConcept('fine_tuning')">LLM</div>
+          <span class="cmap-arr">───</span>
+          <div class="cmap-node" onclick="highlightConcept('function_calling')">API / Function Calling</div>
+          <span class="cmap-arr">───</span>
+          <div class="cmap-node purple" onclick="highlightConcept('mcp')">MCPサーバー</div>
+        </div>
+        <div class="cmap-row">
+          <span class="cmap-arr" style="margin-left:2px">↓</span>
+        </div>
+        <div class="cmap-row">
+          <div class="cmap-node" onclick="highlightConcept('rag')">RAG</div>
+          <span class="cmap-arr">←──</span>
+          <div class="cmap-node" onclick="highlightConcept('vector_db')">ベクトルDB</div>
+          <span style="flex:1"></span>
+          <div class="cmap-node purple" onclick="highlightConcept('lora')">LoRA / ファインチューニング</div>
+        </div>
+        <div class="cmap-row">
+          <span class="cmap-arr" style="margin-left:2px">↓</span>
+        </div>
+        <div class="cmap-row">
+          <div class="cmap-node" onclick="highlightConcept('ai_agent')">エージェント</div>
+          <span class="cmap-arr">───</span>
+          <div class="cmap-node purple" onclick="highlightConcept('multi_agent')">マルチエージェント</div>
+        </div>
+        <div class="cmap-row">
+          <span class="cmap-arr" style="margin-left:2px">↓</span>
+        </div>
+        <div class="cmap-row">
+          <div class="cmap-node" onclick="highlightConcept('langchain')">LangChain / オーケストレーション</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <i data-lucide="search"></i>
+    <input type="text" id="concept-search" placeholder="技術概念を検索..." oninput="renderConcepts()">
+  </div>
+  <div class="filter-row" id="concept-cat-filters">
+    <button class="filter-btn active" data-cat="all" onclick="setFilter('concept-cat','all',this)">すべて</button>
+    <button class="filter-btn" data-cat="基礎技術" onclick="setFilter('concept-cat','基礎技術',this)">基礎技術</button>
+    <button class="filter-btn" data-cat="応用技術" onclick="setFilter('concept-cat','応用技術',this)">応用技術</button>
+    <button class="filter-btn" data-cat="開発技術" onclick="setFilter('concept-cat','開発技術',this)">開発技術</button>
+  </div>
+  <div class="grid-2" id="concepts-grid"></div>
+</div>
+
+<!-- ===== TAB 5: M365 COPILOT ===== -->
+<div class="tab-panel" id="tab-5">
+  <!-- Sub Nav -->
+  <div class="m365-subnav">
+    <button class="m365-sub-btn active" onclick="switchM365Tab('apps')" id="m365-btn-apps">
+      <i data-lucide="grid-3x3"></i> アプリ別機能
+    </button>
+    <button class="m365-sub-btn" onclick="switchM365Tab('scenarios')" id="m365-btn-scenarios">
+      <i data-lucide="briefcase"></i> 業務シナリオ
+    </button>
+    <button class="m365-sub-btn" onclick="switchM365Tab('prompts')" id="m365-btn-prompts">
+      <i data-lucide="message-square"></i> プロンプト集
+    </button>
+    <button class="m365-sub-btn" onclick="switchM365Tab('license')" id="m365-btn-license">
+      <i data-lucide="shield"></i> ライセンス &amp; セキュリティ
+    </button>
+    <button class="m365-sub-btn" onclick="switchTab(2)" style="margin-left:auto;opacity:0.7;font-size:0.8rem">
+      <i data-lucide="arrow-left"></i> ツール概要に戻る
+    </button>
+  </div>
+
+  <!-- Section A: Apps -->
+  <div class="m365-section active" id="m365-apps">
+    <div id="m365-apps-grid"></div>
+  </div>
+
+  <!-- Section B: Scenarios -->
+  <div class="m365-section" id="m365-scenarios">
+    <div class="filter-row" id="m365-scenario-filters">
+      <button class="filter-btn active" data-val="all" onclick="setM365ScenarioFilter('all',this)">すべて</button>
+      <button class="filter-btn" data-val="Teams" onclick="setM365ScenarioFilter('Teams',this)">Teams</button>
+      <button class="filter-btn" data-val="Word" onclick="setM365ScenarioFilter('Word',this)">Word</button>
+      <button class="filter-btn" data-val="Excel" onclick="setM365ScenarioFilter('Excel',this)">Excel</button>
+      <button class="filter-btn" data-val="Outlook" onclick="setM365ScenarioFilter('Outlook',this)">Outlook</button>
+      <button class="filter-btn" data-val="OneNote" onclick="setM365ScenarioFilter('OneNote',this)">OneNote</button>
+    </div>
+    <div class="grid-2" id="m365-scenarios-grid"></div>
+  </div>
+
+  <!-- Section C: Prompts -->
+  <div class="m365-section" id="m365-prompts">
+    <p style="color:var(--color-muted);font-size:var(--fs-sm);margin-bottom:var(--sp-4)">コピーボタンでテンプレートをクリップボードにコピーして、そのままCopilotに貼り付けて使えます。</p>
+    <div class="filter-row" id="m365-prompt-filters">
+      <button class="filter-btn active" data-val="all" onclick="setM365PromptFilter('all',this)">すべて</button>
+      <button class="filter-btn" data-val="会議" onclick="setM365PromptFilter('会議',this)">会議</button>
+      <button class="filter-btn" data-val="メール" onclick="setM365PromptFilter('メール',this)">メール</button>
+      <button class="filter-btn" data-val="報告書" onclick="setM365PromptFilter('報告書',this)">報告書</button>
+      <button class="filter-btn" data-val="分析" onclick="setM365PromptFilter('分析',this)">分析</button>
+      <button class="filter-btn" data-val="計画" onclick="setM365PromptFilter('計画',this)">計画</button>
+    </div>
+    <div class="grid-2" id="m365-prompts-grid"></div>
+  </div>
+
+  <!-- Section D: License & Security -->
+  <div class="m365-section" id="m365-license">
+    <div class="m365-license-wrap">
+      <h3 style="font-size:var(--fs-h3);font-weight:600;margin-bottom:var(--sp-4)">ライセンス比較</h3>
+      <div class="m365-license-table-wrap">
+        <table class="m365-license-table" id="m365-license-table"></table>
+      </div>
+      <p style="font-size:var(--fs-sm);color:var(--color-muted);margin-top:var(--sp-3)">※価格は税抜・ユーザーあたり月額（2025年4月時点）。円建て参考値。</p>
+    </div>
+    <div style="margin-top:var(--sp-8)">
+      <h3 style="font-size:var(--fs-h3);font-weight:600;margin-bottom:var(--sp-4)">セキュリティ Q&amp;A — 製造業の懸念事項</h3>
+      <div class="m365-qa-list" id="m365-qa-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 6: SECURITY ===== -->
+<div class="tab-panel" id="tab-6">
+  <div class="filter-row" style="margin-bottom:var(--sp-6)">
+    <button class="filter-btn active" data-sec="all" onclick="setSecFilter('all',this)">すべて</button>
+    <button class="filter-btn" data-sec="NG入力" onclick="setSecFilter('NG入力',this)">🔴 NG入力</button>
+    <button class="filter-btn" data-sec="境界線" onclick="setSecFilter('境界線',this)">🟡 境界線（要判断）</button>
+    <button class="filter-btn" data-sec="OK入力" onclick="setSecFilter('OK入力',this)">🟢 OK入力</button>
+  </div>
+  <div id="security-rules-grid" class="grid-2" style="margin-bottom:var(--sp-10)"></div>
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="help-circle"></i> セキュリティ FAQ
+  </h3>
+  <div class="filter-row" style="margin-bottom:var(--sp-4)">
+    <button class="filter-btn active" data-faq="all" onclick="setFaqFilter('all',this)">すべて</button>
+    <button class="filter-btn" data-faq="基本" onclick="setFaqFilter('基本',this)">基本</button>
+    <button class="filter-btn" data-faq="M365" onclick="setFaqFilter('M365',this)">M365</button>
+    <button class="filter-btn" data-faq="外部AI" onclick="setFaqFilter('外部AI',this)">外部AI</button>
+  </div>
+  <div id="security-faq-list"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>製造業・AI活用推進用 — <span>個人学習・社内展開リファレンス</span></p>
+</footer>
+
+<script>
+// ===== DATA =====
+// fetch-snippet.js
+// HTMLの <script> タグ内にある const roadmapData = [...] 等の5つのインライン配列を
+// 外部JSONファイルから fetch() で読み込む置き換えコード。
+//
+// 使い方:
+//   1. genai-db.html の <script> 冒頭にある 5つの const xxxData = [...] 宣言を削除する
+//   2. このファイルの内容を <script> の先頭部分に貼り付け、
+//      document.addEventListener('DOMContentLoaded', ...) ブロックを
+//      下記の init() 呼び出し構造に置き換える
+//
+// ※ HTMLファイルと同じフォルダ構成で data/ ディレクトリが存在すること
+
+// グローバル変数として宣言（既存コードの renderXxx() 関数がそのまま参照できる）
+let roadmapData  = [];
+let termsData    = [];
+let toolsData    = [];
+let casesData    = [];
+let conceptsData = [];
+
+// 既存の DOMContentLoaded ブロックを下記に置き換える
+document.addEventListener('DOMContentLoaded', () => {
+  Promise.all([
+    fetch('data/roadmap.json').then(r  => r.json()),
+    fetch('data/terms.json').then(r    => r.json()),
+    fetch('data/tools.json').then(r    => r.json()),
+    fetch('data/cases.json').then(r    => r.json()),
+    fetch('data/concepts.json').then(r => r.json())
+  ])
+  .then(([roadmap, terms, tools, cases, concepts]) => {
+    roadmapData  = roadmap;
+    termsData    = terms;
+    toolsData    = tools;
+    casesData    = cases;
+    conceptsData = concepts;
+    init();
+  })
+  .catch(err => {
+    console.error('データ読み込みに失敗しました:', err);
+  });
+});
+
+// 既存の DOMContentLoaded 内の処理をそのまま init() にまとめる
+function init() {
+  renderRoadmap();
+  renderTerms();
+  renderTools();
+  renderCases();
+  renderConcepts();
+  renderM365Apps();
+  renderM365Scenarios();
+  renderM365Prompts();
+  renderM365License();
+  renderSecurity();
+  renderSecurityFAQ();
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// ===== CROSS-LINK & MAP FUNCTIONS =====
+function jumpToConceptTab(conceptId) {
+  switchTab(4);
+  requestAnimationFrame(() => {
+    const match = conceptsData.find(c => c.id === conceptId);
+    if (!match) return;
+    const cards = document.querySelectorAll('#concepts-grid .card[data-cid]');
+    let target = null;
+    cards.forEach(card => { if (card.dataset.cid === conceptId) target = card; });
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+    target.style.boxShadow = '0 0 0 2px var(--color-accent)';
+    target.style.borderColor = 'var(--color-accent)';
+    setTimeout(() => { target.style.boxShadow = ''; target.style.borderColor = ''; }, 2000);
+  });
+}
+
+function toggleToolSelector() {
+  const body = document.getElementById('tool-selector-body');
+  const chevron = document.getElementById('tool-selector-chevron');
+  body.classList.toggle('hidden');
+  chevron.classList.toggle('collapsed');
+}
+
+function toggleConceptMap() {
+  const body = document.getElementById('cmap-body');
+  const chevron = document.getElementById('cmap-chevron');
+  const hidden = body.style.display === 'none';
+  body.style.display = hidden ? '' : 'none';
+  chevron.style.transform = hidden ? '' : 'rotate(180deg)';
+}
+
+function highlightConcept(id) {
+  document.querySelectorAll('#concepts-grid .card[data-cid]').forEach(c => {
+    const isTarget = c.dataset.cid === id;
+    c.style.borderColor = isTarget ? 'var(--color-accent)' : '';
+    c.style.boxShadow = isTarget ? '0 0 16px rgba(56,189,248,0.35)' : '';
+    if (isTarget) c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+}
+
+// ===== STATE =====
+const state = {
+  'term-level': 'all',
+  'concept-cat': 'all'
+};
+
+// ===== HELPERS =====
+function normalizeSearch(str) {
+  return str.toLowerCase()
+    .replace(/[\u3041-\u3096]/g, ch => String.fromCharCode(ch.charCodeAt(0) + 0x60))
+    .replace(/[\u30A1-\u30F6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+}
+
+function setFilter(key, val, btn) {
+  state[key] = val;
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (key === 'term-level') renderTerms();
+  if (key === 'concept-cat') renderConcepts();
+}
+
+function switchTab(idx) {
+  document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+}
+
+function toggleAccordion(el) {
+  const content = el.nextElementSibling;
+  if (!content) return;
+  const isOpen = content.classList.contains('open');
+  content.classList.toggle('open', !isOpen);
+}
+
+function skillBadge(diff) {
+  const map = { '低': 'AIツール操作のみ', '中': 'API基礎知識', '高': 'Python / システム設計' };
+  return `<span class="badge badge-muted" style="font-size:0.72rem;opacity:0.85">必要: ${map[diff] || '—'}</span>`;
+}
+
+function diffBadge(diff) {
+  const map = { '低': 'badge-green', '中': 'badge-yellow', '高': 'badge-orange' };
+  return `<span class="badge ${map[diff] || 'badge-muted'}">${diff}</span>`;
+}
+
+function jpBadge(q) {
+  if (q === '◎') return `<span class="jp-badge-good">日本語 ◎</span>`;
+  if (q === '○') return `<span class="jp-badge-mid">日本語 ○</span>`;
+  return `<span class="jp-badge-low">日本語 △</span>`;
+}
+
+function conceptDiffBadge(diff) {
+  const map = { '低': 'badge-green', '中': 'badge-blue', '高': 'badge-orange' };
+  return `<span class="badge ${map[diff] || 'badge-muted'}">難易度: ${diff}</span>`;
+}
+
+function catBadge(cat) {
+  const map = { '基礎技術': 'badge-blue', '応用技術': 'badge-purple', '開発技術': 'badge-yellow' };
+  return `<span class="badge ${map[cat] || 'badge-muted'}">${cat}</span>`;
+}
+
+// ===== RENDER ROADMAP =====
+function getRoadmapChecks(stepNum, total) {
+  const checks = [];
+  for (let i = 0; i < total; i++) {
+    checks.push(localStorage.getItem(`genai-roadmap-${stepNum}-${i}`) === '1');
+  }
+  return checks;
+}
+
+function toggleRoadmapCheck(stepNum, actionIndex, checkbox) {
+  localStorage.setItem(`genai-roadmap-${stepNum}-${actionIndex}`, checkbox.checked ? '1' : '0');
+  const li = checkbox.parentElement;
+  li.classList.toggle('checked', checkbox.checked);
+  const card = li.closest('.roadmap-card');
+  const total = card.querySelectorAll('.actions-list li').length;
+  const done = card.querySelectorAll('.actions-list li.checked').length;
+  card.querySelector('.roadmap-progress-bar').style.width = `${Math.round(done/total*100)}%`;
+  card.querySelector('.roadmap-progress-count').textContent = `${done} / ${total}`;
+}
+
+function renderRoadmap() {
+  const container = document.getElementById('roadmap-list');
+  container.innerHTML = roadmapData.map(d => {
+    const checks = getRoadmapChecks(d.step, d.actions.length);
+    const done = checks.filter(Boolean).length;
+    const total = d.actions.length;
+    const pct = total ? Math.round(done / total * 100) : 0;
+    const actionsHtml = d.actions.map((a, i) => {
+      const checked = checks[i];
+      return `<li class="${checked ? 'checked' : ''}">
+        <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleRoadmapCheck(${d.step},${i},this)">
+        <span>${a}</span>
+      </li>`;
+    }).join('');
+    return `
+    <div class="roadmap-card">
+      <div class="roadmap-header">
+        <div class="step-num">${d.step}</div>
+        <h3>${d.title}</h3>
+        <span class="duration-badge">${d.duration}</span>
+      </div>
+      <p class="roadmap-desc">${d.description}</p>
+      <div class="roadmap-progress">
+        <div class="roadmap-progress-label">
+          <span>実践アクション</span>
+          <span class="roadmap-progress-count">${done} / ${total}</span>
+        </div>
+        <div class="roadmap-progress-bar-bg">
+          <div class="roadmap-progress-bar" style="width:${pct}%"></div>
+        </div>
+      </div>
+      <ul class="actions-list">
+        ${actionsHtml}
+      </ul>
+    </div>`;
+  }).join('');
+}
+
+// ===== RENDER TERMS =====
+function renderTerms() {
+  const q = normalizeSearch(document.getElementById('term-search').value);
+  const level = state['term-level'];
+  const grid = document.getElementById('terms-grid');
+  const filtered = termsData.filter(t => {
+    const match = !q || normalizeSearch(t.term).includes(q) || normalizeSearch(t.term_en).includes(q) || normalizeSearch(t.short).includes(q);
+    const lv = level === 'all' || t.level === level;
+    return match && lv;
+  });
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">該当する用語がありません</div>'; return; }
+  const levelBadgeMap = { '入門': 'badge-green', '中級': 'badge-yellow', '上級': 'badge-orange' };
+  grid.innerHTML = filtered.map(t => `
+    <div class="card term-card clickable" onclick="toggleAccordion(this.querySelector('.term-header'))">
+      <div class="term-header">
+        <div class="term-icon"><i data-lucide="book-marked"></i></div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span class="term-title">${t.term}</span>
+            <span class="badge ${levelBadgeMap[t.level]}">${t.level}</span>
+          </div>
+          <div class="term-en">${t.term_en}</div>
+          <div class="term-short">${t.short}</div>
+        </div>
+      </div>
+      <div class="accordion-content">
+        <p class="term-detail">${t.detail}</p>
+        <div class="term-example"><strong>具体例:</strong> ${t.example}</div>
+        ${(()=>{
+          const map = {'RAG':'rag','ファインチューニング':'fine_tuning','エージェント':'ai_agent','ベクトルDB':'vector_db'};
+          const cid = map[t.term_en] || map[t.term];
+          return cid ? `<div class="term-crosslink"><button onclick="event.stopPropagation();jumpToConceptTab('${cid}')" class="crosslink-btn">詳細を技術概念で見る →</button></div>` : '';
+        })()}
+      </div>
+    </div>
+  `).join('');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// ===== RENDER TOOLS =====
+function renderTools() {
+  const grid = document.getElementById('tools-grid');
+  grid.innerHTML = toolsData.map(t => `
+    <div class="card tool-card clickable" onclick="toggleAccordion(this.querySelector('.tool-header-row'))">
+      <div class="tool-header-row">
+        <div class="tool-logo" style="background:${t.color}22;border:1px solid ${t.color}44;color:${t.color}">${t.icon_label}</div>
+        <div>
+          <div class="tool-name">${t.name}</div>
+          <div class="tool-provider">${t.provider}</div>
+        </div>
+        <div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+          ${jpBadge(t.japanese_quality)}
+          <span class="badge badge-muted">$${t.paid_plan}（約¥${Math.round(t.paid_plan * 150)}）/月</span>
+        </div>
+      </div>
+      <div class="tool-meta">
+        ${t.main_models.map(m => `<span class="badge badge-muted">${m}</span>`).join('')}
+      </div>
+      <div class="tool-spec-row">
+        <span class="tool-spec-label">コンテキスト</span>
+        <span class="tool-spec-value" style="color:var(--color-accent)">${t.context_window}</span>
+      </div>
+      <div class="tool-spec-row">
+        <span class="tool-spec-label">無料枠</span>
+        <span class="tool-spec-value" style="font-size:var(--fs-sm);color:var(--color-muted)">${t.free_tier}</span>
+      </div>
+      <div class="accordion-content">
+        <ul class="plus-minus-list">
+          ${t.strengths.map(s => `<li><span class="plus">+</span>${s}</li>`).join('')}
+          ${t.weaknesses.map(w => `<li><span class="minus">−</span>${w}</li>`).join('')}
+        </ul>
+        <div class="best-for-box"><strong>最適用途:</strong> ${t.best_for}${t.name==='Copilot'?`
+          <div class="copilot-tier-compare">
+            <div class="tier-row">
+              <span class="tier-badge free">無償</span>
+              <div>
+                <div class="tier-row-title">Copilot（無料）</div>
+                <div class="tier-row-detail">copilot.microsoft.com · Bing検索統合 · 1日ターン制限あり · Officeアプリ統合なし · 個人データ学習リスクあり（個人版）</div>
+              </div>
+            </div>
+            <div class="tier-row">
+              <span class="tier-badge paid">M365有償</span>
+              <div>
+                <div class="tier-row-title">M365 Copilot（+¥4,500/月 ※M365ライセンス必須）</div>
+                <div class="tier-row-detail">Word・Excel・Teams・Outlook内で直接動作 · SharePoint/OneDrive社内データ参照 · 商用データ保護（学習使用なし）· 無制限ターン</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:var(--sp-3)"><button onclick="event.stopPropagation();switchTab(5)" style="background:rgba(0,120,212,0.15);color:#0078d4;border:1px solid rgba(0,120,212,0.3);border-radius:var(--radius-sm);padding:4px 12px;font-size:var(--fs-sm);cursor:pointer;font-family:var(--font-base)">📋 M365 詳細タブへ →</button></div>
+        `:''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== RENDER CASES =====
+function renderCases() {
+  const q = normalizeSearch(document.getElementById('case-search').value);
+  const industry = document.getElementById('case-industry').value;
+  const diff = document.getElementById('case-diff').value;
+  const tool = document.getElementById('case-tool').value;
+  const grid = document.getElementById('cases-grid');
+  const filtered = casesData.filter(c => {
+    const matchQ = !q || normalizeSearch(c.title).includes(q) || normalizeSearch(c.overview).includes(q) || normalizeSearch(c.industry).includes(q);
+    const matchI = industry === 'all' || c.industry === industry;
+    const matchD = diff === 'all' || c.difficulty === diff;
+    const matchT = tool === 'all' || c.tool === tool;
+    return matchQ && matchI && matchD && matchT;
+  });
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">該当する事例がありません</div>'; return; }
+  const typeMap = {'文書生成':'badge-blue','知識検索':'badge-purple','業務自動化':'badge-yellow','コード生成':'badge-orange','データ分析':'badge-green'};
+  grid.innerHTML = filtered.map(c => `
+    <div class="card">
+      <h3 style="font-size:0.95rem;font-weight:600;margin-bottom:var(--sp-2)">${c.title}</h3>
+      <div class="case-meta">
+        <span class="badge badge-muted">${c.industry}</span>
+        <span class="badge ${typeMap[c.use_case_type]||'badge-muted'}">${c.use_case_type}</span>
+        ${diffBadge(c.difficulty)}
+        ${skillBadge(c.difficulty)}
+        <span class="badge badge-muted">${c.tool}</span>
+      </div>
+      <p style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-2)">${c.overview}</p>
+      <div class="case-effect">
+        <i data-lucide="trending-up" style="width:14px;height:14px;flex-shrink:0"></i>
+        ${c.effect}
+      </div>
+      <div class="case-key"><strong>ポイント:</strong> ${c.key_point}</div>
+    </div>
+  `).join('');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// ===== RENDER CONCEPTS =====
+function renderConcepts() {
+  const q = normalizeSearch(document.getElementById('concept-search').value);
+  const cat = state['concept-cat'];
+  const grid = document.getElementById('concepts-grid');
+  const filtered = conceptsData.filter(c => {
+    const matchQ = !q || normalizeSearch(c.name).includes(q) || normalizeSearch(c.name_en).includes(q) || normalizeSearch(c.short).includes(q);
+    const matchC = cat === 'all' || c.category === cat;
+    return matchQ && matchC;
+  });
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">該当する概念がありません</div>'; return; }
+  grid.innerHTML = filtered.map(c => `
+    <div class="card concept-card clickable" data-cid="${c.id}" onclick="toggleAccordion(this.querySelector('.concept-short'))">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:var(--sp-2)">
+        <div>
+          <div class="concept-name">${c.name}</div>
+          <div class="concept-name-en">${c.name_en}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+          ${catBadge(c.category)}
+          ${conceptDiffBadge(c.difficulty)}
+        </div>
+      </div>
+      <div class="concept-short">${c.short}</div>
+      <div class="accordion-content">
+        <div class="concept-how">${c.how_it_works}</div>
+        <div class="use-section when">
+          <h4>使うべき場合</h4>
+          <ul class="use-list">${c.when_to_use.map(u=>`<li>${u}</li>`).join('')}</ul>
+        </div>
+        <div class="use-section when-not" style="margin-top:var(--sp-3)">
+          <h4>使わない方がいい場合</h4>
+          <ul class="use-list">${c.when_not_to_use.map(u=>`<li>${u}</li>`).join('')}</ul>
+        </div>
+        <div class="vs-box" style="margin-top:var(--sp-3)"><strong>比較:</strong> ${c.vs}</div>
+        <div class="real-example-box"><strong style="color:var(--color-accent)">実例:</strong> ${c.real_example}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== M365 DATA =====
+const m365AppsData = [
+  {"app":"Word","icon_color":"#2B579A","category":"文書作成","headline":"文書の下書き・要約・改訂を自然言語で指示","features":["プロンプト1行で報告書・仕様書の初稿を自動生成","長文文書を箇条書き・要約・表に変換","文体・トーンを指定して書き換え（フォーマル化・簡潔化）","他ファイル（メール・会議メモ等）の内容を参照して文書生成"],"manufacturing_use":"設備投資稟議書・工事仕様書の初稿をキーワード箇条書きから生成し、ドラフト時間を70%削減。過去の類似仕様書を参照させて差分だけ修正する運用が効果的。","time_saving":"週3〜5時間","difficulty":"低"},
+  {"app":"PowerPoint","icon_color":"#D24726","category":"文書作成","headline":"文書・テキストから提案資料を自動スライド化","features":["Wordファイル・PDF・テキストを指定してプレゼン資料を自動生成","スライドデザインの統一・レイアウト自動調整","発表者ノートの自動生成（想定Q&A付き）","「3スライドにまとめて」等の圧縮・展開が自然言語で可能"],"manufacturing_use":"設備更新検討結果を稟議資料に変換する際、Word仕様検討メモをそのままインプットして5枚構成のサマリー資料を生成。上位報告資料の作成時間を半分以下に短縮。","time_saving":"週2〜3時間","difficulty":"低"},
+  {"app":"Whiteboard","icon_color":"#0078D4","category":"文書作成","headline":"ブレスト結果をAIが整理・グルーピング・文書化","features":["付箋・テキストを自動カテゴリ分類・グルーピング","ホワイトボード内容をWord/PowerPointに変換出力","ブレスト促進のアイデア提案（Suggest機能）","会議中にリアルタイムでWhiteboardをAIが整理"],"manufacturing_use":"設備トラブル原因分析（特性要因図的活用）のブレスト後、AIが要因をカテゴリ別に整理して報告書の素材を生成。リモート参加者も含めた多人数ブレストの整理コストが激減。","time_saving":"週0.5〜1時間","difficulty":"低"},
+  {"app":"Excel","icon_color":"#217346","category":"データ分析","headline":"自然言語でデータ分析・数式生成・グラフ作成","features":["「売上上位10件を抽出して」等の日本語指示でデータ操作","複雑な数式・LAMBDA関数をプロンプトから自動生成","データのパターン・外れ値をAIが自動検出してハイライト","Pythonコード生成による高度な統計分析（Copilot in Excel with Python）"],"manufacturing_use":"設備保全コスト集計・電力消費量トレンド分析をSQL知識不要で実施。インバータ故障頻度データを「月別・設備種別でクロス集計してグラフ化」と指示するだけで完結。","time_saving":"週2〜4時間","difficulty":"低"},
+  {"app":"Forms","icon_color":"#008272","category":"データ分析","headline":"アンケート自動生成・回答分析・レポート化","features":["テーマを入力するだけでアンケート質問を自動生成","回答データのAI分析・傾向サマリー生成","自由記述回答のテーマ分類・感情分析","Power BI・Excelへの分析結果エクスポート"],"manufacturing_use":"設備保全訓練後の理解度確認テストをAIで自動生成。部下からの安全意識調査や製造課との満足度調査の自由記述を自動集計してレポート化。設問設計の時間を80%削減。","time_saving":"週0.5〜1.5時間","difficulty":"低"},
+  {"app":"Power BI","icon_color":"#F2C811","category":"データ分析","headline":"自然言語でデータ可視化・レポート生成・分析","features":["Q&A機能: 「先月の電力コスト上位5設備は？」と日本語で問い合わせてビジュアル即時生成","Copilotがレポートページ・サマリーを自動生成","AIによるデータ異常検知・トレンド予測","Narratives機能: グラフの説明文を自動文章化"],"manufacturing_use":"電力監視システムのデータをPower BIに取り込み、「今週のデマンドピーク時間帯と原因設備を特定して」とCopilotに問い合わせて即時分析。設備投資効果測定ダッシュボードを自動更新・自動サマリー化。","time_saving":"週2〜5時間","difficulty":"中"},
+  {"app":"Outlook","icon_color":"#0078D4","category":"コミュニケーション","headline":"メール要約・返信下書き・スレッド整理を自動化","features":["長いメールスレッドを3行サマリーに要約","返信メールのドラフトをトーン指定（丁寧・簡潔等）で生成","会議招集・スケジュール調整メールの自動作成","受信トレイの優先度分類とアクション項目の抽出"],"manufacturing_use":"製造課・メーカーとの長期スレッドを「決定事項と未決事項だけ要約」させて打ち合わせ前確認を効率化。メーカーへの仕様確認メールのドラフトを回答期限付きで30秒生成。","time_saving":"週3〜5時間","difficulty":"低"},
+  {"app":"Teams","icon_color":"#6264A7","category":"コミュニケーション","headline":"会議の議事録・要約・アクション抽出をリアルタイム生成","features":["会議中のリアルタイム文字起こし（Copilot in Teams）","会議終了後に要約・決定事項・アクションアイテムを自動生成","「誰が何を言ったか」を後から検索可能なアーカイブ","チャットの要約・見逃しキャッチアップ機能"],"manufacturing_use":"製造課との定例会議や設備投資検討会の議事録作成を自動化。「電計チームの担当アクション一覧だけ抽出」と指示すれば会議後即座にTODOリストが完成。出張・外出時のチャット見逃しキャッチアップも1クリック。","time_saving":"週4〜6時間","difficulty":"低"},
+  {"app":"OneNote","icon_color":"#7719AA","category":"コミュニケーション","headline":"ノート横断検索・要約・構造化を自然言語で実行","features":["複数ノートブックを横断して質問に回答（RAG的活用）","手書きメモ・会議メモを構造化・整形","「このノートをWord文書にまとめて」等の変換指示","タグ付き項目の一覧抽出・未完了タスクの集計"],"manufacturing_use":"設備保全メモや技術調査ノートをまたいで「過去のインバータ不具合事例をまとめて」と問い合わせ可能。知識の横断検索コストを大幅削減。","time_saving":"週1〜2時間","difficulty":"低"},
+  {"app":"Viva","icon_color":"#0078D4","category":"コミュニケーション","headline":"従業員体験・エンゲージメント・学習をAIで強化","features":["Viva Insights: 仕事パターン分析・集中時間確保支援","Viva Learning: AIが個人に合わせた学習コンテンツを推薦","Viva Topics: 社内知識をAIが自動タグ付け・トピックページ生成","Viva Engage: 社内コミュニティの投稿・要約をAI支援"],"manufacturing_use":"Viva Insightsで電計チームの会議過多・残業パターンを可視化し業務改善の根拠データとして活用。Viva Learningで電気保安法令・設備保全スキルの学習コンテンツを自動推薦し部下育成を効率化。","time_saving":"週1〜2時間（管理業務削減）","difficulty":"中"},
+  {"app":"Power Automate","icon_color":"#0066FF","category":"自動化","headline":"自然言語でワークフロー・自動化フローを生成","features":["「メールが来たらTeamsに通知」等の日本語指示でフロー自動生成","AIによるフロー最適化提案・エラー修正支援","Process Advisor: 業務プロセスをAIが分析して自動化候補を提示","Copilot in Power Automate Desktop: RPAフロー生成支援"],"manufacturing_use":"設備トラブル報告メールを受信したら自動でTeamsに転送・SharePointに記録・担当者にアサインするフローをプロンプトで生成。稟議承認ワークフローの自動化でペーパーレス化を推進。","time_saving":"週3〜8時間（自動化後のランニング削減）","difficulty":"中"},
+  {"app":"Copilot Studio","icon_color":"#742774","category":"自動化","headline":"ノーコードでカスタムAIエージェントを自社構築","features":["GUIベースでカスタムCopilot（チャットボット・エージェント）を構築","社内データ（SharePoint・DB等）をナレッジとして連携","TeamsやWebサイトにエージェントを埋め込み配置","Power Automateと連携してエージェントがアクション実行（フォーム送信・DB更新等）"],"manufacturing_use":"「設備保全FAQ Bot」を構築し、現場担当者がTeamsで質問すると保全手順書・過去トラブル記録から自動回答するシステムを構築。電気主任技術者の点検チェックリスト案内や法定点検スケジュール確認にも活用可能。","time_saving":"週5〜15時間（チーム全体・問い合わせ対応削減）","difficulty":"高"},
+  {"app":"SharePoint","icon_color":"#077568","category":"ナレッジ管理","headline":"社内文書サイトの検索・要約・ページ生成を自動化","features":["SharePoint内文書をまたいでCopilotが横断検索・回答","SharePointページのドラフト・レイアウト生成","ドキュメントライブラリの分類・タグ付け自動化","Copilot Agents（エージェント）をSharePointに設置して社内FAQ化"],"manufacturing_use":"設備仕様書・保全手順書・過去トラブルレポートを格納したSharePointに「このポンプ型式の定期点検手順は？」と問い合わせるエージェントを設置し、現場担当者のドキュメント検索時間を削減。","time_saving":"週2〜4時間（チーム全体）","difficulty":"中"},
+  {"app":"Loop","icon_color":"#009E49","category":"ナレッジ管理","headline":"リアルタイム共同編集ワークスペースをAIで加速","features":["Loopページの下書きをプロンプトから即時生成","表・タスクリスト・議題をAIが提案・補完","会議アジェンダをLoopページとして自動構造化","Teamsチャット・Outlookと双方向でLoopコンポーネントを埋め込み"],"manufacturing_use":"設備投資検討の共同ワークスペースとして、チームメンバーとリアルタイムで仕様項目を埋めていくプロセスを効率化。AIが検討漏れ項目を提案してくれるためヌケモレ防止に有効。","time_saving":"週1〜2時間","difficulty":"中"}
+];
+
+const m365ScenariosData = [
+  {"id":"m365_001","title":"週次チームミーティング議事録の自動生成","app":"Teams","role":"チームリーダー","situation":"電計チームの週次定例会議後、議事録作成に毎回30〜40分かかっている。","how_to":["Teams会議で「文字起こし」をオンにして録音開始","会議終了後、チャット欄のCopilotアイコンをクリック","「決定事項・アクションアイテム・担当者・期限を一覧化」と入力","出力を議事録テンプレートに貼り付け、5分でレビュー完了"],"effect":"議事録作成時間40分→8分（80%削減）","before_after":{"before":"録音を聞き直しながら手入力。40分消費","after":"会議終了後8分で構造化議事録が完成"}},
+  {"id":"m365_002","title":"設備投資稟議書ドラフトの高速生成","app":"Word","role":"チームリーダー","situation":"設備更新・新規投資の稟議書作成が毎回2〜3時間かかる。","how_to":["WordでCopilotサイドパネルを開く（Alt+I）","設備名・投資額・更新理由・期待効果を入力","構成指定（エグゼクティブサマリー→現状課題→投資内容→費用対効果→リスク→判断期限）でドラフト生成","数値プレースホルダーを補完してレビュー"],"effect":"稟議書作成2.5時間→30分（76%削減）","before_after":{"before":"過去稟議書を参照しながら一から作成","after":"情報を渡してドラフト生成後、数値補完のみ"}},
+  {"id":"m365_003","title":"月次電力データの分析・グラフ化","app":"Excel","role":"担当者","situation":"SCADAから出力した電力CSVをExcelで手動グラフ化してコメントを書いている。","how_to":["電力データをExcelシートに貼り付け","「デマンドピーク上位5件・前月比・異常値（平均±2σ超）を特定」と指示","「ピーク・前月比・トレンドを示す折れ線グラフと棒グラフを作成」と追加指示","「月次報告向けに200字以内のコメントを結論先で」と入力"],"effect":"月次電力レポート1.5時間→20分（78%削減）","before_after":{"before":"手動グラフ作成・異常値目視確認・コメント作成を個別に実施","after":"データ貼り付け後にCopilotが分析・グラフ・コメントを一括生成"}},
+  {"id":"m365_004","title":"製造課への設備停止作業依頼メール","app":"Outlook","role":"チームリーダー","situation":"停止を伴う作業の依頼メールを製造課に送る際、影響範囲・日程・代替案の適切な伝え方に時間がかかる。","how_to":["Outlookの新規メール作成画面でCopilotを開く","作業内容・停止時間・影響ライン・希望日程・代替案を箇条書きで入力","「製造課向けに停止影響を冒頭に記載した依頼メールを作成」と指示","件名が結論になっているか確認して送信"],"effect":"依頼メール作成15分→4分（73%削減）","before_after":{"before":"停止影響の記述が後半になり製造課から追加確認が来ることが多い","after":"影響論先行の構成で生成。製造課からの確認返信が減少"}},
+  {"id":"m365_005","title":"設備保全ナレッジのOneNote整理","app":"OneNote","role":"担当者","situation":"過去のトラブル対応メモ・技術資料が散在し、同種トラブル発生時に事例を探すのに時間がかかる。","how_to":["OneNoteの既存メモをCopilot Chatに貼り付け","「現象・推定原因・対処法・再発防止策の4項目で構造化」と指示","構造化テキストをOneNoteのテンプレートとして保存","「[設備種別]関連トラブルで[現象]に類似した事例を探して」と横断検索"],"effect":"類似トラブル事例検索30分→5分（83%削減）","before_after":{"before":"フリーテキストのメモが蓄積。担当者の記憶頼み","after":"構造化ナレッジとして蓄積。自然言語検索で即座に類似事例を抽出"}},
+  {"id":"m365_006","title":"部下の6ヶ月育成計画書の作成","app":"Word","role":"チームリーダー","situation":"新人・若手の育成計画書を年2回作成。スキルマップ・目標・評価指標の記載に半日かかっている。","how_to":["対象メンバーの現状スキル・強み・課題・担当業務をCopilotに入力","「6ヶ月育成計画書のドラフトを月次マイルストーン・評価指標・育成施策付きで作成」と指示","電気計装特有スキル（高圧取扱・PLC・防爆知識等）を追記して調整","OJT/OFF-JTの比率・具体的なアサイン業務を記載して完成"],"effect":"育成計画書作成4時間→45分（81%削減）","before_after":{"before":"前回計画書を参照しながら個人別に一から作成","after":"メンバー情報を渡してドラフト生成後、専門スキルの調整のみ"}},
+  {"id":"m365_007","title":"設備トラブル発生時の緊急連絡文","app":"Teams","role":"担当者","situation":"トラブル発生時、状況確認と並行して上司・製造課への連絡文作成が同時進行で混乱する。","how_to":["TeamsのCopilotを開く","「発生時刻・設備種別・現象・影響・対応状況・復旧見込み」をメモ書きで入力","「上司・製造課向け緊急連絡文を。影響範囲を冒頭に」と指示","30秒でレビューして関係チャンネルに投稿"],"effect":"トラブル連絡文作成10分→2分（80%削減）","before_after":{"before":"焦りの中で文章を考えながら入力。情報の抜け漏れが発生","after":"メモ書きを渡すだけで構造化連絡文が即生成。現場対応に集中できる"}},
+  {"id":"m365_008","title":"KPIダッシュボードの月次コメント生成","app":"Excel","role":"チームリーダー","situation":"KPIダッシュボード更新後のコメント作成に時間がかかる。","how_to":["KPIの今月実績・前月比・目標比をExcelにまとめる","Copilotにデータとコピペし目標値を添えて入力","「管理職向け月次KPIコメントを結論先で。良化・悪化の要因分析と来月対策を含めて」と指示","200字以内に圧縮し報告資料に貼り付け"],"effect":"月次コメント作成30分→8分（73%削減）","before_after":{"before":"数値を見ながら要因を考えてコメント作成。毎月表現がバラつく","after":"データを渡して構造化コメントを生成。要因分析の観点が標準化"}},
+  {"id":"m365_009","title":"他工場との情報交換後のナレッジ化","app":"Teams","role":"チームリーダー","situation":"他工場との情報交換後、得た知見を社内に展開・ナレッジ化するまとめ作業が後回しになり情報が劣化する。","how_to":["Teams会議録画・文字起こしをCopilotに渡す","「他工場から得た技術情報・保全事例・改善アイデアを自工場への適用可能性評価付きで整理」と指示","「適用可能性：高/中/低」と「次アクション（担当・期限）」を自動付与","OneNoteのナレッジテンプレートに貼り付けて保存"],"effect":"情報交換後ナレッジ化率40%→85%（会議当日中に完了）","before_after":{"before":"メモを取るが整理は後回し。1週間後には詳細を忘れる","after":"会議直後にCopilotで整理・適用可能性評価まで完了。当日中に共有"}},
+  {"id":"m365_010","title":"定修計画書の作業リスト自動生成","app":"Excel","role":"チームリーダー","situation":"年次定修の作業リストと工程表作成に毎回1〜2日かかる。","how_to":["過去の定修作業リスト・トラブルログ・法定点検スケジュールをCopilotに渡す","「今年の定修作業リストを法定点検・予防保全・設備更新工事・停止確認に分類し、優先度と推定工数付きで作成」と指示","ExcelのCopilotで工数合計・クリティカルパスを自動計算","製造課調整用に「停止時間合計と短縮案」を追加出力"],"effect":"定修計画書作成2日→4時間（75%削減）","before_after":{"before":"過去記録を1件ずつ参照しながらExcelに入力","after":"過去記録を一括入力後にCopilotが分類・工数付きリストを生成"}},
+  {"id":"m365_011","title":"技術仕様確認のメーカー問い合わせメール","app":"Outlook","role":"担当者","situation":"設備仕様確認のメーカーへの問い合わせメール作成で、質問の漏れや不明確な表現による往復が発生している。","how_to":["対象機器・確認したい仕様項目・背景・回答期限をCopilotに入力","「質問番号を振り、仕様は数値で、回答期限を明記したメーカー問い合わせメールを作成」と指示","「ご検討ください」→「〇月〇日までに回答ください」への変換を確認","Q1, Q2...番号付きで送信"],"effect":"メーカー往復回数平均3回→1.5回（確認漏れ50%削減）","before_after":{"before":"質問の漏れや曖昧な表現でメーカーからの確認返信が多発","after":"番号付き明確な質問リストで一発回答率が向上"}},
+  {"id":"m365_012","title":"月次業務サマリー（上司向け報告）","app":"Outlook","role":"チームリーダー","situation":"月次の上司向け業務報告書作成に毎回1時間かかる。","how_to":["今月の完了業務・数値実績・課題・来月予定を箇条書きで入力","「上司向け月次サマリーを結論（今月の総合評価1行）→実績ハイライト→課題と対策→来月重点事項の順で。A4半ページ以内」と指示","禁止表現（させていただきます等）が含まれていないか確認","数値の補完のみ行って送信"],"effect":"月次報告書作成1時間→15分（75%削減）","before_after":{"before":"実績を見ながら文章を考えて入力。構成を迷う時間が多い","after":"箇条書きを渡してドラフト生成後、数値補完のみで完成"}},
+  {"id":"m365_013","title":"設備投資稟議書→PPTスライド自動変換","app":"PowerPoint","role":"チームリーダー","situation":"Wordで作成した稟議書を経営層向けにPowerPointに変換する作業が毎回1〜2時間かかる。","how_to":["Wordの稟議書ドキュメントを開き、PowerPoint Copilotに「このドキュメントからプレゼンを作成」と指示","スライド構成（エグゼクティブサマリー・現状課題・投資内容・費用対効果・リスクと対策・意思決定期限）を確認","デザイナー機能でSlate Frost系のシンプルなテーマを適用","数値スライドに図解・比較表をCopilotに追加依頼して完成"],"effect":"稟議書→PPT変換2時間→25分（79%削減）","before_after":{"before":"Wordの内容をコピーしながら1スライドずつ作成。図解は手動","after":"Copilotがスライド構成を自動生成。図解・比較表も追加指示で即追加"}},
+  {"id":"m365_014","title":"社内規程・保全手順書のQ&A即時検索","app":"SharePoint","role":"担当者","situation":"電気保安規程・保全手順書が複数のSharePointフォルダに散在し、手順確認のたびに5〜10分かけてファイルを探す。","how_to":["SharePointのCopilot検索バーで「[設備種別]の停電作業手順を教えて」と自然言語で入力","関連手順書のページが引用付きで即表示されることを確認","「防爆機器の定期点検周期は？」など規程Q&Aも同様に検索","よく使う質問をブックマークしてチームに共有"],"effect":"手順書検索時間10分→1分（90%削減）","before_after":{"before":"フォルダを階層移動してファイルを開き、Ctrl+Fで検索","after":"自然言語で質問するだけで該当箇所が引用付きで即表示"}},
+  {"id":"m365_015","title":"設備点検チェックリストのAI自動設計","app":"Forms","role":"チームリーダー","situation":"設備種別ごとの点検チェックリストを一から作成する作業が発生するたびに1〜2時間かかる。","how_to":["FormsのCopilotで「[設備種別]の月次点検チェックリストを作成。項目は点検内容・判定基準・測定値入力欄・異常時対応を含む」と入力","自動生成されたフォームの項目を設備実態に合わせて調整","スマートフォン対応の点検票として現場に配布","回答データをExcelに自動転送してCopilotで分析"],"effect":"チェックリスト作成2時間→20分（83%削減）","before_after":{"before":"Excel/紙のチェックリストを設備ごとに一から設計","after":"設備種別と要件を伝えるだけでCopilotが点検項目を網羅的に生成"}},
+  {"id":"m365_016","title":"設備投資の財務指標自動計算と感度分析","app":"Excel","role":"チームリーダー","situation":"設備投資のROI・回収期間・NPVの計算式作成と感度分析に時間がかかり、稟議準備のボトルネックになっている。","how_to":["投資額・年間コスト削減額・耐用年数・割引率をExcelに入力","Copilotに「ROI・単純回収期間・NPV・IRRの計算式を作成し、結果を表形式でまとめて」と指示","「割引率を3%〜8%で変化させた場合のNPV感度分析表を追加」と追加依頼","「稟議資料向けに財務評価の結論コメントを200字以内で」と最終出力"],"effect":"財務分析作業3時間→40分（78%削減）","before_after":{"before":"ROI計算式を調べながら手動作成。感度分析は手動で複数ケース作成","after":"投資数値を入力するだけでCopilotが計算式・感度分析・コメントを一括生成"}},
+  {"id":"m365_017","title":"多拠点・メーカー参加会議の議事録自動生成","app":"Teams","role":"チームリーダー","situation":"他工場やメーカーが参加するオンライン会議の議事録作成に会議後1〜2時間かかる。情報の正確な共有が必要。","how_to":["Teams会議で録画・文字起こし機能をオンにして会議実施","会議終了後にCopilotの「会議の要約」で議事録自動生成","「社外参加者向けに、決定事項と各社アクションアイテムを明記した議事録に再編集」と追加指示","メーカー担当への確認事項と期限を別途チャットで送信"],"effect":"議事録作成1.5時間→15分（83%削減）","before_after":{"before":"メモをもとに後から議事録を再構成。参加者の発言を思い出しながら作成","after":"文字起こしからCopilotが自動生成。社外向け体裁への変換も追加指示で即対応"}},
+  {"id":"m365_018","title":"設備トラブル傾向ダッシュボード構築","app":"Power BI","role":"チームリーダー","situation":"トラブルログがExcelに蓄積されているが、傾向分析・月次集計・設備別比較を可視化する工数がなく活用できていない。","how_to":["トラブルログExcel（発生日・設備種別・現象・対処法・停止時間）をPower BIに読み込み","Copilot（Q&A機能）で「設備種別ごとの月次トラブル件数を棒グラフで表示」と自然言語で指示","「停止時間が多い設備TOP5」「月別トレンド」「対処法の分類別件数」を追加","完成ダッシュボードをTeamsチャンネルに埋め込んで全員参照可能に"],"effect":"トラブル傾向レポート月次3時間→ゼロ（自動更新ダッシュボードに置換）","before_after":{"before":"Excelのピボットテーブルを毎月手動作成。グラフのコピーで報告書を更新","after":"データ追加するだけでPower BIが自動集計・可視化。Copilotに質問するだけで追加分析"}},
+  {"id":"m365_019","title":"設備保全FAQボット構築","app":"Copilot Studio","role":"チームリーダー","situation":"若手担当者からの「この設備の点検周期は？」「インバータのアラームコードの意味は？」などの質問対応に週数時間を使っている。","how_to":["Copilot Studioで新規ボットを作成し、SharePointの保全手順書・技術マニュアルをナレッジソースとして登録","設備種別・アラームコード・点検手順の質問パターンを20件テストして精度確認","「回答が見つからない場合はチームリーダーにエスカレーション」のフローを設定","TeamsチャンネルにボットをインストールしてQRコードで現場周知"],"effect":"若手からの基本質問対応週3時間→週30分（83%削減）","before_after":{"before":"若手から同じ質問を繰り返し受けて回答。担当者がいない時は作業が止まる","after":"ボットが24時間対応。マニュアル根拠付きで回答し、不明な場合のみエスカレーション"}},
+  {"id":"m365_020","title":"法定点検記録の自動整理とアラート","app":"Power Automate","role":"担当者","situation":"電気設備の法定点検（年次・月次）の実施記録管理と期限アラートを手動のExcel管理表で運用しており、期限漏れリスクがある。","how_to":["SharePointに点検記録リスト（設備種別・点検区分・前回実施日・次回期限・担当者）を作成","Power AutomateのCopilotで「次回点検期限の30日前と7日前にTeamsで担当者に通知するフローを作成して」と自然言語で指示","生成されたフローを確認・有効化。点検完了時にSharePointリストを更新するフォームも作成","月次で期限超過リストをPDFに変換してメールで管理職に自動送信"],"effect":"点検期限漏れリスクの排除・管理工数月3時間→0（完全自動化）","before_after":{"before":"Excelの管理表を週1回確認して期限をチェック。漏れに気づかないリスク","after":"期限30日前・7日前に自動アラート。担当者が見落とすことがない仕組みを構築"}},
+  {"id":"m365_021","title":"定型メール・申請フローの自動化","app":"Power Automate","role":"担当者","situation":"設備作業前の関係部署への連絡メール、作業完了後の報告メールなど定型メールを毎回手動で作成・送信している。","how_to":["Power AutomateのCopilotで「SharePointのリストにアイテムが追加されたら関係者にTeamsメッセージを送信するフロー」と自然言語入力","フロー生成後に送信先・テンプレート文面・条件分岐（緊急/通常）を調整","作業完了ボタン（PowerApps）を現場タブレットに設置し完了報告を自動化","フォーム入力→承認ルート自動付与→完了通知の一連フローを3日で構築"],"effect":"定型連絡業務週2時間→週15分（88%削減）","before_after":{"before":"定型文をコピーして宛先・日程を変えて手動送信。送り忘れが発生","after":"リスト更新をトリガーに自動送信。送り忘れゼロ・記録も自動でSharePointに蓄積"}},
+  {"id":"m365_022","title":"保全コスト・工数の月次集計レポート自動生成","app":"Power BI / Excel","role":"チームリーダー","situation":"保全作業の材料費・外注費・工数をExcelで集計して月次レポートを作成する作業が毎月4〜5時間かかる。","how_to":["保全作業記録（作業日・設備種別・材料費・外注費・工数）をExcelまたはSharePointリストに統一フォーマットで蓄積","Power BIでデータを読み込み、Copilotに「設備種別・月別・費用区分のクロス集計表と予算対比グラフを作成」と指示","「コスト上位5設備と前年同月比のコメントを生成」と追加指示","月初にPower Automateで自動更新・PDF出力・管理職メール送信をスケジュール化"],"effect":"月次保全レポート作成5時間→30分（90%削減）","before_after":{"before":"複数Excelファイルを手動統合・集計・グラフ化。コメントも一から作成","after":"データ入力するだけで集計・グラフ・コメントが自動生成。月初に自動配信"}}
+];
+
+const m365PromptsData = [
+  {"id":"p001","title":"週次会議議事録テンプレート","app":"Teams","category":"会議","template":"この会議を以下の形式でまとめてください。\n【決定事項】（箇条書き、各項目に決定理由を1文）\n【アクションアイテム】（担当者 | 内容 | 期限：YYYY-MM-DD）\n【継続検討事項】（未決定の理由と次回確認内容）\n【次回議題候補】（2〜3件）\n曖昧な期限（「なるべく早く」等）は記載しないこと。","output_example":"決定事項・担当者・期限が表形式で整理され、即共有できる状態になる","tip":"会議前に今日の議題をTeamsチャットに投稿しておくとCopilotの精度が上がる"},
+  {"id":"p002","title":"製造課への設備停止依頼メール","app":"Outlook","category":"メール","template":"製造課[担当者名]さん宛に設備停止作業依頼メールを作成してください。\n作業内容：[作業内容]\n停止時間：[時間]時間（[開始]〜[終了]）\n影響ライン：[ライン名]\n希望日程：第1候補[日程]、第2候補[日程]\n代替案：[代替案または「代替案なし」]\n件名に停止時間と影響ラインを含め、影響を冒頭に記載し製造課の生産計画優先のトーンで。","output_example":"件名「[ライン名] X時間停止作業依頼 — [日程]」で始まる影響先行の依頼メール","tip":"「代替案なし」の場合は理由（年次点検等）を明記するとCopilotが適切な表現を選ぶ"},
+  {"id":"p003","title":"設備トラブル緊急連絡文","app":"Teams","category":"メール","template":"設備トラブルの緊急連絡文を作成してください。\n発生時刻：[時刻]\n設備種別：[例：動力盤、センサー類]\n現象：[何が起きているか]\n影響：[停止ライン、停止時間見込み]\n現在の対応：[実施中の対処]\n復旧見込み：[時間または「調査中」]\n冒頭に影響範囲を記載し箇条書きで。「させていただきます」は使わないこと。","output_example":"「[ライン名]が[時刻]より停止中」から始まる影響論先行の簡潔な連絡文","tip":"テンプレートをTeamsのマイノートに保存しておくとトラブル時に素早く呼び出せる"},
+  {"id":"p004","title":"設備点検結果の報告書","app":"Word","category":"報告書","template":"以下の点検結果データを元に設備点検報告書を作成してください。\n点検設備：[設備種別]\n点検日：[日付]\n点検項目と結果：[測定値一覧]\n異常箇所：[あれば記載、なければ「異常なし」]\n\n構成：①点検概要（1段落）②測定結果一覧（表形式）③異常・要注意箇所（根拠数値付き）④推奨対処（期限付き）⑤次回点検推奨時期\n総合所見を冒頭1行で。","output_example":"「総合所見：異常なし / 〇〇に要注意」から始まり測定結果が表で整理された報告書","tip":"測定値はCSV形式で貼り付けると表変換の精度が上がる"},
+  {"id":"p005","title":"電力使用量の異常値分析","app":"Excel","category":"分析","template":"このExcelデータの電力使用量を分析してください。\n①デマンドピーク上位3件（日時・値・前日比）\n②月間使用量の前月比（%）\n③平均値から2σ以上乖離している日時と値\n④トレンド（直近3ヶ月：増加/横ばい/減少）\n⑤異常値がある場合の推定要因（設備起因/操業変化/季節要因）\n経営報告向けに200字以内のコメントも生成すること。","output_example":"デマンドピーク・前月比・異常値が箇条書きで整理され、200字の報告コメントが自動生成","tip":"過去12ヶ月分のデータを含めると季節変動の判定精度が上がる"},
+  {"id":"p006","title":"部下へのフィードバックメッセージ","app":"Teams","category":"メール","template":"以下の内容で部下[名前/役職]へのフィードバックメッセージを作成してください。\n評価対象業務：[業務内容]\n良かった点：[具体的な行動・成果]\n改善してほしい点：[具体的な行動・場面]\n\nWhy先行（なぜそのフィードバックをするかから入る）、1項目1アクション、最後に「どう思う？」で締める。説教調にならず次のアクションが明確になる文体で。","output_example":"「〇〇の理由から△△は良かった。次は□□を意識してほしい。どう思う？」という対話促進型の短いフィードバック","tip":"「改善してほしい点」は行動ベース（「積極性が足りない」→「会議で1回以上発言してほしい」）で入力すると具体的になる"},
+  {"id":"p007","title":"設備投資5軸評価レポート","app":"Word","category":"報告書","template":"以下の設備投資案件を5軸評価してください。\n案件名：[案件名]\n投資内容：[内容]\n投資額：[金額]万円\n\n評価軸（各5点満点でスコアリングし根拠1〜2文）：\n①安全（法規制適合・防爆・作業安全性）\n②信頼性（設備稼働率・MTBF・実績）\n③保全性（現場作業性・予備品調達・特殊工具の要否）\n④拡張性（将来の増設・通信プロトコル適合性）\n⑤コスト（初期投資・LCC・ROI年数）\n\n総合評価と推奨判断を結論先で。","output_example":"5軸スコア表と根拠、「推奨する / 条件付き推奨 / 推奨しない」の判断が結論先で出力される","tip":"競合案が複数ある場合は「案A vs 案B」形式で入力すると比較マトリクスが自動生成される"},
+  {"id":"p008","title":"他工場情報交換の知見整理","app":"Teams","category":"分析","template":"以下の他工場との情報交換メモから、自工場への適用可能な知見を抽出してください。\n[情報交換メモをここに貼り付け]\n\n出力形式：\n【適用可能性：高】（即実行できる施策）\n【適用可能性：中】（検討・調査が必要な施策）\n【適用可能性：低】（設備・環境が異なり適用困難）\n\n各項目に①内容②自工場への適用イメージ③必要なアクション（担当部門・期限）を付けること。","output_example":"「適用可能性：高」の施策が冒頭に整理され、次アクションが担当・期限付きで明確になる","tip":"「自工場の特徴」（防爆エリアあり、PLC多用環境等）をプロンプト冒頭に追記すると適用判断の精度が上がる"},
+  {"id":"p009","title":"月次業務サマリー（上司向け）","app":"Outlook","category":"報告書","template":"以下の今月の業務実績を上司向け月次サマリーに整理してください。\n完了業務：[完了した主要業務一覧]\n数値実績：[KPI・工数・件数等]\n課題・懸念：[発生した問題と対処状況]\n来月の予定：[主要予定]\n\n構成：結論（今月の総合評価1行）→実績ハイライト（数値付き3点）→課題と対策→来月重点事項。A4半ページ以内。「させていただきます」「ご確認いただけますでしょうか」は使わないこと。","output_example":"「今月の総合評価：計画通り達成 / 〇〇に課題」から始まる簡潔な報告書","tip":"「数値実績」に具体的な数字（達成率・件数・金額）を入れると説得力のある報告書になる"},
+  {"id":"p010","title":"会議アジェンダ作成（製造課調整）","app":"Teams","category":"会議","template":"以下の目的で製造課との調整会議アジェンダを作成してください。\n会議目的：[例：Q2定修計画の日程調整]\n参加者：電計チーム[人数]名、製造課[人数]名\n会議時間：[分]分\n決めたいこと：[決定事項]\n共有したい情報：[情報]\n\n各項目に所要時間・担当（電計/製造課/共同）・目標（決定/情報共有/議論）を付けること。製造課の関心事（生産計画への影響）を議題の優先順位に反映すること。","output_example":"時間配分・担当・目標が明記されたアジェンダが生成され会議の空転を防ぐ","tip":"「製造課が最も気にすること」を1行添えると議題の順序と所要時間が最適化される"},
+  {"id":"p011","title":"トラブルナレッジの構造化","app":"OneNote","category":"分析","template":"以下のトラブル記録を標準形式に構造化してください。\n[トラブルメモをここに貼り付け]\n\n出力形式：\n【現象】いつ・どの設備種別・何が起きたか（1〜2文）\n【推定原因】可能性が高い順に3つ（根拠付き）\n【実施した対処法】手順と所要時間\n【結果】復旧確認内容\n【再発防止策】具体的なアクション（期限付き）\n【次回点検時の確認ポイント】","output_example":"現象・原因・対処・再発防止が標準フォーマットで整理され既知パターンとの照合が容易になる","tip":"「設備種別・現象の概要」だけのメモからでも構造化できる。詳細は後から補完すればよい"},
+  {"id":"p012","title":"定修作業リスト生成","app":"Excel","category":"計画","template":"以下の情報を元に年次定修の作業リストを作成してください。\n過去作業記録：[記録]\n法定点検スケジュール：[スケジュール]\n今年の設備更新工事：[工事内容]\n\n各作業に①分類（法定/予防保全/更新工事/確認）②優先度（高/通常）③推定工数（時間）④必要人員を付けること。停止時間合計と短縮可能な作業も整理すること。","output_example":"分類・優先度・工数付きの定修作業リストが生成され、製造課との日程調整資料として即使える","tip":"「今年特に注意すべき設備（老朽化・不具合履歴あり）」を明記するとそれを優先リストの冒頭に配置してくれる"},
+  {"id":"p013","title":"育成計画の月次進捗レビュー","app":"Word","category":"計画","template":"部下[役職・経験年数]の育成計画に対する今月の進捗レビューコメントを作成してください。\n今月の目標：[目標]\n実際の行動・成果：[実績]\n達成度：[%または定性評価]\n\n①達成度評価（数値・事実ベース）②良かった行動（具体的場面）③来月の重点課題（1〜2点、行動ベース）④チームリーダーとして提供できるサポート。説教・抽象的な励ましは使わず次のアクションで締めること。","output_example":"「目標の〇%達成。△△の場面での□□行動が良かった。来月は◇◇を意識してほしい」という具体的なレビューコメント","tip":"「良かった行動」は必ず具体的な場面・日時を入力する。「頑張っていた」ではCopilotも曖昧なコメントしか生成できない"},
+  {"id":"p014","title":"技術仕様確認のメーカー問い合わせ","app":"Outlook","category":"メール","template":"以下の内容でメーカーへの技術仕様確認メールを作成してください。\n対象機器：[機器種別]\n確認したい仕様：[仕様項目1、仕様項目2、仕様項目3]\n確認が必要な背景：[導入検討中/既設機更新/法的要件のため等]\n回答期限：[YYYY-MM-DD]\n\n敬語は最小限・仕様は数値で質問・「ご検討ください」は使わず「〇月〇日までに回答ください」と明記。質問番号を振り回答しやすくすること。","output_example":"Q1, Q2, Q3と番号付きの明確な質問リストと期限明記メールが生成される","tip":"「現在使用中の類似機器のメーカー・型番」を添えると互換性・置き換え可能性の質問を自動追加してくれる"},
+  {"id":"p015","title":"チーム向け技術共有資料のサマリー","app":"PowerPoint","category":"報告書","template":"以下の技術情報・調査結果をチーム向け共有資料にまとめてください。\n[技術情報・資料をここに貼り付け]\n\n対象：電気計装チーム（担当者〜チームリーダー）\n目的：[例：新型センサーの特徴把握、法改正の周知]\n\n構成：①TL;DR（3行以内・結論先）②背景・必要な理由③重要ポイント（3〜5項目、数値・規格番号付き）④現場への適用時の注意点⑤次のアクション（誰が・何を・いつまでに）。専門用語はそのまま使い不要な解説は省くこと。","output_example":"「TL;DR：〇〇は××に変更。[日付]までに△△の対応が必要」から始まる実務直結の共有資料","tip":"「チームの現在のスキルレベル」を添えると説明の詳細度が最適化される"}
+];
+
+const m365LicenseData = [
+  {"name":"Business Basic","price_jpy":900,"copilot":false,"key":"メール・Teams・SharePoint基本"},
+  {"name":"Business Standard","price_jpy":1880,"copilot":false,"key":"デスクトップOffice追加"},
+  {"name":"Business Premium","price_jpy":3300,"copilot":false,"key":"セキュリティ強化（Intune・DLP）"},
+  {"name":"E3","price_jpy":5400,"copilot":false,"key":"大企業向け・コンプライアンス"},
+  {"name":"E5","price_jpy":8550,"copilot":false,"key":"最高セキュリティ・Power BI Pro含む"},
+  {"name":"Copilot追加","price_jpy":4500,"copilot":true,"key":"全アプリにAI機能（上記プランに追加）"}
+];
+
+const m365SecurityQA = [
+  {"q":"社内の機密情報がAIの学習データに使われないか？","a":"使われません。Microsoft商用ユーザーのデータはモデルトレーニングに使用しないことがMicrosoft製品利用規約（DPA）に明記されています。個人版Bing/Copilot.comとは契約条件が異なります。"},
+  {"q":"設計図・化学物質情報が社外に漏れないか？","a":"Copilotはユーザーのアクセス権があるデータのみ参照します（Azure AD権限を継承）。ただし事前にSharePointの権限棚卸しと、機密文書への秘密度ラベル設定が必要です。"},
+  {"q":"データはどこのサーバーに保存されるか？","a":"日本テナントで契約した場合、Exchange/SharePoint/TeamsのデータはMicrosoft東日本・西日本データセンターに保管されます。"},
+  {"q":"ISO 27001やISMAPに対応しているか？","a":"対応しています。Microsoft Service Trust Portalから最新の監査レポート（ISO 27001/SOC2/ISMAP等）をダウンロードして社内審査証跡として使用できます。"},
+  {"q":"Copilotが見てはいけない文書を参照しないようにできるか？","a":"可能です。Microsoft Purview DLPポリシーと秘密度ラベル（MIP）を組み合わせることで、「極秘」ラベルの文書をCopilotが参照しないよう制御できます。"}
+];
+
+// ===== M365 STATE =====
+let m365ScenarioFilter = 'all';
+let m365PromptFilter = 'all';
+
+function switchM365Tab(name) {
+  document.querySelectorAll('.m365-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.m365-sub-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('m365-' + name).classList.add('active');
+  document.getElementById('m365-btn-' + name).classList.add('active');
+}
+
+function setM365ScenarioFilter(val, btn) {
+  m365ScenarioFilter = val;
+  document.querySelectorAll('#m365-scenario-filters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderM365Scenarios();
+}
+
+function setM365PromptFilter(val, btn) {
+  m365PromptFilter = val;
+  document.querySelectorAll('#m365-prompt-filters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderM365Prompts();
+}
+
+function m365DiffBadge(d) {
+  const map = {'低':'m365-badge-diff-low','中':'m365-badge-diff-mid','高':'m365-badge-diff-high'};
+  return `<span class="${map[d]||'m365-badge-diff-low'}">難易度: ${d}</span>`;
+}
+
+function appBadgeColor(app) {
+  const map = {'Teams':'#6264A7','Word':'#2B579A','Excel':'#217346','Outlook':'#0078D4','OneNote':'#7719AA','PowerPoint':'#D24726','Power BI':'#F2C811','SharePoint':'#077568','Loop':'#009E49','Viva':'#0078D4','Power Automate':'#0066FF','Copilot Studio':'#742774','Forms':'#008272','Whiteboard':'#0078D4'};
+  return map[app] || '#38bdf8';
+}
+
+function renderM365Apps() {
+  const categories = ['文書作成','データ分析','コミュニケーション','自動化','ナレッジ管理'];
+  const container = document.getElementById('m365-apps-grid');
+  container.innerHTML = categories.map(cat => {
+    const apps = m365AppsData.filter(a => a.category === cat);
+    if (!apps.length) return '';
+    const cards = apps.map(a => {
+      const col = a.icon_color;
+      const abbr = a.app.substring(0,2);
+      return `
+      <div class="m365-app-card clickable" style="--app-color:${col}" onclick="toggleAccordion(this.querySelector('.m365-app-headline'))">
+        <div class="m365-app-header">
+          <div class="m365-app-icon" style="background:${col}22;border:1px solid ${col}44;color:${col}">${abbr}</div>
+          <div>
+            <div class="m365-app-name">${a.app}</div>
+          </div>
+        </div>
+        <div class="m365-app-headline">${a.headline}</div>
+        <div class="accordion-content">
+          <div class="m365-app-meta">
+            <span class="m365-badge-time">⏱ ${a.time_saving}</span>
+            ${m365DiffBadge(a.difficulty)}
+          </div>
+          <ul class="m365-features-list">
+            ${a.features.map(f=>`<li>${f}</li>`).join('')}
+          </ul>
+          <div class="m365-mfg-use"><strong>製造業活用:</strong> ${a.manufacturing_use}</div>
+        </div>
+      </div>`;
+    }).join('');
+    return `
+    <div class="m365-category-block">
+      <div class="m365-category-label">${cat}</div>
+      <div class="grid-3">${cards}</div>
+    </div>`;
+  }).join('');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function renderM365Scenarios() {
+  const filtered = m365ScenarioFilter === 'all' ? m365ScenariosData : m365ScenariosData.filter(s => s.app === m365ScenarioFilter);
+  const grid = document.getElementById('m365-scenarios-grid');
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">該当するシナリオがありません</div>'; return; }
+  const col = app => appBadgeColor(app);
+  grid.innerHTML = filtered.map(s => `
+    <div class="m365-scenario-card">
+      <div class="m365-scenario-title">${s.title}</div>
+      <div class="m365-scenario-meta">
+        <span class="badge" style="background:${col(s.app)}22;color:${col(s.app)};border:1px solid ${col(s.app)}44">${s.app}</span>
+        <span class="badge badge-muted">${s.role}</span>
+      </div>
+      <div class="m365-scenario-situation">${s.situation}</div>
+      <div class="m365-effect-box">
+        <i data-lucide="trending-up" style="width:14px;height:14px;flex-shrink:0"></i>
+        ${s.effect}
+      </div>
+      <div class="m365-before-after">
+        <div class="m365-ba-col">
+          <div class="m365-ba-label before">BEFORE</div>
+          <div class="m365-ba-text">${s.before_after.before}</div>
+        </div>
+        <div class="m365-ba-col">
+          <div class="m365-ba-label after">AFTER</div>
+          <div class="m365-ba-text">${s.before_after.after}</div>
+        </div>
+      </div>
+      <div class="m365-howto">
+        <div class="m365-howto-label">手順</div>
+        <ol>${s.how_to.map(h=>`<li>${h}</li>`).join('')}</ol>
+      </div>
+    </div>
+  `).join('');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function renderM365Prompts() {
+  const filtered = m365PromptFilter === 'all' ? m365PromptsData : m365PromptsData.filter(p => p.category === m365PromptFilter);
+  const grid = document.getElementById('m365-prompts-grid');
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">該当するプロンプトがありません</div>'; return; }
+  const col = app => appBadgeColor(app);
+  const catColor = {'会議':'badge-blue','メール':'badge-purple','報告書':'badge-green','分析':'badge-yellow','計画':'badge-orange'};
+  grid.innerHTML = filtered.map(p => `
+    <div class="m365-prompt-card">
+      <div class="m365-prompt-header">
+        <div class="m365-prompt-title">${p.title}</div>
+        <button class="m365-copy-btn" onclick="copyPrompt(this, '${p.id}')" id="copy-${p.id}">
+          <i data-lucide="clipboard"></i> コピー
+        </button>
+      </div>
+      <div class="m365-prompt-meta">
+        <span class="badge" style="background:${col(p.app)}22;color:${col(p.app)};border:1px solid ${col(p.app)}44">${p.app}</span>
+        <span class="badge ${catColor[p.category]||'badge-muted'}">${p.category}</span>
+      </div>
+      <div class="m365-prompt-template" id="tmpl-${p.id}">${escapeHtml(p.template)}</div>
+      <div class="m365-output-box"><strong>出力イメージ:</strong> ${p.output_example}</div>
+      <div class="m365-tip-box">${p.tip}</div>
+    </div>
+  `).join('');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function renderM365License() {
+  const table = document.getElementById('m365-license-table');
+  table.innerHTML = `
+    <thead><tr>
+      <th>プラン</th>
+      <th>月額（税抜）</th>
+      <th>M365 Copilot</th>
+      <th>主な特徴</th>
+    </tr></thead>
+    <tbody>
+      ${m365LicenseData.map(l => `
+        <tr class="${l.copilot ? 'copilot-row' : ''}">
+          <td style="font-weight:600">${l.name}</td>
+          <td class="m365-price-cell">¥${l.price_jpy.toLocaleString()}</td>
+          <td style="text-align:center">${l.copilot ? '<span class="m365-copilot-mark">✓ 有償</span>' : '<span class="m365-no-mark">— 無償のみ</span>'}</td>
+          <td style="font-size:var(--fs-sm);color:var(--color-muted)">${l.key}</td>
+        </tr>
+      `).join('')}
+    </tbody>
+    <tfoot><tr><td colspan="4" style="padding:var(--sp-3) var(--sp-4);font-size:0.78rem;color:var(--color-muted);border-top:1px solid var(--color-border)">
+      <span style="color:#94a3b8;font-weight:600">— 無償のみ</span>：web版 Copilot（copilot.microsoft.com）のみ利用可。Officeアプリ内統合・社内データ連携は不可。
+      　<span style="color:var(--color-success);font-weight:600">✓ 有償</span>：M365 Copilot追加済み。Word/Excel/Teams/Outlook内で動作し社内データ（SharePoint・OneDrive）を参照。商用データ保護（学習使用なし）が適用。
+    </td></tr></tfoot>`;
+
+  const qaList = document.getElementById('m365-qa-list');
+  qaList.innerHTML = m365SecurityQA.map((qa, i) => `
+    <div class="m365-qa-item" id="qa-${i}">
+      <div class="m365-qa-q" onclick="toggleQA(${i})">
+        <div class="m365-qa-q-text">${qa.q}</div>
+        <span class="m365-qa-chevron">▼</span>
+      </div>
+      <div class="m365-qa-a">${qa.a}</div>
+    </div>
+  `).join('');
+}
+
+function toggleQA(i) {
+  document.getElementById('qa-' + i).classList.toggle('open');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function copyPrompt(btn, id) {
+  const tmpl = m365PromptsData.find(p => p.id === id);
+  if (!tmpl) return;
+  navigator.clipboard.writeText(tmpl.template).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<i data-lucide="check"></i> コピーしました！';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<i data-lucide="clipboard"></i> コピー';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }, 2000);
+  });
+}
+
+// ===== INIT =====
+</script>
+</body>
+</html>
