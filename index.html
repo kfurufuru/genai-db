@@ -657,8 +657,9 @@ body {
 .ts-node--claude .ts-tool  { background: rgba(217,119,6,0.15);  color: #d97706; border: 1px solid rgba(217,119,6,0.3); }
 .ts-node--chatgpt .ts-tool { background: rgba(16,163,127,0.15); color: #10a37f; border: 1px solid rgba(16,163,127,0.3); }
 .ts-node--copilot .ts-tool { background: rgba(0,120,212,0.15);  color: #0078d4; border: 1px solid rgba(0,120,212,0.3); }
-.ts-node--gemini .ts-tool  { background: rgba(66,133,244,0.15); color: #4285f4; border: 1px solid rgba(66,133,244,0.3); }
-.ts-tool--perplexity       { background: rgba(32,178,170,0.15); color: #20b2aa; border: 1px solid rgba(32,178,170,0.3); }
+.ts-node--gemini .ts-tool      { background: rgba(66,133,244,0.15); color: #4285f4; border: 1px solid rgba(66,133,244,0.3); }
+.ts-node--notebooklm .ts-tool  { background: rgba(52,168,83,0.15);  color: #34a853; border: 1px solid rgba(52,168,83,0.3); }
+.ts-tool--perplexity           { background: rgba(32,178,170,0.15); color: #20b2aa; border: 1px solid rgba(32,178,170,0.3); }
 @media (max-width: 768px) {
   .tool-selector-body { padding: var(--sp-3); }
 }
@@ -1197,6 +1198,15 @@ footer span { color: var(--color-accent); }
               <span class="ts-tool">ChatGPT</span>
             </div>
           </div>
+          <div class="ts-branch">
+            <div class="ts-line"></div>
+            <div class="ts-node ts-node--notebooklm">
+              <span class="ts-condition">手元資料（PDF・仕様書）を根拠に質問・整理</span>
+              <span class="ts-arrow">→</span>
+              <span class="ts-tool">NotebookLM</span>
+              <span class="ts-sub">ハルシネーションなし・資料範囲内で回答</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1448,7 +1458,8 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
   })
   .catch(err => {
-    console.error('データ読み込みに失敗しました:', err);
+    console.warn('JSONファイル読み込み失敗（file://制限の可能性）:', err);
+    init(); // インラインデータ（M365等）だけでも描画する
   });
 });
 
