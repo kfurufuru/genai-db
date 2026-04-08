@@ -1,0 +1,221 @@
+[
+  {
+    "name": "ChatGPT",
+    "provider": "OpenAI",
+    "color": "#10a37f",
+    "icon_label": "GPT",
+    "japanese_quality": "◎",
+    "paid_plan": 20,
+    "main_models": ["GPT-4o", "GPT-4o mini", "o1", "o3-mini"],
+    "context_window": "128,000トークン（GPT-4o）",
+    "free_tier": "GPT-4o mini無制限・GPT-4o制限付き・画像生成DALL·E制限付き",
+    "strengths": [
+      "最大のユーザー数・事例数で情報が豊富",
+      "日本語品質が非常に高い（◎）",
+      "DALL·E画像生成・音声入出力・Python実行（Code Interpreter）を1サービスで提供",
+      "GPTs（カスタムAI）でチーム用AIを作成・共有可能",
+      "o1・o3など推論特化モデルで複雑な計算・論理問題に強い"
+    ],
+    "weaknesses": [
+      "有料プラン（$20/月）が必要な機能が多い",
+      "API利用は別途APIキー課金が必要",
+      "商用データ保護はEnterprise/Teamプランのみ",
+      "最新情報の更新頻度に遅延あり（カットオフあり）"
+    ],
+    "best_for": "汎用的な業務支援・文書作成・データ分析・コード生成・画像生成まで幅広くカバー。製造業での日常的なAI活用の入門として最適。"
+  },
+  {
+    "name": "Claude",
+    "provider": "Anthropic",
+    "color": "#d97706",
+    "icon_label": "Cld",
+    "japanese_quality": "◎",
+    "paid_plan": 20,
+    "main_models": ["Claude 3.5 Sonnet", "Claude 3.5 Haiku", "Claude 3 Opus"],
+    "context_window": "200,000トークン（最大）",
+    "free_tier": "Claude 3.5 Haiku（軽量モデル）制限付き無料",
+    "strengths": [
+      "200,000トークンの超大コンテキストウィンドウ（A4で約150ページ）",
+      "長文文書の読み込み・要約・分析に最強クラス",
+      "文章生成の自然さ・論理構造が競合比で高品質",
+      "安全性重視設計（Constitutional AI）",
+      "Claude Code（コーディングエージェント）が業界評価高"
+    ],
+    "weaknesses": [
+      "画像生成機能なし",
+      "ウェブ検索機能は限定的（2025年時点）",
+      "GPTsのような第三者製カスタムAIエコシステムが小さい",
+      "日本国内での認知度がChatGPT比で低い"
+    ],
+    "best_for": "長大な技術文書・仕様書・報告書の読み込み・要約・分析。設備仕様検討資料や保全マニュアル全体を一度に参照させたい場面で圧倒的強み。"
+  },
+  {
+    "name": "Gemini",
+    "provider": "Google DeepMind",
+    "color": "#4285f4",
+    "icon_label": "Gem",
+    "japanese_quality": "◎",
+    "paid_plan": 20,
+    "main_models": ["Gemini 1.5 Pro", "Gemini 2.0 Flash", "Gemini Ultra"],
+    "context_window": "1,000,000トークン（Gemini 1.5 Pro）",
+    "free_tier": "Gemini 1.5 Flash制限付き・Google Workspace統合（制限あり）",
+    "strengths": [
+      "100万トークンのコンテキストウィンドウ（業界最大水準）",
+      "Google検索との深い統合でリアルタイム情報を参照可能",
+      "Google Workspace（Gmail・Drive・Docs・Sheets）との統合",
+      "NotebookLMと組み合わせた社内文書活用が強力",
+      "動画・音声・画像のマルチモーダル処理能力が高い"
+    ],
+    "weaknesses": [
+      "Google Workspaceを使っていない場合の恩恵が限定的",
+      "API品質・安定性はOpenAI比でやや劣るとの評価あり",
+      "企業向けデータ保護ポリシーの透明性が競合比で劣るとの指摘"
+    ],
+    "best_for": "Google Workspaceユーザー・長大な動画や文書（100万トークン級）の処理・リアルタイム情報検索が必要な調査業務。NotebookLMとの組み合わせが特に優秀。"
+  },
+  {
+    "name": "Copilot",
+    "provider": "Microsoft",
+    "color": "#0078d4",
+    "icon_label": "Co.",
+    "japanese_quality": "◎",
+    "paid_plan": 30,
+    "main_models": ["GPT-4o", "o1"],
+    "context_window": "128,000トークン",
+    "free_tier": "copilot.microsoft.com で無料利用可（機能制限あり）",
+    "strengths": [
+      "Microsoft 365（Word・Excel・Teams・Outlook）に直接統合",
+      "SharePoint・OneDriveの社内データを参照して回答",
+      "商用データ保護（M365有償プランでは学習に使用されない）",
+      "Azure OpenAI Serviceベースで企業グレードの信頼性",
+      "Teams会議の自動文字起こし・要約・アクションアイテム抽出"
+    ],
+    "weaknesses": [
+      "Microsoft 365ライセンスが必須（追加費用あり）",
+      "Microsoft 365外での用途は他ツール比で弱い",
+      "カスタマイズ性・プロンプト自由度がChatGPT比で低い",
+      "追加コスト（+¥4,500/月/人）がある程度の規模になると大きな予算"
+    ],
+    "best_for": "すでにMicrosoft 365を使っている製造業組織での業務効率化。Word稟議書・Excel集計・Teams議事録・Outlookメール返信を一気通貫でAI支援できる。"
+  },
+  {
+    "name": "Perplexity",
+    "provider": "Perplexity AI",
+    "color": "#20b2aa",
+    "icon_label": "Prx",
+    "japanese_quality": "○",
+    "paid_plan": 20,
+    "main_models": ["Sonar Large（Llama 3.1ベース）", "Claude 3.5 Sonnet", "GPT-4o"],
+    "context_window": "128,000トークン",
+    "free_tier": "無料枠あり（回数制限・Pro機能制限）",
+    "strengths": [
+      "リアルタイムWeb検索統合が強力で最新情報に強い",
+      "情報源（URL）を必ず明示するため信頼性確認が容易",
+      "技術調査・競合調査・市場調査に最適",
+      "複数モデルを切り替えて使えるPro機能",
+      "「Spaces」機能で社内文書アップロードしてRAG的活用可能"
+    ],
+    "weaknesses": [
+      "長文生成・文書作成は他ツール比でやや弱い",
+      "日本語品質は◎に近いが若干の差あり",
+      "チャット会話の継続性が他ツール比で弱い"
+    ],
+    "best_for": "技術情報・業界動向・最新規格の調査。「この技術の最新動向は？」「この設備の市場トレンドは？」など情報収集・リサーチ用途に特化して使うのが最効率。"
+  },
+  {
+    "name": "Grok",
+    "provider": "xAI（Elon Musk）",
+    "color": "#1da1f2",
+    "icon_label": "Grk",
+    "japanese_quality": "○",
+    "paid_plan": 16,
+    "main_models": ["Grok 2", "Grok 3（2025年）"],
+    "context_window": "131,072トークン",
+    "free_tier": "X（旧Twitter）アカウントで基本利用可（制限あり）",
+    "strengths": [
+      "X（Twitter）のリアルタイムデータにアクセスできる唯一のモデル",
+      "最新ニュース・SNSトレンドの取得が得意",
+      "率直・ユーモアのある回答スタイル（ハルシネーションには注意）",
+      "Grok 3でコーディング能力が大幅向上"
+    ],
+    "weaknesses": [
+      "X（Twitter）プレミアム契約が必要なケースあり",
+      "ハルシネーション率が競合比でやや高いとの報告",
+      "日本語精度はChatGPT・Claude比でやや劣る",
+      "企業・商用利用のデータ保護ポリシーが不透明"
+    ],
+    "best_for": "SNS・X上の業界動向・競合情報のリアルタイムモニタリング。製造業での主用途というよりは、X活用者の補助ツールとして位置付けるのが現実的。"
+  },
+  {
+    "name": "Llama",
+    "provider": "Meta（オープンソース）",
+    "color": "#1877f2",
+    "icon_label": "Lla",
+    "japanese_quality": "△",
+    "paid_plan": 0,
+    "main_models": ["Llama 3.3 70B", "Llama 3.1 405B", "Llama 3.2（マルチモーダル）"],
+    "context_window": "128,000トークン（Llama 3.1）",
+    "free_tier": "オープンソース・完全無料（自社サーバー/クラウドでホスティング）",
+    "strengths": [
+      "完全オープンソース・商用利用可能（Meta Llama Licenseに準拠）",
+      "社内サーバーに完全ローカルデプロイ可能（データが外部に出ない）",
+      "APIコスト無し（自社インフラのみのコスト）",
+      "カスタマイズ・ファインチューニングが自由にできる",
+      "機密性が高い化学・製造業データを扱う際の選択肢"
+    ],
+    "weaknesses": [
+      "自社でのインフラ構築・運用コスト（GPU・エンジニア工数）が必要",
+      "英語中心モデルのため日本語品質はGPT-4o比で劣る",
+      "最先端モデルとの性能差は縮まっているが依然存在"
+    ],
+    "best_for": "機密情報を含む社内データをクラウドに出せない企業。化学・製造業の機密保全情報・営業秘密を扱うAI活用を自社インフラ内で完結させたい場合の選択肢。"
+  },
+  {
+    "name": "NotebookLM",
+    "provider": "Google",
+    "color": "#fbbc04",
+    "icon_label": "NLM",
+    "japanese_quality": "◎",
+    "paid_plan": 0,
+    "main_models": ["Gemini 1.5 Pro"],
+    "context_window": "1,500,000トークン相当（ソース格納量）",
+    "free_tier": "完全無料（Google アカウントのみ必要）",
+    "strengths": [
+      "PDFや文書を最大50件アップロードして横断検索・Q&Aが可能",
+      "アップロード文書のみを根拠として回答（ハルシネーション大幅低減）",
+      "音声ポッドキャスト機能：文書内容をAIが対話形式で解説する音声を自動生成",
+      "引用元（ページ番号付き）を必ず提示するため根拠追跡が容易",
+      "完全無料で使えるRAG相当ツールとして最も手軽"
+    ],
+    "weaknesses": [
+      "アップロードできるのはGoogleドライブ・PDF・Web URL等に限定",
+      "高度なカスタマイズや自動化フローとの統合は難しい",
+      "企業グレードのデータガバナンス（Workspace版は追加設定が必要）"
+    ],
+    "best_for": "プログラミング不要で今すぐ試せる社内文書RAG。設備マニュアル・保全手順書・規格文書をアップロードして「このポンプのメンテ周期は？」と質問するだけで活用できる。製造業の技術者に最もおすすめの入門RAGツール。"
+  },
+  {
+    "name": "DeepSeek",
+    "provider": "DeepSeek（中国）",
+    "color": "#6366f1",
+    "icon_label": "DS",
+    "japanese_quality": "○",
+    "paid_plan": 0,
+    "main_models": ["DeepSeek V3", "DeepSeek R1（推論特化）"],
+    "context_window": "128,000トークン",
+    "free_tier": "chat.deepseek.comで無料利用可・APIは非常に低価格",
+    "strengths": [
+      "API価格がGPT-4o比で約1/10〜1/30と圧倒的コスト優位",
+      "R1モデルは推論・数学・コーディングでGPT-o1相当の性能",
+      "オープンソース版のモデルウェイトが公開されている",
+      "技術的な質問・コーディング支援の品質が高い"
+    ],
+    "weaknesses": [
+      "中国企業のサービスのため、機密データ入力は企業ポリシー確認が必須",
+      "政治的・社会的センシティブなトピックに検閲があることが判明",
+      "日本語品質は高いが、ビジネス文章のニュアンスはGPT-4o比でやや劣る",
+      "企業での商用利用には法務・情報セキュリティ部門への確認が先決"
+    ],
+    "best_for": "コスト最優先で大量のAPIコールを必要とするシステム開発・PoC段階。ただし機密情報を扱う製造業では情報セキュリティポリシーの確認後に使用すること。"
+  }
+]
