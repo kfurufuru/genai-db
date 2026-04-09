@@ -1321,6 +1321,9 @@ footer span { color: var(--color-accent); }
   <button class="tab-btn" onclick="switchTab(8)" id="tab-btn-8">
     <i data-lucide="alert-triangle"></i> アンチパターン
   </button>
+  <button class="tab-btn" onclick="switchTab(9)" id="tab-btn-9">
+    <i data-lucide="zap"></i> 推進のコツ
+  </button>
 </nav>
 
 <!-- ===== TAB 0: ROADMAP ===== -->
@@ -1678,6 +1681,231 @@ footer span { color: var(--color-accent); }
     <button class="filter-btn" data-apcat="期待値ミスマッチ" onclick="setApFilter('期待値ミスマッチ',this)">期待値</button>
   </div>
   <div class="grid-2" id="ap-grid"></div>
+</div>
+
+<!-- ===== TAB 9: 推進のコツ ===== -->
+<div class="tab-panel" id="tab-9">
+
+  <!-- ヒーロー: 時間削減インパクト -->
+  <div style="background:linear-gradient(135deg,rgba(56,189,248,0.08),rgba(167,139,250,0.08));border:1px solid rgba(56,189,248,0.2);border-radius:var(--radius-lg);padding:var(--sp-8) var(--sp-6);margin-bottom:var(--sp-8);text-align:center">
+    <div style="font-size:0.85rem;color:var(--color-accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:var(--sp-2)">電計チーム 実践データ</div>
+    <div style="font-size:2.4rem;font-weight:700;color:var(--color-text);line-height:1.2;margin-bottom:var(--sp-2)">
+      4つの業務で <span style="color:var(--color-accent)">約4時間</span> の削減
+    </div>
+    <div style="color:var(--color-muted);font-size:var(--fs-sm)">1件あたり平均で従来の <strong style="color:#4ade80">1/4 以下</strong> の時間に</div>
+  </div>
+
+  <!-- 事例カード群 -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="clock"></i> Before / After 実践事例
+  </h3>
+  <div style="display:flex;flex-direction:column;gap:var(--sp-4);margin-bottom:var(--sp-8)">
+
+    <!-- 事例A -->
+    <div class="card" style="border-left:3px solid var(--color-accent)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+        <div>
+          <span class="badge badge-blue" style="margin-bottom:var(--sp-2)">設備投資</span>
+          <div style="font-weight:700;font-size:1.05rem">インバータ更新 仕様比較表の自動生成</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <span style="font-size:0.78rem;color:var(--color-muted)">削減時間</span>
+          <div style="font-size:1.6rem;font-weight:700;color:#4ade80;line-height:1">▼100分</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
+        <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
+          <div style="font-size:0.75rem;color:#f87171;font-weight:600;letter-spacing:0.05em;margin-bottom:4px">BEFORE</div>
+          <div style="font-size:1.8rem;font-weight:700;color:#f87171;line-height:1">2時間</div>
+          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">仕様書を読みながら手動でExcel作成</div>
+        </div>
+        <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
+          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;margin-bottom:4px">AFTER</div>
+          <div style="font-size:1.8rem;font-weight:700;color:var(--color-accent);line-height:1">20分</div>
+          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">PDFを読ませて比較表→修正5分</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
+        💡 <strong style="color:var(--color-text)">コツ</strong>: 比較軸（定格・保護等級・通信規格・予備品リードタイム）をプロンプトに指定するだけ
+      </div>
+    </div>
+
+    <!-- 事例B -->
+    <div class="card" style="border-left:3px solid #a78bfa">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+        <div>
+          <span class="badge badge-purple" style="margin-bottom:var(--sp-2)">調整・依頼</span>
+          <div style="font-weight:700;font-size:1.05rem">製造課向け停止依頼メールの下書き</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <span style="font-size:0.78rem;color:var(--color-muted)">削減時間</span>
+          <div style="font-size:1.6rem;font-weight:700;color:#4ade80;line-height:1">▼26分</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
+        <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
+          <div style="font-size:0.75rem;color:#f87171;font-weight:600;letter-spacing:0.05em;margin-bottom:4px">BEFORE</div>
+          <div style="font-size:1.8rem;font-weight:700;color:#f87171;line-height:1">30分</div>
+          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">言い回しに気を使いながらゼロから作成</div>
+        </div>
+        <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
+          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;margin-bottom:4px">AFTER</div>
+          <div style="font-size:1.8rem;font-weight:700;color:var(--color-accent);line-height:1">4分</div>
+          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">影響・代替案・期間を箇条書き→下書き即生成</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
+        💡 <strong style="color:var(--color-text)">コツ</strong>: 「製造課の損益で語る文体で」と最初に指示。件名も一緒に出させる
+      </div>
+    </div>
+
+    <!-- 事例C -->
+    <div class="card" style="border-left:3px solid #fbbf24">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+        <div>
+          <span class="badge badge-yellow" style="margin-bottom:var(--sp-2)">保全・トラブル</span>
+          <div style="font-weight:700;font-size:1.05rem">インバータトリップ 報告書の構成案生成</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <span style="font-size:0.78rem;color:var(--color-muted)">削減時間</span>
+          <div style="font-size:1.6rem;font-weight:700;color:#4ade80;line-height:1">▼25分</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
+        <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
+          <div style="font-size:0.75rem;color:#f87171;font-weight:600;letter-spacing:0.05em;margin-bottom:4px">BEFORE</div>
+          <div style="font-size:1.8rem;font-weight:700;color:#f87171;line-height:1">45分</div>
+          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">構成を考えながらゼロから記述</div>
+        </div>
+        <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
+          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;margin-bottom:4px">AFTER</div>
+          <div style="font-size:1.8rem;font-weight:700;color:var(--color-accent);line-height:1">20分</div>
+          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">現象をメモ入力→4M分析構成案→肉付け</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
+        💡 <strong style="color:var(--color-text)">コツ</strong>: 「断定しすぎず現場確認中の表現で」と付けると事実と推定が自動で分かれる
+      </div>
+    </div>
+
+    <!-- 事例D -->
+    <div class="card" style="border-left:3px solid #4ade80">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+        <div>
+          <span class="badge badge-green" style="margin-bottom:var(--sp-2)">マネジメント</span>
+          <div style="font-weight:700;font-size:1.05rem">部下4名の6ヶ月育成計画ドラフト生成</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <span style="font-size:0.78rem;color:var(--color-muted)">削減時間</span>
+          <div style="font-size:1.6rem;font-weight:700;color:#4ade80;line-height:1">▼150分</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
+        <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
+          <div style="font-size:0.75rem;color:#f87171;font-weight:600;letter-spacing:0.05em;margin-bottom:4px">BEFORE</div>
+          <div style="font-size:1.8rem;font-weight:700;color:#f87171;line-height:1">3時間</div>
+          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">現状・目標・計画を一から考えて記述</div>
+        </div>
+        <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
+          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;margin-bottom:4px">AFTER</div>
+          <div style="font-size:1.8rem;font-weight:700;color:var(--color-accent);line-height:1">30分</div>
+          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">現状・担当設備・目標を箇条書き→計画ドラフト生成</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
+        💡 <strong style="color:var(--color-text)">コツ</strong>: ドラフトをそのまま使わず「自分の言葉に直す」作業が、考えを整理する時間にもなる
+      </div>
+    </div>
+  </div>
+
+  <!-- 壁と突破法 -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="alert-triangle"></i> よくある壁と突破法
+  </h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--sp-4);margin-bottom:var(--sp-8)">
+    <div class="card">
+      <div style="font-size:1.5rem;margin-bottom:var(--sp-2)">😰</div>
+      <div style="font-weight:700;margin-bottom:var(--sp-2)">「難しそう・失敗したら怖い」</div>
+      <div style="color:var(--color-muted);font-size:var(--fs-sm);margin-bottom:var(--sp-3)">ベテランほど強い。変化への抵抗。</div>
+      <div style="background:rgba(56,189,248,0.06);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
+        <strong style="color:var(--color-accent)">突破法</strong>: まず上司（自分）が使って見せる。失敗も笑い話で共有する。
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:1.5rem;margin-bottom:var(--sp-2)">🤷</div>
+      <div style="font-weight:700;margin-bottom:var(--sp-2)">「何ができるか分からない」</div>
+      <div style="color:var(--color-muted);font-size:var(--fs-sm);margin-bottom:var(--sp-3)">抽象的な「AI活用」では動けない。</div>
+      <div style="background:rgba(56,189,248,0.06);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
+        <strong style="color:var(--color-accent)">突破法</strong>: 上の事例のように「業務×時間削減」の具体例を先に見せる。
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:1.5rem;margin-bottom:var(--sp-2)">🏢</div>
+      <div style="font-weight:700;margin-bottom:var(--sp-2)">「会社が許可してるの？」</div>
+      <div style="color:var(--color-muted);font-size:var(--fs-sm);margin-bottom:var(--sp-3)">曖昧な制約が行動を止める。</div>
+      <div style="background:rgba(56,189,248,0.06);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
+        <strong style="color:var(--color-accent)">突破法</strong>: セキュリティタブで確認。M365 Copilotは社内情報をAIに送らない設計。
+      </div>
+    </div>
+  </div>
+
+  <!-- 推進ステップ -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="trending-up"></i> チームへの広げ方 3ステップ
+  </h3>
+  <div style="display:flex;flex-direction:column;gap:var(--sp-3);margin-bottom:var(--sp-8)">
+    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:40px;height:40px;border-radius:50%;background:rgba(56,189,248,0.15);border:2px solid var(--color-accent);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--color-accent);flex-shrink:0">1</div>
+      <div>
+        <div style="font-weight:700;margin-bottom:4px">自分が使い倒す（今すぐ）</div>
+        <div style="color:var(--color-muted);font-size:var(--fs-sm)">部下の前でCopilotを使う姿を見せる。「自分でも使えそう」という安心感が先。上司が使えば部下は許可されたと感じる。</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:40px;height:40px;border-radius:50%;background:rgba(167,139,250,0.15);border:2px solid #a78bfa;display:flex;align-items:center;justify-content:center;font-weight:700;color:#a78bfa;flex-shrink:0">2</div>
+      <div>
+        <div style="font-weight:700;margin-bottom:4px">1人1体験を作る（1ヶ月以内）</div>
+        <div style="color:var(--color-muted);font-size:var(--fs-sm)">最初の体験は「手書きメモをAIに清書させる」だけでいい。「便利だった」体験を1回作ることが最重要。</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:40px;height:40px;border-radius:50%;background:rgba(74,222,128,0.15);border:2px solid #4ade80;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4ade80;flex-shrink:0">3</div>
+      <div>
+        <div style="font-weight:700;margin-bottom:4px">成功事例を朝礼で共有する（3ヶ月以内）</div>
+        <div style="color:var(--color-muted);font-size:var(--fs-sm)">「AIで〇〇が△△分で終わった」を朝礼で話す。失敗談も笑い話として共有。事例が集まったら推進役メンバーを育てる。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PwC参考データ -->
+  <details style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+    <summary style="cursor:pointer;font-weight:600;font-size:var(--fs-sm);color:var(--color-muted);list-style:none;display:flex;align-items:center;gap:var(--sp-2)">
+      <i data-lucide="bar-chart-2" style="width:14px;height:14px"></i> 参考: PwC 生成AI活用実態調査 2024（5カ国比較）
+    </summary>
+    <div style="margin-top:var(--sp-4);font-size:var(--fs-sm)">
+      <div style="color:var(--color-muted);margin-bottom:var(--sp-3)">日本は「期待を上回る効果を得ている」企業が <strong style="color:#f87171">13%</strong>（米国51%・英国50%）。差は組織への組み込み深さにある。</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:var(--sp-2)">
+        <div style="background:rgba(248,113,113,0.08);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center">
+          <div style="font-size:1.4rem;font-weight:700;color:#f87171">13%</div>
+          <div style="color:var(--color-muted);font-size:0.75rem">日本: 期待を上回る</div>
+        </div>
+        <div style="background:rgba(74,222,128,0.08);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center">
+          <div style="font-size:1.4rem;font-weight:700;color:#4ade80">51%</div>
+          <div style="color:var(--color-muted);font-size:0.75rem">米国: 期待を上回る</div>
+        </div>
+        <div style="background:rgba(56,189,248,0.08);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center">
+          <div style="font-size:1.4rem;font-weight:700;color:var(--color-accent)">50%</div>
+          <div style="color:var(--color-muted);font-size:0.75rem">英国: 期待を上回る</div>
+        </div>
+        <div style="background:rgba(251,146,60,0.08);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center">
+          <div style="font-size:1.4rem;font-weight:700;color:#fb923c">24%</div>
+          <div style="color:var(--color-muted);font-size:0.75rem">日本: 業務組み込み率</div>
+        </div>
+      </div>
+      <div style="margin-top:var(--sp-3);color:var(--color-muted);font-size:0.75rem">出典: PwC「生成AI活用の実態調査」2024</div>
+    </div>
+  </details>
+
 </div>
 
 <!-- FOOTER -->
