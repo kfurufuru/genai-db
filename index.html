@@ -750,6 +750,51 @@ body {
 }
 .crosslink-btn svg { width: 11px; height: 11px; }
 
+/* ===== RELATED CASES IN TERM CARDS ===== */
+.term-related-cases {
+  margin-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--sp-3);
+}
+.term-related-title {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-bottom: var(--sp-2);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.term-related-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition);
+  flex-wrap: wrap;
+  border: 1px solid transparent;
+}
+.term-related-item:hover {
+  background: rgba(34,211,238,0.07);
+  border-color: rgba(34,211,238,0.2);
+}
+.term-related-label {
+  font-size: var(--fs-sm);
+  color: var(--color-accent);
+  flex: 1;
+  min-width: 0;
+  font-weight: 500;
+}
+.term-related-effect {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  width: 100%;
+  padding-left: 0;
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
 /* ===== TAB 5: M365 COPILOT ===== */
 .m365-subnav {
   display: flex;
@@ -1924,6 +1969,34 @@ function jumpToConceptTab(conceptId) {
   });
 }
 
+function getRelatedCases(term, termEn) {
+  const kws = [term, termEn].filter(Boolean).map(k => k.toLowerCase());
+  return casesData.filter(c => {
+    const text = [c.tool, c.title, c.overview, c.key_point].join(' ').toLowerCase();
+    return kws.some(k => k.length >= 3 && text.includes(k));
+  }).slice(0, 3);
+}
+
+function jumpToCaseTab(caseId) {
+  switchTab(3);
+  document.getElementById('case-search').value = '';
+  document.getElementById('case-industry').value = 'all';
+  document.getElementById('case-diff').value = 'all';
+  document.getElementById('case-tool').value = 'all';
+  renderCases();
+  requestAnimationFrame(() => {
+    const cards = document.querySelectorAll('#cases-grid .card[data-cid]');
+    let target = null;
+    cards.forEach(card => { if (card.dataset.cid === caseId) target = card; });
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target.style.transition = 'box-shadow 0.3s, border-color 0.3s';
+    target.style.boxShadow = '0 0 0 2px var(--color-accent)';
+    target.style.borderColor = 'var(--color-accent)';
+    setTimeout(() => { target.style.boxShadow = ''; target.style.borderColor = ''; }, 2000);
+  });
+}
+
 function toggleToolSelector() {
   const body = document.getElementById('tool-selector-body');
   const chevron = document.getElementById('tool-selector-chevron');
@@ -2107,6 +2180,18 @@ function renderTerms() {
           const cid = map[t.term_en] || map[t.term];
           return cid ? `<div class="term-crosslink"><button onclick="event.stopPropagation();jumpToConceptTab('${cid}')" class="crosslink-btn">詳細を技術概念で見る →</button></div>` : '';
         })()}
+        ${(()=>{
+          const related = getRelatedCases(t.term, t.term_en);
+          if (!related.length) return '';
+          return `<div class="term-related-cases">
+            <div class="term-related-title">📌 この技術を使った事例</div>
+            ${related.map(c => `<div class="term-related-item" onclick="event.stopPropagation();jumpToCaseTab('${c.id}')">
+              <span class="term-related-label">${c.title}</span>
+              <span class="badge badge-muted">${c.industry}</span>
+              <span class="term-related-effect">${c.effect}</span>
+            </div>`).join('')}
+          </div>`;
+        })()}
       </div>
     </div>
   `).join('');
@@ -2187,7 +2272,7 @@ function renderCases() {
   if (!filtered.length) { grid.innerHTML = '<div class="empty-state">該当する事例がありません</div>'; return; }
   const typeMap = {'文書生成':'badge-blue','知識検索':'badge-purple','業務自動化':'badge-yellow','コード生成':'badge-orange','データ分析':'badge-green'};
   grid.innerHTML = filtered.map(c => `
-    <div class="card">
+    <div class="card" data-cid="${c.id}">
       <h3 style="font-size:0.95rem;font-weight:600;margin-bottom:var(--sp-2)">${c.title}</h3>
       <div class="case-meta">
         <span class="badge badge-muted">${c.industry}</span>
