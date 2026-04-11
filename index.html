@@ -331,11 +331,122 @@ body {
 }
 
 /* ===== TAB 0: ROADMAP ===== */
-.roadmap-list { display: flex; flex-direction: column; gap: var(--sp-6); }
-.roadmap-card {
+/* ===== TAB 0: ROADMAP — Timeline Design ===== */
+.roadmap-overall-progress {
   background: var(--color-bg3);
   border: 1px solid var(--color-border);
-  border-top: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: var(--sp-6);
+  margin-bottom: var(--sp-8);
+  backdrop-filter: blur(12px);
+}
+.roadmap-overall-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--sp-4);
+}
+.roadmap-overall-header .label { font-size: var(--fs-sm); color: var(--color-muted); font-weight: 600; }
+.roadmap-overall-header .pct { font-size: 1.5rem; font-weight: var(--fw-bold); color: var(--color-accent); }
+.roadmap-overall-bar-bg {
+  height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden;
+}
+.roadmap-overall-bar {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent2), #c084fc);
+  transition: width 0.6s ease;
+  box-shadow: 0 0 12px rgba(34,211,238,0.4);
+}
+.roadmap-overall-steps {
+  display: flex; justify-content: space-between; margin-top: var(--sp-3);
+}
+.roadmap-overall-dot {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--color-bg2); border: 2px solid var(--color-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: var(--fw-bold); color: var(--color-muted);
+  transition: all 0.3s ease; cursor: default;
+}
+.roadmap-overall-dot.active {
+  border-color: var(--color-accent); color: var(--color-accent);
+  box-shadow: 0 0 8px rgba(34,211,238,0.3);
+}
+.roadmap-overall-dot.done {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent2));
+  border-color: transparent; color: #fff;
+  box-shadow: 0 0 12px rgba(34,211,238,0.4);
+}
+
+.roadmap-phase-group { margin-bottom: var(--sp-8); }
+.roadmap-phase-label {
+  display: flex; align-items: center; gap: var(--sp-3);
+  margin-bottom: var(--sp-4); padding-left: 60px;
+}
+.roadmap-phase-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.roadmap-phase-text { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+.phase-beginner .roadmap-phase-icon { background: rgba(34,211,238,0.15); }
+.phase-beginner .roadmap-phase-text { color: var(--color-accent); }
+.phase-intermediate .roadmap-phase-icon { background: rgba(129,140,248,0.15); }
+.phase-intermediate .roadmap-phase-text { color: var(--color-accent2); }
+.phase-advanced .roadmap-phase-icon { background: rgba(192,132,252,0.15); }
+.phase-advanced .roadmap-phase-text { color: #c084fc; }
+
+.roadmap-list { display: flex; flex-direction: column; gap: 0; }
+.roadmap-item { display: flex; gap: 0; position: relative; }
+.roadmap-timeline {
+  width: 60px; display: flex; flex-direction: column; align-items: center;
+  flex-shrink: 0; position: relative;
+}
+.roadmap-timeline .line {
+  width: 2px; flex: 1;
+  background: linear-gradient(180deg, rgba(34,211,238,0.3), rgba(129,140,248,0.3));
+}
+.roadmap-item:last-child .roadmap-timeline .line-bottom { display: none; }
+
+.step-num {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(34,211,238,0.15), rgba(129,140,248,0.15));
+  border: 2px solid rgba(34,211,238,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(34,211,238,0.1);
+  transition: all 0.4s ease;
+  position: relative; z-index: 2;
+}
+.step-num.step-done {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent2));
+  border-color: transparent; color: #fff;
+  box-shadow: 0 0 20px rgba(34,211,238,0.4);
+}
+.step-num.step-done::after {
+  content: "\2713"; position: absolute;
+  font-size: 0.7rem; bottom: -2px; right: -2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--color-success); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 6px rgba(52,211,153,0.5);
+}
+.step-num.step-mid {
+  border-color: rgba(34,211,238,0.6);
+  box-shadow: 0 0 16px rgba(34,211,238,0.25);
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 16px rgba(34,211,238,0.25); }
+  50% { box-shadow: 0 0 24px rgba(34,211,238,0.45); }
+}
+
+.roadmap-card {
+  flex: 1;
+  background: var(--color-bg3);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
   border-radius: var(--radius-md);
   padding: var(--sp-6);
   backdrop-filter: blur(12px);
@@ -343,30 +454,36 @@ body {
   box-shadow: 0 4px 24px rgba(0,0,0,0.5);
   position: relative;
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  margin-bottom: var(--sp-6);
 }
 .roadmap-card:hover {
   transform: var(--hover-lift);
   box-shadow: 0 8px 40px rgba(34,211,238,0.12);
-  border-color: rgba(34,211,238,0.25);
-  border-top-color: var(--color-accent);
+  border-top-color: rgba(34,211,238,0.25);
+  border-right-color: rgba(34,211,238,0.25);
+  border-bottom-color: rgba(34,211,238,0.25);
 }
+.roadmap-card.card-done {
+  border-left-color: var(--color-success);
+  background: linear-gradient(135deg, var(--color-bg3), rgba(52,211,153,0.04));
+}
+.roadmap-card.card-mid {
+  border-left-color: var(--color-accent);
+  background: linear-gradient(135deg, var(--color-bg3), rgba(34,211,238,0.04));
+}
+
+.roadmap-item[data-phase="intermediate"] .step-num:not(.step-done) { color: var(--color-accent2); border-color: rgba(129,140,248,0.3); background: linear-gradient(135deg, rgba(129,140,248,0.15), rgba(192,132,252,0.15)); }
+.roadmap-item[data-phase="intermediate"] .roadmap-card:not(.card-done) { border-left-color: var(--color-accent2); }
+.roadmap-item[data-phase="intermediate"] .roadmap-timeline .line { background: linear-gradient(180deg, rgba(129,140,248,0.3), rgba(192,132,252,0.3)); }
+.roadmap-item[data-phase="advanced"] .step-num:not(.step-done) { color: #c084fc; border-color: rgba(192,132,252,0.3); background: linear-gradient(135deg, rgba(192,132,252,0.15), rgba(244,114,182,0.15)); }
+.roadmap-item[data-phase="advanced"] .roadmap-card:not(.card-done) { border-left-color: #c084fc; }
+.roadmap-item[data-phase="advanced"] .roadmap-timeline .line { background: linear-gradient(180deg, rgba(192,132,252,0.3), rgba(244,114,182,0.3)); }
+
 .roadmap-header {
   display: flex;
   align-items: center;
-  gap: var(--sp-4);
+  gap: var(--sp-3);
   margin-bottom: var(--sp-3);
-}
-.step-num {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(34,211,238,0.25), rgba(129,140,248,0.25));
-  border: 1px solid rgba(34,211,238,0.4);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem;
-  font-weight: var(--fw-bold);
-  color: var(--color-accent);
-  flex-shrink: 0;
-  box-shadow: 0 0 12px rgba(34,211,238,0.15);
 }
 .roadmap-card h3 { font-size: var(--fs-h3); font-weight: 600; color: var(--color-text); }
 .duration-badge {
@@ -383,47 +500,31 @@ body {
 .actions-title { font-size: 0.78rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: var(--sp-2); font-weight: 600; }
 .actions-list { list-style: none; display: flex; flex-direction: column; gap: var(--sp-2); }
 .actions-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--sp-2);
-  font-size: var(--fs-sm);
-  color: var(--color-text);
-  line-height: 1.6;
+  display: flex; align-items: flex-start; gap: var(--sp-2);
+  font-size: var(--fs-sm); color: var(--color-text); line-height: 1.6;
 }
 .actions-list li input[type="checkbox"] {
-  margin-top: 3px;
-  flex-shrink: 0;
+  margin-top: 3px; flex-shrink: 0;
   width: 14px; height: 14px;
-  accent-color: var(--color-accent);
-  cursor: pointer;
+  accent-color: var(--color-accent); cursor: pointer;
 }
 .actions-list li.checked {
-  color: var(--color-muted);
-  text-decoration: line-through;
-  opacity: 0.55;
+  color: var(--color-muted); text-decoration: line-through; opacity: 0.55;
 }
-.roadmap-progress {
-  margin: var(--sp-3) 0 var(--sp-2);
-}
+.roadmap-progress { margin: var(--sp-3) 0 var(--sp-2); }
 .roadmap-progress-bar-bg {
-  height: 5px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-top: var(--sp-1);
+  height: 5px; background: rgba(255,255,255,0.06);
+  border-radius: 3px; overflow: hidden; margin-top: var(--sp-1);
 }
 .roadmap-progress-bar {
   height: 100%;
   background: linear-gradient(90deg, var(--color-accent), var(--color-accent2));
-  border-radius: 3px;
-  transition: width 0.5s ease;
+  border-radius: 3px; transition: width 0.5s ease;
   box-shadow: 0 0 8px rgba(34,211,238,0.4);
 }
 .roadmap-progress-label {
-  font-size: 0.75rem;
-  color: var(--color-muted);
-  display: flex;
-  justify-content: space-between;
+  font-size: 0.75rem; color: var(--color-muted);
+  display: flex; justify-content: space-between;
 }
 
 /* ===== TAB 1: TERMS ===== */
@@ -1195,6 +1296,9 @@ footer span { color: var(--color-accent); }
   .grid-2, .grid-3 { grid-template-columns: 1fr; gap: var(--sp-4); }
   .case-filters { flex-direction: column; }
   .roadmap-header { flex-wrap: wrap; }
+  .roadmap-phase-label { padding-left: 44px; }
+  .roadmap-timeline { width: 44px; }
+  .step-num { width: 36px; height: 36px; font-size: 0.95rem; }
   .duration-badge { margin-left: 0; }
   .m365-before-after { grid-template-columns: 1fr; }
   .m365-subnav { gap: var(--sp-1); }
@@ -1208,6 +1312,10 @@ footer span { color: var(--color-accent); }
   .m365-prompt-header { flex-direction: column; gap: var(--sp-2); }
   .m365-copy-btn { align-self: flex-start; }
   .card, .roadmap-card, .m365-app-card, .m365-scenario-card, .m365-prompt-card { padding: var(--sp-4); }
+  .roadmap-timeline { width: 36px; }
+  .roadmap-phase-label { padding-left: 36px; }
+  .step-num { width: 28px; height: 28px; font-size: 0.8rem; }
+  .roadmap-overall-dot { width: 20px; height: 20px; font-size: 0.6rem; }
 }
 
 /* ===== PORTAL BACK LINK ===== */
@@ -1313,6 +1421,7 @@ footer span { color: var(--color-accent); }
   </div>
 </div>
 
+  <div id="roadmap-overall"></div>
   <div class="roadmap-list" id="roadmap-list"></div>
 </div>
 
@@ -2099,52 +2208,117 @@ function toggleRoadmapCheck(stepNum, actionIndex, checkbox) {
   const done = card.querySelectorAll('.actions-list li.checked').length;
   card.querySelector('.roadmap-progress-bar').style.width = `${Math.round(done/total*100)}%`;
   card.querySelector('.roadmap-progress-count').textContent = `${done} / ${total}`;
+  // Update step-num and card visual state
+  var stepNumEl = card.closest('.roadmap-item') ? card.closest('.roadmap-item').querySelector('.step-num') : null;
+  if (stepNumEl) {
+    stepNumEl.classList.toggle('step-done', done === total);
+    stepNumEl.classList.toggle('step-mid', done > 0 && done < total);
+  }
+  card.classList.toggle('card-done', done === total);
+  card.classList.toggle('card-mid', done > 0 && done < total);
+  // Refresh overall progress bar and dots in single pass
+  var totalAll = 0, doneAll = 0;
+  var allDots = document.querySelectorAll('.roadmap-overall-dot');
+  roadmapData.forEach(function(d, idx) {
+    var c = getRoadmapChecks(d.step, d.actions.length);
+    var dn = c.filter(Boolean).length;
+    totalAll += d.actions.length;
+    doneAll += dn;
+    if (allDots[idx]) {
+      allDots[idx].className = 'roadmap-overall-dot' + (dn === d.actions.length ? ' done' : dn > 0 ? ' active' : '');
+      allDots[idx].textContent = dn === d.actions.length ? '\u2713' : String(d.step);
+    }
+  });
+  var overallPct = totalAll ? Math.round(doneAll/totalAll*100) : 0;
+  var ob = document.querySelector('.roadmap-overall-bar'); if (ob) ob.style.width = overallPct + '%';
+  var op = document.querySelector('.roadmap-overall-header .pct'); if (op) op.textContent = overallPct + '%';
 }
 
 function renderRoadmap() {
-  const container = document.getElementById('roadmap-list');
-  container.innerHTML = roadmapData.map(d => {
-    const checks = getRoadmapChecks(d.step, d.actions.length);
-    const done = checks.filter(Boolean).length;
-    const total = d.actions.length;
-    const pct = total ? Math.round(done / total * 100) : 0;
-    const actionsHtml = d.actions.map((a, i) => {
-      const checked = checks[i];
-      return `<li class="${checked ? 'checked' : ''}">
-        <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleRoadmapCheck(${d.step},${i},this)">
-        <span>${a}</span>
-      </li>`;
-    }).join('');
-    const criteriaHtml = d.criteria ? `
-  <div style="margin-top:var(--sp-4);padding-top:var(--sp-3);border-top:1px solid var(--color-border)">
-    <div style="font-size:0.75rem;color:var(--color-success);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:var(--sp-2);font-weight:600">&#x2705; 達成基準</div>
-    <ul style="list-style:none;display:flex;flex-direction:column;gap:var(--sp-1)">
-      ${d.criteria.map(c => `<li style="display:flex;align-items:flex-start;gap:var(--sp-2);font-size:0.82rem;color:var(--color-muted);line-height:1.55"><span style="color:var(--color-success);flex-shrink:0;margin-top:1px">›</span>${c}</li>`).join('')}
-    </ul>
-  </div>` : '';
-    return `
-    <div class="roadmap-card">
-      <div class="roadmap-header">
-        <div class="step-num">${d.step}</div>
-        <h3>${d.title}</h3>
-        <span class="duration-badge">${d.duration}</span>
-      </div>
-      <p class="roadmap-desc">${d.description}</p>
-      <div class="roadmap-progress">
-        <div class="roadmap-progress-label">
-          <span>実践アクション</span>
-          <span class="roadmap-progress-count">${done} / ${total}</span>
-        </div>
-        <div class="roadmap-progress-bar-bg">
-          <div class="roadmap-progress-bar" style="width:${pct}%"></div>
-        </div>
-      </div>
-      <ul class="actions-list">
-        ${actionsHtml}
-      </ul>
-      ${criteriaHtml}
-    </div>`;
+  // Phase definitions — steps are auto-assigned: first 3 = beginner, next 2 = intermediate, rest = advanced
+  var total = roadmapData.length;
+  var b = Math.ceil(total * 0.43);  // ~43% beginner
+  var m = Math.ceil(total * 0.29);  // ~29% intermediate
+  var beginnerSteps = roadmapData.slice(0, b).map(function(d) { return d.step; });
+  var intermediateSteps = roadmapData.slice(b, b + m).map(function(d) { return d.step; });
+  var advancedSteps = roadmapData.slice(b + m).map(function(d) { return d.step; });
+  var phases = [
+    { label: '基礎習得フェーズ', icon: '🌱', cls: 'phase-beginner', steps: beginnerSteps },
+    { label: '実装化フェーズ', icon: '⚡', cls: 'phase-intermediate', steps: intermediateSteps },
+    { label: '組織展開フェーズ', icon: '🚀', cls: 'phase-advanced', steps: advancedSteps }
+  ];
+  var phaseMap = {};
+  phases.forEach(function(p) { p.steps.forEach(function(s) { phaseMap[s] = p.cls.replace('phase-',''); }); });
+
+  var totalAll = 0, doneAll = 0;
+  var stepStats = {};
+  roadmapData.forEach(function(d) {
+    var checks = getRoadmapChecks(d.step, d.actions.length);
+    var done = checks.filter(Boolean).length;
+    totalAll += d.actions.length;
+    doneAll += done;
+    stepStats[d.step] = { done: done, total: d.actions.length, checks: checks, pct: d.actions.length ? Math.round(done/d.actions.length*100) : 0 };
+  });
+  var overallPct = totalAll ? Math.round(doneAll/totalAll*100) : 0;
+
+  var overallEl = document.getElementById('roadmap-overall');
+  var dots = roadmapData.map(function(d) {
+    var s = stepStats[d.step];
+    var cls = s.pct === 100 ? 'done' : s.done > 0 ? 'active' : '';
+    return '<div class="roadmap-overall-dot ' + cls + '" title="Step ' + d.step + ': ' + s.done + '/' + s.total + '">' + (s.pct === 100 ? '\u2713' : d.step) + '</div>';
   }).join('');
+  overallEl.innerHTML = '<div class="roadmap-overall-progress">' +
+    '<div class="roadmap-overall-header"><span class="label">\u5168\u4f53\u9032\u6357 \u2014 7\u30b9\u30c6\u30c3\u30d7</span><span class="pct">' + overallPct + '%</span></div>' +
+    '<div class="roadmap-overall-bar-bg"><div class="roadmap-overall-bar" style="width:' + overallPct + '%"></div></div>' +
+    '<div class="roadmap-overall-steps">' + dots + '</div></div>';
+
+  var container = document.getElementById('roadmap-list');
+  var html = '';
+  phases.forEach(function(phase) {
+    html += '<div class="roadmap-phase-group"><div class="roadmap-phase-label ' + phase.cls + '">' +
+      '<div class="roadmap-phase-icon">' + phase.icon + '</div>' +
+      '<div class="roadmap-phase-text">' + phase.label + '</div></div>';
+
+    phase.steps.forEach(function(stepNum, idx) {
+      var d = roadmapData.find(function(r) { return r.step === stepNum; });
+      if (!d) return;
+      var s = stepStats[d.step];
+      var phaseName = phaseMap[d.step];
+      var numCls = s.pct === 100 ? 'step-done' : s.done > 0 ? 'step-mid' : '';
+      var cardCls = s.pct === 100 ? 'card-done' : s.done > 0 ? 'card-mid' : '';
+      var actionsHtml = d.actions.map(function(a, i) {
+        var checked = s.checks[i];
+        return '<li class="' + (checked ? 'checked' : '') + '">' +
+          '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleRoadmapCheck(' + d.step + ',' + i + ',this)">' +
+          '<span>' + a + '</span></li>';
+      }).join('');
+      var criteriaHtml = '';
+      if (d.criteria) {
+        criteriaHtml = '<div style="margin-top:var(--sp-4);padding-top:var(--sp-3);border-top:1px solid var(--color-border)">' +
+          '<div style="font-size:0.75rem;color:var(--color-success);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:var(--sp-2);font-weight:600">\u2705 \u9054\u6210\u57fa\u6e96</div>' +
+          '<ul style="list-style:none;display:flex;flex-direction:column;gap:var(--sp-1)">' +
+          d.criteria.map(function(c) { return '<li style="display:flex;align-items:flex-start;gap:var(--sp-2);font-size:0.82rem;color:var(--color-muted);line-height:1.55"><span style="color:var(--color-success);flex-shrink:0;margin-top:1px">\u203a</span>' + c + '</li>'; }).join('') +
+          '</ul></div>';
+      }
+      var isLast = idx === phase.steps.length - 1;
+      html += '<div class="roadmap-item" data-phase="' + phaseName + '">' +
+        '<div class="roadmap-timeline">' +
+        '<div class="line line-top" style="min-height:8px"></div>' +
+        '<div class="step-num ' + numCls + '">' + d.step + '</div>' +
+        '<div class="line line-bottom" style="min-height:' + (isLast ? '8px;opacity:0.3' : '24px') + '"></div>' +
+        '</div>' +
+        '<div class="roadmap-card ' + cardCls + '">' +
+        '<div class="roadmap-header"><h3>' + d.title + '</h3><span class="duration-badge">' + d.duration + '</span></div>' +
+        '<p class="roadmap-desc">' + d.description + '</p>' +
+        '<div class="roadmap-progress"><div class="roadmap-progress-label"><span>\u5b9f\u8df5\u30a2\u30af\u30b7\u30e7\u30f3</span><span class="roadmap-progress-count">' + s.done + ' / ' + s.total + '</span></div>' +
+        '<div class="roadmap-progress-bar-bg"><div class="roadmap-progress-bar" style="width:' + s.pct + '%"></div></div></div>' +
+        '<ul class="actions-list">' + actionsHtml + '</ul>' +
+        criteriaHtml +
+        '</div></div>';
+    });
+    html += '</div>';
+  });
+  container.innerHTML = html;
 }
 
 // ===== RENDER TERMS =====
