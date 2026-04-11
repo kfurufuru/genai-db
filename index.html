@@ -7,29 +7,31 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@0.263.1"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
 :root {
-  /* Slate Frost palette */
-  --color-bg:      #0f172a;
-  --color-bg2:     #1e293b;
-  --color-accent:  #38bdf8;
-  --color-text:    #e2e8f0;
-  --color-muted:   #64748b;
-  --color-border:  rgba(255,255,255,0.08);
-  --color-glass:   rgba(30,41,59,0.7);
-  --color-success: #4ade80;
+  /* Premium Dark palette — Deep Cyber */
+  --color-bg:      #080b14;
+  --color-bg2:     #0f1729;
+  --color-bg3:     #162039;
+  --color-accent:  #22d3ee;
+  --color-accent2: #818cf8;
+  --color-text:    #e8edf5;
+  --color-muted:   #94a3b8;
+  --color-border:  rgba(255,255,255,0.07);
+  --color-glass:   rgba(15,23,41,0.8);
+  --color-success: #34d399;
   --color-warning: #fbbf24;
-  --color-danger:  #f87171;
+  --color-danger:  #fb7185;
 
   /* Typography */
   --font-base: 'Inter', 'Noto Sans JP', sans-serif;
-  --fs-h1:   2rem;
+  --fs-h1:   2.2rem;
   --fs-h2:   1.5rem;
   --fs-h3:   1.25rem;
-  --fs-body: 0.95rem;
-  --fs-sm:   0.85rem;
-  --lh-body: 1.6;
+  --fs-body: 1rem;
+  --fs-sm:   0.875rem;
+  --lh-body: 1.65;
   --fw-normal: 400;
   --fw-bold:   700;
 
@@ -45,7 +47,7 @@
 
   /* Animation */
   --transition: 0.2s ease;
-  --hover-lift: translateY(-2px);
+  --hover-lift: translateY(-3px);
 
   /* Border Radius */
   --radius-sm: 6px;
@@ -66,34 +68,50 @@ body {
 
 /* ===== HEADER ===== */
 .site-header {
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
-  border-bottom: 1px solid var(--color-border);
-  padding: var(--sp-8) var(--sp-6);
+  background: linear-gradient(160deg, #060912 0%, #0d1f3c 40%, #11162e 70%, #080b14 100%);
+  border-bottom: 1px solid rgba(34,211,238,0.12);
+  padding: var(--sp-12) var(--sp-6) var(--sp-8);
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+/* Grid pattern overlay */
+.site-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(34,211,238,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,211,238,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
 }
 .site-header::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(56,189,248,0.12) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(34,211,238,0.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 0%, rgba(129,140,248,0.12) 0%, transparent 55%);
   pointer-events: none;
+  z-index: 1;
 }
+.site-header > * { position: relative; z-index: 2; }
 .site-header h1 {
   font-size: var(--fs-h1);
   font-weight: var(--fw-bold);
-  background: linear-gradient(90deg, #38bdf8, #a78bfa, #38bdf8);
-  background-size: 200%;
+  background: linear-gradient(90deg, #22d3ee 0%, #818cf8 40%, #22d3ee 80%, #34d399 100%);
+  background-size: 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 4s linear infinite;
-  letter-spacing: -0.02em;
+  animation: shimmer 5s linear infinite;
+  letter-spacing: -0.03em;
+  text-shadow: none;
 }
 @keyframes shimmer {
   0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
+  100% { background-position: 300% 50%; }
 }
 .site-header .subtitle {
   color: var(--color-muted);
@@ -111,27 +129,41 @@ body {
 .stats-bar {
   display: flex;
   justify-content: center;
-  gap: var(--sp-4);
+  gap: var(--sp-3);
   flex-wrap: wrap;
-  margin-top: var(--sp-4);
+  margin-top: var(--sp-6);
   padding: 0 var(--sp-6);
 }
 .stats-item {
-  background: rgba(56,189,248,0.06);
-  border: 1px solid rgba(56,189,248,0.15);
+  background: rgba(15,23,41,0.7);
+  border: 1px solid rgba(34,211,238,0.12);
   border-radius: var(--radius-md);
   padding: var(--sp-3) var(--sp-6);
   font-size: var(--fs-sm);
   color: var(--color-text);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   min-width: 130px;
   text-align: center;
+  transition: border-color var(--transition), transform var(--transition);
 }
+.stats-item:hover {
+  transform: var(--hover-lift);
+}
+/* Cycle accent colors via nth-child */
+.stats-item:nth-child(1) { border-top: 2px solid var(--color-accent); }
+.stats-item:nth-child(1) strong { color: var(--color-accent); }
+.stats-item:nth-child(2) { border-top: 2px solid var(--color-accent2); }
+.stats-item:nth-child(2) strong { color: var(--color-accent2); }
+.stats-item:nth-child(3) { border-top: 2px solid var(--color-success); }
+.stats-item:nth-child(3) strong { color: var(--color-success); }
+.stats-item:nth-child(4) { border-top: 2px solid var(--color-warning); }
+.stats-item:nth-child(4) strong { color: var(--color-warning); }
 .stats-item strong {
-  color: var(--color-accent);
   display: block;
   font-size: 0.78rem;
-  margin-top: 2px;
+  margin-top: 3px;
+  font-weight: 600;
 }
 @media (max-width: 768px) {
   .stats-bar { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
@@ -142,18 +174,22 @@ body {
 .tab-nav {
   display: flex;
   gap: var(--sp-1);
-  padding: var(--sp-4) var(--sp-6);
+  padding: var(--sp-3) var(--sp-6);
   background: var(--color-bg2);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(34,211,238,0.1);
   overflow-x: auto;
   scrollbar-width: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 .tab-nav::-webkit-scrollbar { display: none; }
 .tab-btn {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-4);
+  padding: 8px 16px;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -168,15 +204,17 @@ body {
 .tab-btn:hover {
   color: var(--color-text);
   background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.08);
 }
 .tab-btn.active {
   color: var(--color-accent);
-  background: rgba(56,189,248,0.1);
-  border-color: rgba(56,189,248,0.3);
+  background: linear-gradient(135deg, rgba(34,211,238,0.15), rgba(129,140,248,0.1));
+  border-color: rgba(34,211,238,0.4);
+  box-shadow: 0 2px 12px rgba(34,211,238,0.1);
 }
 .tab-btn svg { width: 14px; height: 14px; }
 
-.tab-panel { display: none; padding: var(--sp-6); }
+.tab-panel { display: none; padding: var(--sp-8) var(--sp-6); }
 .tab-panel.active { display: block; }
 
 /* ===== COMMON COMPONENTS ===== */
@@ -184,11 +222,16 @@ body {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
-  background: var(--color-bg2);
+  background: var(--color-bg3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--sp-2) var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
   margin-bottom: var(--sp-4);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.search-bar:focus-within {
+  border-color: rgba(34,211,238,0.4);
+  box-shadow: 0 0 0 2px rgba(34,211,238,0.2);
 }
 .search-bar input {
   flex: 1;
@@ -219,37 +262,41 @@ body {
   cursor: pointer;
   transition: all var(--transition);
 }
-.filter-btn:hover { color: var(--color-text); border-color: rgba(255,255,255,0.2); }
+.filter-btn:hover { color: var(--color-text); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
 .filter-btn.active {
   color: var(--color-accent);
-  border-color: var(--color-accent);
-  background: rgba(56,189,248,0.1);
+  border-color: rgba(34,211,238,0.5);
+  background: rgba(34,211,238,0.1);
+  box-shadow: 0 0 8px rgba(34,211,238,0.1);
 }
 
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--sp-4);
+  gap: var(--sp-6);
 }
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--sp-4);
+  gap: var(--sp-6);
 }
 
 .card {
-  background: var(--color-glass);
+  background: var(--color-bg3);
   border: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-accent);
   border-radius: var(--radius-md);
-  padding: var(--sp-4);
+  padding: var(--sp-6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 .card:hover {
   transform: var(--hover-lift);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  border-color: rgba(56,189,248,0.2);
+  box-shadow: 0 8px 40px rgba(34,211,238,0.12);
+  border-color: rgba(34,211,238,0.25);
+  border-top-color: var(--color-accent);
 }
 .card.clickable { cursor: pointer; }
 
@@ -260,18 +307,18 @@ body {
   font-size: 0.75rem;
   font-weight: 500;
 }
-.badge-blue   { background: rgba(56,189,248,0.15); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); }
-.badge-green  { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+.badge-blue   { background: rgba(34,211,238,0.15); color: #22d3ee; border: 1px solid rgba(34,211,238,0.3); }
+.badge-green  { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
 .badge-yellow { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
 .badge-orange { background: rgba(251,146,60,0.15); color: #fb923c; border: 1px solid rgba(251,146,60,0.3); }
-.badge-purple { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
-.badge-muted  { background: rgba(100,116,139,0.2);  color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+.badge-purple { background: rgba(129,140,248,0.15); color: #818cf8; border: 1px solid rgba(129,140,248,0.3); }
+.badge-muted  { background: rgba(148,163,184,0.15); color: #94a3b8; border: 1px solid rgba(148,163,184,0.25); }
 
 /* Accordion */
 .accordion-content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
+  transition: max-height 0.35s ease, opacity 0.3s ease;
   opacity: 0;
   margin-top: 0;
 }
@@ -284,28 +331,24 @@ body {
 }
 
 /* ===== TAB 0: ROADMAP ===== */
-.roadmap-list { display: flex; flex-direction: column; gap: var(--sp-4); }
+.roadmap-list { display: flex; flex-direction: column; gap: var(--sp-6); }
 .roadmap-card {
-  background: var(--color-glass);
+  background: var(--color-bg3);
   border: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-accent);
   border-radius: var(--radius-md);
   padding: var(--sp-6);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
   position: relative;
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 .roadmap-card:hover {
   transform: var(--hover-lift);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  border-color: rgba(56,189,248,0.2);
-}
-.roadmap-card::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 4px;
-  border-radius: var(--radius-md) 0 0 var(--radius-md);
-  background: linear-gradient(180deg, var(--color-accent), #a78bfa);
+  box-shadow: 0 8px 40px rgba(34,211,238,0.12);
+  border-color: rgba(34,211,238,0.25);
+  border-top-color: var(--color-accent);
 }
 .roadmap-header {
   display: flex;
@@ -314,29 +357,30 @@ body {
   margin-bottom: var(--sp-3);
 }
 .step-num {
-  width: 40px; height: 40px;
+  width: 44px; height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(56,189,248,0.3), rgba(167,139,250,0.3));
-  border: 1px solid rgba(56,189,248,0.4);
+  background: linear-gradient(135deg, rgba(34,211,238,0.25), rgba(129,140,248,0.25));
+  border: 1px solid rgba(34,211,238,0.4);
   display: flex; align-items: center; justify-content: center;
   font-size: 1.1rem;
   font-weight: var(--fw-bold);
   color: var(--color-accent);
   flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(34,211,238,0.15);
 }
-.roadmap-card h3 { font-size: var(--fs-h3); font-weight: 600; }
+.roadmap-card h3 { font-size: var(--fs-h3); font-weight: 600; color: var(--color-text); }
 .duration-badge {
   margin-left: auto;
-  background: rgba(56,189,248,0.1);
-  border: 1px solid rgba(56,189,248,0.2);
+  background: rgba(34,211,238,0.1);
+  border: 1px solid rgba(34,211,238,0.25);
   border-radius: 20px;
-  padding: 2px var(--sp-3);
+  padding: 3px var(--sp-3);
   font-size: 0.75rem;
   color: var(--color-accent);
   white-space: nowrap;
 }
-.roadmap-desc { color: var(--color-muted); margin-bottom: var(--sp-4); font-size: var(--fs-sm); }
-.actions-title { font-size: 0.78rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2); }
+.roadmap-desc { color: var(--color-muted); margin-bottom: var(--sp-4); font-size: var(--fs-sm); line-height: 1.7; }
+.actions-title { font-size: 0.78rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: var(--sp-2); font-weight: 600; }
 .actions-list { list-style: none; display: flex; flex-direction: column; gap: var(--sp-2); }
 .actions-list li {
   display: flex;
@@ -344,6 +388,7 @@ body {
   gap: var(--sp-2);
   font-size: var(--fs-sm);
   color: var(--color-text);
+  line-height: 1.6;
 }
 .actions-list li input[type="checkbox"] {
   margin-top: 3px;
@@ -355,23 +400,24 @@ body {
 .actions-list li.checked {
   color: var(--color-muted);
   text-decoration: line-through;
-  opacity: 0.6;
+  opacity: 0.55;
 }
 .roadmap-progress {
   margin: var(--sp-3) 0 var(--sp-2);
 }
 .roadmap-progress-bar-bg {
-  height: 4px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 2px;
+  height: 5px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
   overflow: hidden;
   margin-top: var(--sp-1);
 }
 .roadmap-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-accent), #a78bfa);
-  border-radius: 2px;
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent2));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 8px rgba(34,211,238,0.4);
 }
 .roadmap-progress-label {
   font-size: 0.75rem;
@@ -384,32 +430,33 @@ body {
 .term-card { cursor: pointer; }
 .term-header { display: flex; align-items: flex-start; gap: var(--sp-3); }
 .term-icon {
-  width: 36px; height: 36px; border-radius: var(--radius-sm);
-  background: rgba(56,189,248,0.1);
-  border: 1px solid rgba(56,189,248,0.2);
+  width: 38px; height: 38px; border-radius: var(--radius-sm);
+  background: rgba(34,211,238,0.1);
+  border: 1px solid rgba(34,211,238,0.25);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   color: var(--color-accent);
 }
 .term-icon svg { width: 16px; height: 16px; }
-.term-title { font-weight: 600; }
+.term-title { font-weight: 600; font-size: 1.05rem; }
 .term-en { font-size: var(--fs-sm); color: var(--color-accent); font-style: italic; }
-.term-short { font-size: var(--fs-sm); color: var(--color-muted); margin-top: var(--sp-1); }
-.term-detail { font-size: var(--fs-sm); color: var(--color-text); margin-bottom: var(--sp-3); }
+.term-short { font-size: var(--fs-sm); color: var(--color-muted); margin-top: var(--sp-1); line-height: 1.6; }
+.term-detail { font-size: var(--fs-sm); color: var(--color-text); margin-bottom: var(--sp-3); line-height: 1.7; }
 .term-example {
-  background: rgba(56,189,248,0.05);
-  border-left: 2px solid var(--color-accent);
+  background: rgba(34,211,238,0.05);
+  border-left: 3px solid rgba(34,211,238,0.5);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--fs-sm);
   color: var(--color-muted);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  line-height: 1.65;
 }
 .term-example strong { color: var(--color-accent); }
 
 /* ===== TAB 2: TOOLS ===== */
 .tool-card { cursor: pointer; }
 .tool-logo {
-  width: 48px; height: 48px; border-radius: var(--radius-sm);
+  width: 50px; height: 50px; border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
   font-weight: var(--fw-bold);
   font-size: 0.85rem;
@@ -422,31 +469,32 @@ body {
 .tool-provider { font-size: var(--fs-sm); color: var(--color-muted); }
 .tool-meta { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: var(--sp-3); }
 .tool-spec-row { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); margin-bottom: var(--sp-2); }
-.tool-spec-label { color: var(--color-muted); width: 90px; flex-shrink: 0; }
+.tool-spec-label { color: var(--color-muted); width: 90px; flex-shrink: 0; font-size: 0.82rem; }
 .tool-spec-value { color: var(--color-text); }
 .plus-minus-list { list-style: none; margin-top: var(--sp-2); }
-.plus-minus-list li { display: flex; align-items: flex-start; gap: var(--sp-2); font-size: var(--fs-sm); margin-bottom: var(--sp-1); }
+.plus-minus-list li { display: flex; align-items: flex-start; gap: var(--sp-2); font-size: var(--fs-sm); margin-bottom: var(--sp-2); line-height: 1.6; }
 .plus { color: var(--color-success); flex-shrink: 0; }
 .minus { color: var(--color-danger); flex-shrink: 0; }
 .best-for-box {
-  background: rgba(56,189,248,0.05);
-  border: 1px solid rgba(56,189,248,0.15);
+  background: rgba(34,211,238,0.05);
+  border: 1px solid rgba(34,211,238,0.15);
   border-radius: var(--radius-sm);
   padding: var(--sp-3);
   font-size: var(--fs-sm);
   color: var(--color-text);
   margin-top: var(--sp-3);
+  line-height: 1.65;
 }
 .best-for-box strong { color: var(--color-accent); }
-.jp-badge-good   { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 4px; padding: 1px 6px; font-size: 0.78rem; }
+.jp-badge-good   { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); border-radius: 4px; padding: 1px 6px; font-size: 0.78rem; }
 .jp-badge-mid    { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); border-radius: 4px; padding: 1px 6px; font-size: 0.78rem; }
 .jp-badge-low    { background: rgba(251,146,60,0.15); color: #fb923c; border: 1px solid rgba(251,146,60,0.3); border-radius: 4px; padding: 1px 6px; font-size: 0.78rem; }
 
 /* ===== TAB 3: CASES ===== */
 .case-filters { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-bottom: var(--sp-6); }
-.filter-group label { font-size: 0.75rem; color: var(--color-muted); display: block; margin-bottom: var(--sp-1); }
+.filter-group label { font-size: 0.75rem; color: var(--color-muted); display: block; margin-bottom: var(--sp-1); font-weight: 500; letter-spacing: 0.03em; }
 .filter-group select {
-  background: var(--color-bg2);
+  background: var(--color-bg3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   color: var(--color-text);
@@ -455,10 +503,12 @@ body {
   padding: var(--sp-2) var(--sp-3);
   outline: none;
   cursor: pointer;
+  transition: border-color var(--transition);
 }
+.filter-group select:focus { border-color: rgba(34,211,238,0.4); }
 .case-effect {
-  background: rgba(74,222,128,0.08);
-  border: 1px solid rgba(74,222,128,0.2);
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.2);
   border-radius: var(--radius-sm);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--fs-sm);
@@ -474,6 +524,7 @@ body {
   border-top: 1px solid var(--color-border);
   padding-top: var(--sp-3);
   margin-top: var(--sp-3);
+  line-height: 1.65;
 }
 .case-key strong { color: var(--color-accent); }
 .case-meta { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: var(--sp-2) 0 var(--sp-3); }
@@ -481,11 +532,14 @@ body {
 /* ===== CONCEPT MAP ===== */
 .concept-map-wrap {
   margin-bottom: var(--sp-6);
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(34,211,238,0.12);
+  border-top: 2px solid rgba(34,211,238,0.4);
   border-radius: var(--radius-md);
-  background: var(--color-glass);
+  background: var(--color-bg3);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 .concept-map-toggle {
   display: flex;
@@ -507,63 +561,66 @@ body {
 .cmap { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 560px; }
 .cmap-row { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: nowrap; }
 .cmap-node {
-  padding: var(--sp-1) var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(56,189,248,0.35);
-  background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(34,211,238,0.35);
+  background: rgba(34,211,238,0.07);
   color: var(--color-accent);
   font-size: var(--fs-sm);
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
 }
-.cmap-node:hover { background: rgba(56,189,248,0.2); border-color: var(--color-accent); transform: var(--hover-lift); }
-.cmap-node.highlighted { background: rgba(56,189,248,0.3); border-color: var(--color-accent); box-shadow: 0 0 12px rgba(56,189,248,0.4); }
-.cmap-node.purple { border-color: rgba(167,139,250,0.4); background: rgba(167,139,250,0.1); color: #a78bfa; }
-.cmap-node.purple:hover { background: rgba(167,139,250,0.25); border-color: #a78bfa; }
+.cmap-node:hover { background: rgba(34,211,238,0.18); border-color: var(--color-accent); transform: var(--hover-lift); box-shadow: 0 4px 12px rgba(34,211,238,0.15); }
+.cmap-node.highlighted { background: rgba(34,211,238,0.25); border-color: var(--color-accent); box-shadow: 0 0 16px rgba(34,211,238,0.4); }
+.cmap-node.purple { border-color: rgba(129,140,248,0.4); background: rgba(129,140,248,0.1); color: var(--color-accent2); }
+.cmap-node.purple:hover { background: rgba(129,140,248,0.22); border-color: var(--color-accent2); box-shadow: 0 4px 12px rgba(129,140,248,0.15); }
 .cmap-arr { color: var(--color-muted); font-size: 0.85rem; flex-shrink: 0; }
 .cmap-label { font-size: 0.72rem; color: var(--color-muted); flex-shrink: 0; }
 
 /* ===== TAB 4: CONCEPTS ===== */
 .concept-card { cursor: pointer; }
-.concept-name { font-size: 1rem; font-weight: 600; }
+.concept-name { font-size: 1.05rem; font-weight: 600; }
 .concept-name-en { font-size: var(--fs-sm); color: var(--color-accent); font-style: italic; }
-.concept-short { font-size: var(--fs-sm); color: var(--color-muted); margin: var(--sp-2) 0; }
+.concept-short { font-size: var(--fs-sm); color: var(--color-muted); margin: var(--sp-2) 0; line-height: 1.65; }
 .concept-how {
   font-size: var(--fs-sm);
   color: var(--color-text);
   margin-bottom: var(--sp-3);
   padding: var(--sp-3);
-  background: rgba(255,255,255,0.02);
+  background: rgba(255,255,255,0.025);
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
+  line-height: 1.7;
 }
 .use-section { margin-bottom: var(--sp-3); }
-.use-section h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2); }
-.use-section.when { --col: #4ade80; }
-.use-section.when-not { --col: #f87171; }
+.use-section h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--sp-2); font-weight: 600; }
+.use-section.when { --col: #34d399; }
+.use-section.when-not { --col: #fb7185; }
 .use-section h4 { color: var(--col); }
-.use-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-.use-list li { display: flex; align-items: flex-start; gap: var(--sp-2); font-size: var(--fs-sm); color: var(--color-text); }
-.use-list li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--col); margin-top: 8px; flex-shrink: 0; }
+.use-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.use-list li { display: flex; align-items: flex-start; gap: var(--sp-2); font-size: var(--fs-sm); color: var(--color-text); line-height: 1.6; }
+.use-list li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--col); margin-top: 9px; flex-shrink: 0; }
 .vs-box {
-  background: rgba(167,139,250,0.06);
-  border: 1px solid rgba(167,139,250,0.2);
+  background: rgba(129,140,248,0.06);
+  border: 1px solid rgba(129,140,248,0.2);
   border-radius: var(--radius-sm);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--fs-sm);
   color: var(--color-muted);
   margin-bottom: var(--sp-3);
+  line-height: 1.65;
 }
-.vs-box strong { color: #a78bfa; }
+.vs-box strong { color: var(--color-accent2); }
 .real-example-box {
-  background: rgba(56,189,248,0.05);
-  border-left: 2px solid var(--color-accent);
+  background: rgba(34,211,238,0.05);
+  border-left: 3px solid rgba(34,211,238,0.5);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--fs-sm);
   color: var(--color-text);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  line-height: 1.65;
 }
 
 /* empty state */
@@ -575,11 +632,13 @@ body {
 
 /* ===== TOOL SELECTOR FLOWCHART (B1) ===== */
 .tool-selector-wrap {
-  background: var(--color-bg2);
-  border: 1px solid var(--color-border);
+  background: var(--color-bg3);
+  border: 1px solid rgba(34,211,238,0.12);
+  border-top: 2px solid var(--color-accent);
   border-radius: var(--radius-md);
   margin-bottom: var(--sp-6);
   overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 .tool-selector-header {
   display: flex;
@@ -594,7 +653,7 @@ body {
   transition: background var(--transition);
   user-select: none;
 }
-.tool-selector-header:hover { background: rgba(56,189,248,0.05); }
+.tool-selector-header:hover { background: rgba(34,211,238,0.05); }
 .tool-selector-chevron { font-size: 0.7rem; transition: transform var(--transition); }
 .tool-selector-chevron.collapsed { transform: rotate(180deg); }
 .tool-selector-body { padding: var(--sp-4) var(--sp-6); overflow: hidden; }
@@ -611,7 +670,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0;
-  border-left: 2px solid rgba(56,189,248,0.3);
+  border-left: 2px solid rgba(34,211,238,0.25);
   margin-left: var(--sp-3);
 }
 .ts-branch {
@@ -623,7 +682,7 @@ body {
 .ts-line {
   width: var(--sp-4);
   height: 2px;
-  background: rgba(56,189,248,0.3);
+  background: rgba(34,211,238,0.25);
   flex-shrink: 0;
 }
 .ts-node {
@@ -633,14 +692,14 @@ body {
   gap: var(--sp-2);
   padding: var(--sp-2) var(--sp-3);
   border-radius: var(--radius-sm);
-  background: rgba(255,255,255,0.02);
+  background: rgba(255,255,255,0.025);
   border: 1px solid var(--color-border);
   font-size: var(--fs-sm);
   transition: background var(--transition);
 }
 .ts-node:hover { background: rgba(255,255,255,0.05); }
 .ts-condition { color: var(--color-muted); }
-.ts-arrow { color: var(--color-border); flex-shrink: 0; }
+.ts-arrow { color: rgba(255,255,255,0.15); flex-shrink: 0; }
 .ts-tool {
   font-weight: 700;
   padding: 1px 8px;
@@ -659,6 +718,7 @@ body {
 .ts-node--copilot .ts-tool { background: rgba(0,120,212,0.15);  color: #0078d4; border: 1px solid rgba(0,120,212,0.3); }
 .ts-node--gemini .ts-tool      { background: rgba(66,133,244,0.15); color: #4285f4; border: 1px solid rgba(66,133,244,0.3); }
 .ts-node--notebooklm .ts-tool  { background: rgba(52,168,83,0.15);  color: #34a853; border: 1px solid rgba(52,168,83,0.3); }
+.ts-node--genspark .ts-tool    { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
 .ts-tool--perplexity           { background: rgba(32,178,170,0.15); color: #20b2aa; border: 1px solid rgba(32,178,170,0.3); }
 @media (max-width: 768px) {
   .tool-selector-body { padding: var(--sp-3); }
@@ -674,8 +734,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-1);
-  background: rgba(56,189,248,0.08);
-  border: 1px solid rgba(56,189,248,0.25);
+  background: rgba(34,211,238,0.08);
+  border: 1px solid rgba(34,211,238,0.25);
   border-radius: var(--radius-sm);
   color: var(--color-accent);
   font-size: 0.78rem;
@@ -685,8 +745,8 @@ body {
   transition: background var(--transition), border-color var(--transition);
 }
 .crosslink-btn:hover {
-  background: rgba(56,189,248,0.15);
-  border-color: rgba(56,189,248,0.5);
+  background: rgba(34,211,238,0.18);
+  border-color: rgba(34,211,238,0.55);
 }
 .crosslink-btn svg { width: 11px; height: 11px; }
 
@@ -696,14 +756,14 @@ body {
   gap: var(--sp-2);
   margin-bottom: var(--sp-6);
   flex-wrap: wrap;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(34,211,238,0.1);
   padding-bottom: var(--sp-3);
 }
 .m365-sub-btn {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-4);
+  padding: 8px 16px;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -715,11 +775,12 @@ body {
   white-space: nowrap;
   transition: all var(--transition);
 }
-.m365-sub-btn:hover { color: var(--color-text); background: rgba(255,255,255,0.05); }
+.m365-sub-btn:hover { color: var(--color-text); background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); }
 .m365-sub-btn.active {
   color: var(--color-accent);
-  background: rgba(56,189,248,0.1);
-  border-color: rgba(56,189,248,0.3);
+  background: linear-gradient(135deg, rgba(34,211,238,0.15), rgba(129,140,248,0.1));
+  border-color: rgba(34,211,238,0.4);
+  box-shadow: 0 2px 12px rgba(34,211,238,0.1);
 }
 .m365-sub-btn svg { width: 14px; height: 14px; }
 .m365-section { display: none; }
@@ -730,12 +791,13 @@ body {
 .m365-category-label {
   font-size: 0.78rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   color: var(--color-muted);
-  margin-bottom: var(--sp-3);
+  margin-bottom: var(--sp-4);
   display: flex;
   align-items: center;
   gap: var(--sp-2);
+  font-weight: 600;
 }
 .m365-category-label::after {
   content: '';
@@ -744,19 +806,22 @@ body {
   background: var(--color-border);
 }
 .m365-app-card {
-  background: var(--color-glass);
+  background: var(--color-bg3);
   border: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-accent);
   border-radius: var(--radius-md);
-  padding: var(--sp-4);
+  padding: var(--sp-6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
   cursor: pointer;
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-  border-left: 3px solid var(--app-color, #38bdf8);
 }
 .m365-app-card:hover {
   transform: var(--hover-lift);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 40px rgba(34,211,238,0.12);
+  border-color: rgba(34,211,238,0.25);
+  border-top-color: var(--color-accent);
 }
 .m365-app-header {
   display: flex;
@@ -765,25 +830,25 @@ body {
   margin-bottom: var(--sp-2);
 }
 .m365-app-icon {
-  width: 36px; height: 36px;
+  width: 38px; height: 38px;
   border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
   font-weight: var(--fw-bold);
   font-size: 0.75rem;
   flex-shrink: 0;
 }
-.m365-app-name { font-weight: 600; font-size: 1rem; }
-.m365-app-headline { font-size: var(--fs-sm); color: var(--color-muted); margin-bottom: var(--sp-3); }
+.m365-app-name { font-weight: 600; font-size: 1.05rem; }
+.m365-app-headline { font-size: var(--fs-sm); color: var(--color-muted); margin-bottom: var(--sp-3); line-height: 1.65; }
 .m365-app-meta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-2); }
-.m365-badge-time { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
-.m365-badge-diff-low    { background: rgba(56,189,248,0.12); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
+.m365-badge-time { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
+.m365-badge-diff-low    { background: rgba(34,211,238,0.12); color: #22d3ee; border: 1px solid rgba(34,211,238,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
 .m365-badge-diff-mid    { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
-.m365-badge-diff-high   { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
+.m365-badge-diff-high   { background: rgba(251,113,133,0.12); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); border-radius: 20px; font-size: 0.73rem; padding: 1px 8px; }
 .m365-features-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--sp-1);
+  gap: var(--sp-2);
   margin-bottom: var(--sp-3);
 }
 .m365-features-list li {
@@ -792,41 +857,45 @@ body {
   gap: var(--sp-2);
   font-size: var(--fs-sm);
   color: var(--color-text);
+  line-height: 1.6;
 }
 .m365-features-list li::before {
   content: '▸';
-  color: var(--app-color, #38bdf8);
+  color: var(--app-color, #22d3ee);
   flex-shrink: 0;
   margin-top: 1px;
 }
 .m365-mfg-use {
-  background: rgba(56,189,248,0.04);
-  border-left: 2px solid var(--color-accent);
+  background: rgba(34,211,238,0.04);
+  border-left: 3px solid rgba(34,211,238,0.45);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--fs-sm);
   color: var(--color-muted);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   margin-top: var(--sp-2);
+  line-height: 1.65;
 }
 .m365-mfg-use strong { color: var(--color-accent); }
 
 /* Scenario cards */
 .m365-scenario-card {
-  background: var(--color-glass);
+  background: var(--color-bg3);
   border: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-accent2);
   border-radius: var(--radius-md);
-  padding: var(--sp-4);
+  padding: var(--sp-6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
   transition: transform var(--transition), box-shadow var(--transition);
 }
-.m365-scenario-card:hover { transform: var(--hover-lift); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-.m365-scenario-title { font-weight: 600; font-size: 0.95rem; margin-bottom: var(--sp-2); }
+.m365-scenario-card:hover { transform: var(--hover-lift); box-shadow: 0 8px 40px rgba(129,140,248,0.1); }
+.m365-scenario-title { font-weight: 600; font-size: 1rem; margin-bottom: var(--sp-2); }
 .m365-scenario-meta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-3); }
-.m365-scenario-situation { font-size: var(--fs-sm); color: var(--color-muted); margin-bottom: var(--sp-3); }
+.m365-scenario-situation { font-size: var(--fs-sm); color: var(--color-muted); margin-bottom: var(--sp-3); line-height: 1.65; }
 .m365-effect-box {
-  background: rgba(74,222,128,0.08);
-  border: 1px solid rgba(74,222,128,0.2);
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.2);
   border-radius: var(--radius-sm);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--fs-sm);
@@ -843,7 +912,7 @@ body {
   margin-bottom: var(--sp-3);
 }
 .m365-ba-col {
-  background: rgba(255,255,255,0.02);
+  background: rgba(255,255,255,0.025);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: var(--sp-3);
@@ -852,33 +921,35 @@ body {
   font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   margin-bottom: var(--sp-2);
 }
 .m365-ba-label.before { color: var(--color-danger); }
 .m365-ba-label.after  { color: var(--color-success); }
-.m365-ba-text { font-size: var(--fs-sm); color: var(--color-text); }
+.m365-ba-text { font-size: var(--fs-sm); color: var(--color-text); line-height: 1.6; }
 .m365-howto {
   margin-top: var(--sp-3);
   padding-top: var(--sp-3);
   border-top: 1px solid var(--color-border);
 }
-.m365-howto-label { font-size: 0.78rem; color: var(--color-accent); font-weight: 600; margin-bottom: var(--sp-2); }
-.m365-howto ol { list-style: decimal; padding-left: 1.2em; display: flex; flex-direction: column; gap: var(--sp-1); }
-.m365-howto li { font-size: var(--fs-sm); color: var(--color-text); }
+.m365-howto-label { font-size: 0.78rem; color: var(--color-accent); font-weight: 600; margin-bottom: var(--sp-2); letter-spacing: 0.04em; }
+.m365-howto ol { list-style: decimal; padding-left: 1.2em; display: flex; flex-direction: column; gap: var(--sp-2); }
+.m365-howto li { font-size: var(--fs-sm); color: var(--color-text); line-height: 1.6; }
 .m365-scenario-card .accordion-toggle { cursor: pointer; }
 
 /* Prompt cards */
 .m365-prompt-card {
-  background: var(--color-glass);
+  background: var(--color-bg3);
   border: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-success);
   border-radius: var(--radius-md);
-  padding: var(--sp-4);
+  padding: var(--sp-6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
   transition: transform var(--transition), box-shadow var(--transition);
 }
-.m365-prompt-card:hover { transform: var(--hover-lift); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.m365-prompt-card:hover { transform: var(--hover-lift); box-shadow: 0 8px 40px rgba(52,211,153,0.1); }
 .m365-prompt-header {
   display: flex;
   align-items: flex-start;
@@ -886,13 +957,13 @@ body {
   gap: var(--sp-3);
   margin-bottom: var(--sp-3);
 }
-.m365-prompt-title { font-weight: 600; font-size: 0.95rem; }
+.m365-prompt-title { font-weight: 600; font-size: 1rem; }
 .m365-copy-btn {
   display: flex;
   align-items: center;
   gap: var(--sp-1);
-  background: rgba(56,189,248,0.1);
-  border: 1px solid rgba(56,189,248,0.3);
+  background: rgba(34,211,238,0.1);
+  border: 1px solid rgba(34,211,238,0.3);
   border-radius: var(--radius-sm);
   color: var(--color-accent);
   font-size: 0.75rem;
@@ -903,56 +974,60 @@ body {
   flex-shrink: 0;
   transition: all var(--transition);
 }
-.m365-copy-btn:hover { background: rgba(56,189,248,0.2); }
-.m365-copy-btn.copied { background: rgba(74,222,128,0.15); border-color: rgba(74,222,128,0.4); color: #4ade80; }
+.m365-copy-btn:hover { background: rgba(34,211,238,0.2); box-shadow: 0 0 8px rgba(34,211,238,0.15); }
+.m365-copy-btn.copied { background: rgba(52,211,153,0.15); border-color: rgba(52,211,153,0.4); color: #34d399; }
 .m365-copy-btn svg { width: 12px; height: 12px; }
 .m365-prompt-meta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-3); }
 .m365-prompt-template {
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.35);
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: var(--radius-sm);
   padding: var(--sp-3) var(--sp-4);
   font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   color: #cbd5e1;
   white-space: pre-wrap;
   word-break: break-word;
-  line-height: 1.7;
+  line-height: 1.75;
   margin-bottom: var(--sp-3);
   max-height: 180px;
   overflow-y: auto;
 }
 .m365-prompt-template::-webkit-scrollbar { width: 4px; }
 .m365-prompt-template::-webkit-scrollbar-track { background: transparent; }
-.m365-prompt-template::-webkit-scrollbar-thumb { background: rgba(56,189,248,0.3); border-radius: 2px; }
+.m365-prompt-template::-webkit-scrollbar-thumb { background: rgba(34,211,238,0.3); border-radius: 2px; }
 .m365-output-box {
-  background: rgba(74,222,128,0.05);
-  border: 1px solid rgba(74,222,128,0.15);
+  background: rgba(52,211,153,0.05);
+  border: 1px solid rgba(52,211,153,0.15);
   border-radius: var(--radius-sm);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--fs-sm);
   color: var(--color-muted);
   margin-bottom: var(--sp-2);
 }
-.m365-output-box strong { color: #4ade80; }
+.m365-output-box strong { color: #34d399; }
 .m365-tip-box {
-  background: rgba(56,189,248,0.06);
-  border-left: 2px solid var(--color-accent);
+  background: rgba(34,211,238,0.06);
+  border-left: 3px solid rgba(34,211,238,0.4);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--fs-sm);
   color: var(--color-muted);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   position: relative;
+  line-height: 1.65;
 }
 .m365-tip-box::before { content: '💡 '; }
 
 /* License table */
 .m365-license-wrap {
-  background: var(--color-glass);
-  border: 1px solid var(--color-border);
+  background: var(--color-bg3);
+  border: 1px solid rgba(34,211,238,0.12);
+  border-top: 2px solid var(--color-accent);
   border-radius: var(--radius-md);
   padding: var(--sp-6);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 .m365-license-table-wrap { overflow-x: auto; }
 .m365-license-table {
@@ -967,18 +1042,20 @@ body {
   color: var(--color-muted);
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
+  font-weight: 600;
 }
 .m365-license-table td {
   padding: var(--sp-3);
   border-bottom: 1px solid var(--color-border);
   vertical-align: middle;
+  line-height: 1.5;
 }
 .m365-license-table tr:last-child td { border-bottom: none; }
 .m365-license-table tr.copilot-row td {
-  background: rgba(56,189,248,0.07);
+  background: rgba(34,211,238,0.07);
   color: var(--color-accent);
   font-weight: 600;
 }
@@ -1009,20 +1086,23 @@ body {
   min-width: 42px;
   text-align: center;
 }
-.tier-badge.free { background: rgba(100,116,139,0.2); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
-.tier-badge.paid { background: rgba(0,120,212,0.2); color: #38bdf8; border: 1px solid rgba(0,120,212,0.4); }
+.tier-badge.free { background: rgba(148,163,184,0.15); color: #94a3b8; border: 1px solid rgba(148,163,184,0.25); }
+.tier-badge.paid { background: rgba(34,211,238,0.15); color: #22d3ee; border: 1px solid rgba(34,211,238,0.35); }
 .tier-row-title { font-size: var(--fs-sm); font-weight: 600; color: var(--color-text); }
-.tier-row-detail { font-size: 0.78rem; color: var(--color-muted); margin-top: 2px; line-height: 1.5; }
+.tier-row-detail { font-size: 0.78rem; color: var(--color-muted); margin-top: 2px; line-height: 1.6; }
 
 /* QA accordion */
 .m365-qa-list { display: flex; flex-direction: column; gap: var(--sp-3); }
 .m365-qa-item {
-  background: var(--color-glass);
+  background: var(--color-bg3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   overflow: hidden;
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: box-shadow var(--transition);
 }
+.m365-qa-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
 .m365-qa-q {
   display: flex;
   align-items: center;
@@ -1045,204 +1125,12 @@ body {
   padding: 0 var(--sp-4) var(--sp-4);
   font-size: var(--fs-sm);
   color: var(--color-text);
-  line-height: 1.7;
+  line-height: 1.75;
   border-top: 1px solid var(--color-border);
   padding-top: var(--sp-3);
 }
 .m365-qa-item.open .m365-qa-a { display: block; }
 .m365-qa-a::before { content: 'A  '; color: var(--color-success); font-weight: 700; }
-
-/* ===== TAB 7: PROMPT LIBRARY ===== */
-.prompt-lib-card {
-  background: var(--color-glass);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--sp-4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-.prompt-lib-card:hover { transform: var(--hover-lift); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-.prompt-lib-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--sp-3);
-  margin-bottom: var(--sp-3);
-}
-.prompt-lib-title { font-weight: 600; font-size: 0.95rem; flex: 1; }
-.tool-tag {
-  display: inline-block;
-  padding: 2px var(--sp-2);
-  border-radius: var(--radius-sm);
-  font-size: 0.72rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.tool-tag-claude   { background: rgba(217,119,6,0.15);  color: #d97706; border: 1px solid rgba(217,119,6,0.3); }
-.tool-tag-chatgpt  { background: rgba(16,163,127,0.15); color: #10a37f; border: 1px solid rgba(16,163,127,0.3); }
-.tool-tag-gemini   { background: rgba(66,133,244,0.15); color: #4285f4; border: 1px solid rgba(66,133,244,0.3); }
-.tool-tag-generic  { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
-
-/* ===== TAB 8: ANTI-PATTERNS ===== */
-.antipattern-card {
-  background: var(--color-glass);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--sp-4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: transform var(--transition), box-shadow var(--transition);
-  cursor: pointer;
-}
-.antipattern-card:hover { transform: var(--hover-lift); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-.antipattern-severity-high   { border-left: 4px solid var(--color-danger); }
-.antipattern-severity-mid    { border-left: 4px solid var(--color-warning); }
-.antipattern-severity-low    { border-left: 4px solid var(--color-muted); }
-.antipattern-header { display: flex; align-items: flex-start; gap: var(--sp-3); margin-bottom: var(--sp-2); }
-.antipattern-icon { font-size: 1.4rem; flex-shrink: 0; line-height: 1; }
-.antipattern-title { font-weight: 600; font-size: 0.95rem; }
-.antipattern-cat { font-size: 0.75rem; color: var(--color-muted); margin-top: 2px; }
-.symptom-box {
-  background: rgba(248,113,113,0.06);
-  border: 1px solid rgba(248,113,113,0.2);
-  border-radius: var(--radius-sm);
-  padding: var(--sp-2) var(--sp-3);
-  font-size: var(--fs-sm);
-  color: #f87171;
-  margin-bottom: var(--sp-3);
-}
-.symptom-box strong { color: #fca5a5; }
-.cause-box {
-  background: rgba(251,191,36,0.05);
-  border-left: 2px solid var(--color-warning);
-  padding: var(--sp-2) var(--sp-3);
-  font-size: var(--fs-sm);
-  color: var(--color-muted);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  margin-bottom: var(--sp-3);
-}
-.solution-box {
-  background: rgba(74,222,128,0.06);
-  border: 1px solid rgba(74,222,128,0.2);
-  border-radius: var(--radius-sm);
-  padding: var(--sp-2) var(--sp-3);
-  font-size: var(--fs-sm);
-  color: var(--color-success);
-}
-.solution-box strong { color: #86efac; }
-
-/* ===== ROI SUMMARY ===== */
-.roi-summary-section {
-  background: var(--color-glass);
-  border: 1px solid rgba(56,189,248,0.2);
-  border-radius: var(--radius-lg);
-  padding: var(--sp-6);
-  backdrop-filter: blur(12px);
-  margin-bottom: var(--sp-8);
-}
-.roi-summary-title {
-  font-size: var(--fs-h3);
-  font-weight: 700;
-  color: var(--color-text);
-  margin-bottom: var(--sp-1);
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-}
-.roi-summary-subtitle { font-size: var(--fs-sm); color: var(--color-muted); margin-bottom: var(--sp-6); }
-.roi-kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--sp-4);
-  margin-bottom: var(--sp-6);
-}
-.roi-kpi-card {
-  background: rgba(56,189,248,0.06);
-  border: 1px solid rgba(56,189,248,0.15);
-  border-radius: var(--radius-md);
-  padding: var(--sp-4);
-  text-align: center;
-}
-.roi-kpi-value {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--color-accent);
-  line-height: 1;
-  margin-bottom: var(--sp-1);
-}
-.roi-kpi-label { font-size: var(--fs-sm); color: var(--color-muted); }
-.roi-kpi-sub { font-size: 0.72rem; color: var(--color-muted); opacity: 0.7; margin-top: 2px; }
-.roi-dept-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-4);
-}
-.roi-dept-block { }
-.roi-dept-label {
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-muted);
-  margin-bottom: var(--sp-3);
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-}
-.roi-dept-label::after { content: ''; flex: 1; height: 1px; background: var(--color-border); }
-.roi-bar-item {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  margin-bottom: var(--sp-2);
-  font-size: var(--fs-sm);
-}
-.roi-bar-name { color: var(--color-muted); width: 100px; flex-shrink: 0; font-size: 0.8rem; }
-.roi-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
-.roi-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--color-accent), #a78bfa); }
-.roi-bar-val { color: var(--color-accent); font-weight: 600; width: 40px; text-align: right; flex-shrink: 0; }
-@media (max-width: 768px) {
-  .roi-dept-row { grid-template-columns: 1fr; }
-  .roi-kpi-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 480px) {
-  .roi-kpi-grid { grid-template-columns: 1fr 1fr; }
-}
-
-/* ===== CHANGELOG ===== */
-.changelog-section {
-  border-top: 1px solid var(--color-border);
-  padding: var(--sp-4) var(--sp-6);
-}
-.changelog-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--sp-2);
-  cursor: pointer;
-  color: var(--color-muted);
-  font-size: var(--fs-sm);
-  user-select: none;
-  padding: var(--sp-2);
-  transition: color var(--transition);
-}
-.changelog-toggle:hover { color: var(--color-text); }
-.changelog-toggle svg { width: 14px; height: 14px; transition: transform var(--transition); }
-.changelog-toggle.open svg { transform: rotate(180deg); }
-.changelog-body {
-  display: none;
-  padding: var(--sp-4) 0;
-}
-.changelog-body.open { display: block; }
-.changelog-list { list-style: none; display: flex; flex-direction: column; gap: var(--sp-3); max-width: 640px; margin: 0 auto; }
-.changelog-item { display: flex; align-items: flex-start; gap: var(--sp-3); font-size: var(--fs-sm); }
-.changelog-date { color: var(--color-accent); font-size: 0.78rem; white-space: nowrap; flex-shrink: 0; width: 80px; }
-.changelog-text { color: var(--color-text); }
-.changelog-tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 0.72rem; margin-right: var(--sp-1); }
-.changelog-tag-add { background: rgba(74,222,128,0.15); color: #4ade80; }
-.changelog-tag-upd { background: rgba(56,189,248,0.15); color: #38bdf8; }
-.changelog-tag-fix { background: rgba(251,191,36,0.15); color: #fbbf24; }
 
 /* ===== FOOTER ===== */
 footer {
@@ -1251,14 +1139,15 @@ footer {
   border-top: 1px solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--fs-sm);
+  background: linear-gradient(0deg, rgba(8,11,20,0.8), transparent);
 }
 footer span { color: var(--color-accent); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .site-header h1 { font-size: 1.5rem; }
+  .site-header h1 { font-size: 1.6rem; }
   .tab-panel { padding: var(--sp-4); }
-  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; gap: var(--sp-4); }
   .case-filters { flex-direction: column; }
   .roadmap-header { flex-wrap: wrap; }
   .duration-badge { margin-left: 0; }
@@ -1266,17 +1155,44 @@ footer span { color: var(--color-accent); }
   .m365-subnav { gap: var(--sp-1); }
 }
 @media (max-width: 480px) {
-  .site-header { padding: var(--sp-6) var(--sp-4); }
-  .tab-nav { padding: var(--sp-3) var(--sp-4); }
-  .tab-btn { padding: var(--sp-2) var(--sp-3); font-size: 0.78rem; }
+  .site-header { padding: var(--sp-8) var(--sp-4) var(--sp-6); }
+  .tab-nav { padding: var(--sp-2) var(--sp-3); }
+  .tab-btn { padding: 6px var(--sp-3); font-size: 0.78rem; }
   .tool-meta { flex-direction: column; }
   .m365-sub-btn { font-size: 0.78rem; padding: var(--sp-1) var(--sp-2); }
   .m365-prompt-header { flex-direction: column; gap: var(--sp-2); }
   .m365-copy-btn { align-self: flex-start; }
+  .card, .roadmap-card, .m365-app-card, .m365-scenario-card, .m365-prompt-card { padding: var(--sp-4); }
+}
+
+/* ===== PORTAL BACK LINK ===== */
+.portal-back-link {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 9999;
+  background: rgba(8,11,20,0.85);
+  border: 1px solid rgba(129,140,248,0.35);
+  color: #a5b4fc;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: Inter, sans-serif;
+  letter-spacing: -0.01em;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.portal-back-link:hover {
+  border-color: rgba(129,140,248,0.6);
+  box-shadow: 0 0 12px rgba(129,140,248,0.2);
 }
 </style>
 </head>
 <body>
+<a href="../portal-v2.html" class="portal-back-link">← ポータル</a>
 
 <!-- HEADER -->
 <header class="site-header">
@@ -1285,10 +1201,10 @@ footer span { color: var(--color-accent); }
   <p class="updated">最終更新: 2026-04-08</p>
 
   <div class="stats-bar">
-    <div class="stats-item">📚 <strong>基礎用語</strong> <span id="stat-terms">15語</span></div>
-    <div class="stats-item">🛠 <strong>ツール</strong> 9サービス</div>
-    <div class="stats-item">📋 <strong>事例</strong> <span id="stat-cases">21件</span></div>
-    <div class="stats-item">⚙ <strong>技術概念</strong> <span id="stat-concepts">12件</span></div>
+    <div class="stats-item">📚 <strong>基礎用語</strong> 15語</div>
+    <div class="stats-item">🛠 <strong>ツール</strong> 11サービス</div>
+    <div class="stats-item">📋 <strong>事例</strong> 27件</div>
+    <div class="stats-item">⚙ <strong>技術概念</strong> 14件</div>
   </div>
 </header>
 
@@ -1316,18 +1232,42 @@ footer span { color: var(--color-accent); }
     <i data-lucide="shield"></i> セキュリティ
   </button>
   <button class="tab-btn" onclick="switchTab(7)" id="tab-btn-7">
-    <i data-lucide="message-square-text"></i> プロンプト集
-  </button>
-  <button class="tab-btn" onclick="switchTab(8)" id="tab-btn-8">
-    <i data-lucide="alert-triangle"></i> アンチパターン
-  </button>
-  <button class="tab-btn" onclick="switchTab(9)" id="tab-btn-9">
     <i data-lucide="zap"></i> 推進のコツ
   </button>
 </nav>
 
 <!-- ===== TAB 0: ROADMAP ===== -->
 <div class="tab-panel active" id="tab-0">
+<!-- PERSONA ENTRY CARDS -->
+<div style="margin-bottom:var(--sp-8)">
+  <div style="text-align:center;margin-bottom:var(--sp-4)">
+    <div style="font-size:0.8rem;color:var(--color-accent);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:var(--sp-1)">あなたはどこから始める？</div>
+    <div style="color:var(--color-muted);font-size:var(--fs-sm)">職種をクリックすると最適なタブに移動します</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:var(--sp-3)">
+    <div class="card clickable" style="border-top-color:#22d3ee;text-align:center;padding:var(--sp-4)" onclick="switchTab(7)">
+      <div style="font-size:1.6rem;margin-bottom:var(--sp-2)">⚡</div>
+      <div style="font-weight:700;margin-bottom:var(--sp-1)">電気・計装</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted)">推進のコツ → 実践事例 → プロンプト集</div>
+    </div>
+    <div class="card clickable" style="border-top-color:#34d399;text-align:center;padding:var(--sp-4)" onclick="switchTab(3)">
+      <div style="font-size:1.6rem;margin-bottom:var(--sp-2)">🔧</div>
+      <div style="font-weight:700;margin-bottom:var(--sp-1)">機械・保全</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted)">活用事例（保全フィルタ）→ ツール比較</div>
+    </div>
+    <div class="card clickable" style="border-top-color:#818cf8;text-align:center;padding:var(--sp-4)" onclick="switchTab(5)">
+      <div style="font-size:1.6rem;margin-bottom:var(--sp-2)">📊</div>
+      <div style="font-weight:700;margin-bottom:var(--sp-1)">事務・管理</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted)">M365 Copilot → プロンプト集</div>
+    </div>
+    <div class="card clickable" style="border-top-color:#fbbf24;text-align:center;padding:var(--sp-4)" onclick="switchTab(7)">
+      <div style="font-size:1.6rem;margin-bottom:var(--sp-2)">👔</div>
+      <div style="font-weight:700;margin-bottom:var(--sp-1)">管理職・リーダー</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted)">ロードマップ → 推進のコツ（壁と突破法）</div>
+    </div>
+  </div>
+</div>
+
   <div class="roadmap-list" id="roadmap-list"></div>
 </div>
 
@@ -1408,6 +1348,15 @@ footer span { color: var(--color-accent); }
               <span class="ts-sub">ハルシネーションなし・資料範囲内で回答</span>
             </div>
           </div>
+          <div class="ts-branch">
+            <div class="ts-line"></div>
+            <div class="ts-node ts-node--genspark">
+              <span class="ts-condition">調査・比較検討を複数AIに並列実行してまとめ</span>
+              <span class="ts-arrow">→</span>
+              <span class="ts-tool">Genspark</span>
+              <span class="ts-sub">Sparkpageで自動レポート生成</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1418,24 +1367,6 @@ footer span { color: var(--color-accent); }
 
 <!-- ===== TAB 3: CASES ===== -->
 <div class="tab-panel" id="tab-3">
-
-  <!-- ROI SUMMARY SECTION -->
-  <div class="roi-summary-section">
-    <div class="roi-summary-title"><i data-lucide="bar-chart-2" style="width:20px;height:20px;color:var(--color-accent)"></i> 導入効果サマリー — 上司に見せる1枚</div>
-    <div class="roi-summary-subtitle">活用事例から集計した効果指標。社内展開の提案資料に活用してください。</div>
-    <div class="roi-kpi-grid" id="roi-kpi-grid"></div>
-    <div class="roi-dept-row">
-      <div class="roi-dept-block">
-        <div class="roi-dept-label">ツール別 効果件数</div>
-        <div id="roi-tool-bars"></div>
-      </div>
-      <div class="roi-dept-block">
-        <div class="roi-dept-label">用途タイプ別 平均難易度</div>
-        <div id="roi-type-bars"></div>
-      </div>
-    </div>
-  </div>
-
   <div class="search-bar">
     <i data-lucide="search"></i>
     <input type="text" id="case-search" placeholder="キーワードで検索..." oninput="renderCases()">
@@ -1473,6 +1404,7 @@ footer span { color: var(--color-accent); }
         <option value="Copilot">Copilot</option>
         <option value="Gemini">Gemini</option>
         <option value="NotebookLM">NotebookLM</option>
+        <option value="Genspark">Genspark</option>
         <option value="独自LLM">独自LLM</option>
         <option value="複合">複合</option>
       </select>
@@ -1620,7 +1552,7 @@ footer span { color: var(--color-accent); }
     <button class="filter-btn" data-sec="境界線" onclick="setSecFilter('境界線',this)">🟡 境界線（要判断）</button>
     <button class="filter-btn" data-sec="OK入力" onclick="setSecFilter('OK入力',this)">🟢 OK入力</button>
   </div>
-  <div id="security-rules-grid" class="grid-2" style="margin-bottom:var(--sp-10)"></div>
+  <div id="security-rules-grid" class="grid-2" style="margin-bottom:var(--sp-8)"></div>
   <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
     <i data-lucide="help-circle"></i> セキュリティ FAQ
   </h3>
@@ -1633,58 +1565,8 @@ footer span { color: var(--color-accent); }
   <div id="security-faq-list"></div>
 </div>
 
-<!-- ===== TAB 7: PROMPT LIBRARY ===== -->
+<!-- ===== TAB 7: 推進のコツ ===== -->
 <div class="tab-panel" id="tab-7">
-  <p style="color:var(--color-muted);font-size:var(--fs-sm);margin-bottom:var(--sp-4)">Claude / ChatGPT / Gemini / 汎用で使えるプロンプトテンプレート集。コピーして使えます。</p>
-  <div class="search-bar">
-    <i data-lucide="search"></i>
-    <input type="text" id="plib-search" placeholder="テンプレートを検索..." oninput="renderPromptLib()">
-  </div>
-  <div style="display:flex;flex-wrap:wrap;gap:var(--sp-3);margin-bottom:var(--sp-4)">
-    <div>
-      <label style="font-size:0.75rem;color:var(--color-muted);display:block;margin-bottom:4px">ツール</label>
-      <div class="filter-row" id="plib-tool-filters" style="margin-bottom:0">
-        <button class="filter-btn active" data-ptool="all" onclick="setPlibFilter('tool','all',this)">すべて</button>
-        <button class="filter-btn" data-ptool="Claude" onclick="setPlibFilter('tool','Claude',this)">Claude</button>
-        <button class="filter-btn" data-ptool="ChatGPT" onclick="setPlibFilter('tool','ChatGPT',this)">ChatGPT</button>
-        <button class="filter-btn" data-ptool="Gemini" onclick="setPlibFilter('tool','Gemini',this)">Gemini</button>
-        <button class="filter-btn" data-ptool="汎用" onclick="setPlibFilter('tool','汎用',this)">汎用</button>
-      </div>
-    </div>
-    <div>
-      <label style="font-size:0.75rem;color:var(--color-muted);display:block;margin-bottom:4px">カテゴリ</label>
-      <div class="filter-row" id="plib-cat-filters" style="margin-bottom:0">
-        <button class="filter-btn active" data-pcat="all" onclick="setPlibFilter('cat','all',this)">すべて</button>
-        <button class="filter-btn" data-pcat="メール作成" onclick="setPlibFilter('cat','メール作成',this)">メール</button>
-        <button class="filter-btn" data-pcat="議事録要約" onclick="setPlibFilter('cat','議事録要約',this)">議事録</button>
-        <button class="filter-btn" data-pcat="報告書作成" onclick="setPlibFilter('cat','報告書作成',this)">報告書</button>
-        <button class="filter-btn" data-pcat="データ分析" onclick="setPlibFilter('cat','データ分析',this)">データ分析</button>
-        <button class="filter-btn" data-pcat="コード生成" onclick="setPlibFilter('cat','コード生成',this)">コード</button>
-        <button class="filter-btn" data-pcat="ブレスト" onclick="setPlibFilter('cat','ブレスト',this)">ブレスト</button>
-        <button class="filter-btn" data-pcat="調査・リサーチ" onclick="setPlibFilter('cat','調査・リサーチ',this)">リサーチ</button>
-        <button class="filter-btn" data-pcat="翻訳・校正" onclick="setPlibFilter('cat','翻訳・校正',this)">翻訳・校正</button>
-      </div>
-    </div>
-  </div>
-  <div class="grid-2" id="plib-grid"></div>
-</div>
-
-<!-- ===== TAB 8: ANTI-PATTERNS ===== -->
-<div class="tab-panel" id="tab-8">
-  <p style="color:var(--color-muted);font-size:var(--fs-sm);margin-bottom:var(--sp-4)">生成AI活用でやりがちな失敗パターン。製造業・化学メーカー特有の事例を含む。導入前・導入後のチェックリストとして活用してください。</p>
-  <div class="filter-row" id="ap-cat-filters" style="margin-bottom:var(--sp-6)">
-    <button class="filter-btn active" data-apcat="all" onclick="setApFilter('all',this)">すべて</button>
-    <button class="filter-btn" data-apcat="セキュリティ事故" onclick="setApFilter('セキュリティ事故',this)">セキュリティ</button>
-    <button class="filter-btn" data-apcat="ハルシネーション" onclick="setApFilter('ハルシネーション',this)">ハルシネーション</button>
-    <button class="filter-btn" data-apcat="プロンプト設計ミス" onclick="setApFilter('プロンプト設計ミス',this)">プロンプト設計</button>
-    <button class="filter-btn" data-apcat="組織・運用ミス" onclick="setApFilter('組織・運用ミス',this)">組織・運用</button>
-    <button class="filter-btn" data-apcat="期待値ミスマッチ" onclick="setApFilter('期待値ミスマッチ',this)">期待値</button>
-  </div>
-  <div class="grid-2" id="ap-grid"></div>
-</div>
-
-<!-- ===== TAB 9: 推進のコツ ===== -->
-<div class="tab-panel" id="tab-9">
 
   <!-- ヒーロー: 時間削減インパクト -->
   <div style="background:linear-gradient(135deg,rgba(56,189,248,0.08),rgba(167,139,250,0.08));border:1px solid rgba(56,189,248,0.2);border-radius:var(--radius-lg);padding:var(--sp-8) var(--sp-6);margin-bottom:var(--sp-8);text-align:center">
@@ -1699,7 +1581,7 @@ footer span { color: var(--color-accent); }
   <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
     <i data-lucide="clock"></i> Before / After 実践事例
   </h3>
-  <div style="display:flex;flex-direction:column;gap:var(--sp-4);margin-bottom:var(--sp-8)">
+  <div style="display:flex;flex-direction:column;gap:var(--sp-4);margin-bottom:var(--sp-8)" id="cases-list">
 
     <!-- 事例A -->
     <div class="card" style="border-left:3px solid var(--color-accent)">
@@ -1713,6 +1595,7 @@ footer span { color: var(--color-accent); }
           <div style="font-size:1.6rem;font-weight:700;color:#4ade80;line-height:1">▼100分</div>
         </div>
       </div>
+      <!-- Before/After バー -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
         <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
           <div style="font-size:0.75rem;color:#f87171;font-weight:600;letter-spacing:0.05em;margin-bottom:4px">BEFORE</div>
@@ -1818,6 +1701,53 @@ footer span { color: var(--color-accent); }
     </div>
   </div>
 
+  <!-- やらかし事例集 -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="x-circle"></i> やらかし事例集 — 失敗から学ぶ
+  </h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--sp-4);margin-bottom:var(--sp-8)">
+    <div class="card" style="border-top-color:var(--color-danger)">
+      <div style="display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-2)">
+        <span style="font-size:1.4rem">❌</span>
+        <span style="font-weight:700;color:var(--color-danger)">数値をそのまま稟議に使った</span>
+      </div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">AIが出した「コスト削減200万円」をそのまま提案書に記載。根拠を聞かれて答えられなかった。</div>
+      <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
+        <strong style="color:#34d399">✅ 対策</strong>: AIは「構成案・叩き台」として使う。数値は必ず元データで自分が計算して確認する。
+      </div>
+    </div>
+    <div class="card" style="border-top-color:var(--color-danger)">
+      <div style="display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-2)">
+        <span style="font-size:1.4rem">❌</span>
+        <span style="font-weight:700;color:var(--color-danger)">社外秘情報をそのまま入力した</span>
+      </div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">取引先名・設備ID・生産量データを含むメールをそのままChatGPTに貼り付けた。後で情報管理部門から指摘を受けた。</div>
+      <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
+        <strong style="color:#34d399">✅ 対策</strong>: セキュリティタブの「NG入力」を事前確認。固有名詞は「設備A」「取引先X」に置換してから入力する。
+      </div>
+    </div>
+    <div class="card" style="border-top-color:var(--color-danger)">
+      <div style="display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-2)">
+        <span style="font-size:1.4rem">❌</span>
+        <span style="font-weight:700;color:var(--color-danger)">プロンプトが長すぎて逆に遅くなった</span>
+      </div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">「完璧なプロンプトを書こう」と30分かけて作成。AIへの入力準備だけで従来の作業時間を超えた。</div>
+      <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
+        <strong style="color:#34d399">✅ 対策</strong>: まず3行で試す。足りなければ追加指示。完璧なプロンプトより「試して修正」のサイクルが速い。
+      </div>
+    </div>
+    <div class="card" style="border-top-color:var(--color-danger)">
+      <div style="display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-2)">
+        <span style="font-size:1.4rem">❌</span>
+        <span style="font-weight:700;color:var(--color-danger)">「AIが言ったから正しい」で提出</span>
+      </div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">報告書の技術的根拠をAIが生成した文章をそのまま使用。上司から「この規格番号は存在しない」と指摘された（ハルシネーション）。</div>
+      <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
+        <strong style="color:#34d399">✅ 対策</strong>: 規格番号・法令条文・型番はAIを信じない。AIは「構成の骨格」、専門知識は自分が入れる。
+      </div>
+    </div>
+  </div>
+
   <!-- 壁と突破法 -->
   <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
     <i data-lucide="alert-triangle"></i> よくある壁と突破法
@@ -1877,14 +1807,14 @@ footer span { color: var(--color-accent); }
     </div>
   </div>
 
-  <!-- PwC参考データ -->
+  <!-- PwC参考データ（補足扱い） -->
   <details style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
     <summary style="cursor:pointer;font-weight:600;font-size:var(--fs-sm);color:var(--color-muted);list-style:none;display:flex;align-items:center;gap:var(--sp-2)">
       <i data-lucide="bar-chart-2" style="width:14px;height:14px"></i> 参考: PwC 生成AI活用実態調査 2024（5カ国比較）
     </summary>
     <div style="margin-top:var(--sp-4);font-size:var(--fs-sm)">
       <div style="color:var(--color-muted);margin-bottom:var(--sp-3)">日本は「期待を上回る効果を得ている」企業が <strong style="color:#f87171">13%</strong>（米国51%・英国50%）。差は組織への組み込み深さにある。</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:var(--sp-2)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--sp-2)">
         <div style="background:rgba(248,113,113,0.08);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center">
           <div style="font-size:1.4rem;font-weight:700;color:#f87171">13%</div>
           <div style="color:var(--color-muted);font-size:0.75rem">日本: 期待を上回る</div>
@@ -1899,79 +1829,66 @@ footer span { color: var(--color-accent); }
         </div>
         <div style="background:rgba(251,146,60,0.08);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center">
           <div style="font-size:1.4rem;font-weight:700;color:#fb923c">24%</div>
-          <div style="color:var(--color-muted);font-size:0.75rem">日本: 業務組み込み率</div>
+          <div style="color:var(--color-muted);font-size:0.75rem">日本: 業務への組み込み率</div>
         </div>
       </div>
       <div style="margin-top:var(--sp-3);color:var(--color-muted);font-size:0.75rem">出典: PwC「生成AI活用の実態調査」2024</div>
     </div>
   </details>
 
+  <!-- 効果測定テンプレート -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="bar-chart-2"></i> 効果測定テンプレート — チームの実績を記録する
+  </h3>
+  <div style="background:rgba(34,211,238,0.04);border:1px solid rgba(34,211,238,0.18);border-radius:var(--radius-lg);padding:var(--sp-6);margin-bottom:var(--sp-4)">
+    <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-4)">以下のテンプレートをコピーして Teams/OneNote に貼り付け、チーム全員で記録しましょう。10件溜まると管理職が上層部への報告資料を作れます。</div>
+    <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius-sm);padding:var(--sp-4);font-family:'Consolas','Monaco',monospace;font-size:0.85rem;color:#cbd5e1;white-space:pre-wrap;line-height:1.8;margin-bottom:var(--sp-4)">【AI活用記録】
+業務名      : ___________________
+使ったツール : Claude / ChatGPT / Copilot / その他（　　）
+Before 時間  : _____ 分
+After 時間   : _____ 分
+削減時間     : _____ 分（削減率 _____%）
+プロンプトのコツ: ___________________
+気づき・改善点: ___________________
+記録日      : YYYY-MM-DD　氏名: ___</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--sp-3)">
+      <div style="background:rgba(34,211,238,0.08);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center">
+        <div style="font-size:0.75rem;color:var(--color-muted);margin-bottom:var(--sp-1)">目標（月)</div>
+        <div style="font-size:1.4rem;font-weight:700;color:var(--color-accent)">5件</div>
+        <div style="font-size:0.75rem;color:var(--color-muted)">チームで記録</div>
+      </div>
+      <div style="background:rgba(52,211,153,0.08);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center">
+        <div style="font-size:0.75rem;color:var(--color-muted);margin-bottom:var(--sp-1)">報告可能</div>
+        <div style="font-size:1.4rem;font-weight:700;color:#34d399">10件〜</div>
+        <div style="font-size:0.75rem;color:var(--color-muted)">上層部報告レベル</div>
+      </div>
+      <div style="background:rgba(251,191,36,0.08);border-radius:var(--radius-sm);padding:var(--sp-3);text-align:center">
+        <div style="font-size:0.75rem;color:var(--color-muted);margin-bottom:var(--sp-1)">次のステップ</div>
+        <div style="font-size:1.4rem;font-weight:700;color:#fbbf24">横展</div>
+        <div style="font-size:0.75rem;color:var(--color-muted)">他部署に展開</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="changelog-section">
-    <div class="changelog-toggle" id="changelog-toggle" onclick="toggleChangelog()">
-      <i data-lucide="history"></i> 更新履歴
-      <i data-lucide="chevron-down"></i>
-    </div>
-    <div class="changelog-body" id="changelog-body">
-      <ul class="changelog-list">
-        <li class="changelog-item">
-          <span class="changelog-date">2026-04-08</span>
-          <span class="changelog-text"><span class="changelog-tag changelog-tag-add">追加</span>汎用プロンプトテンプレート集（15件）・ROI効果サマリー・アンチパターン集（12件）・クロスリンク強化・更新履歴</span>
-        </li>
-        <li class="changelog-item">
-          <span class="changelog-date">2026-04-08</span>
-          <span class="changelog-text"><span class="changelog-tag changelog-tag-add">追加</span>M365 Copilotタブ（アプリ別機能・業務シナリオ22件・プロンプト集15件・ライセンス比較）</span>
-        </li>
-        <li class="changelog-item">
-          <span class="changelog-date">2026-04-07</span>
-          <span class="changelog-text"><span class="changelog-tag changelog-tag-add">追加</span>セキュリティタブ（NG/OK入力ルール18件・FAQ12件）</span>
-        </li>
-        <li class="changelog-item">
-          <span class="changelog-date">2026-04-06</span>
-          <span class="changelog-text"><span class="changelog-tag changelog-tag-add">追加</span>活用事例21件・技術概念12件（JSONデータ化）</span>
-        </li>
-        <li class="changelog-item">
-          <span class="changelog-date">2026-04-05</span>
-          <span class="changelog-text"><span class="changelog-tag changelog-tag-add">追加</span>初版リリース（ロードマップ・基礎用語・ツール比較）</span>
-        </li>
-      </ul>
-    </div>
-  </div>
   <p>製造業・AI活用推進用 — <span>個人学習・社内展開リファレンス</span></p>
 </footer>
 
 <script>
+// ===== DATA (インライン埋め込み) =====
+// 更新方法: data/*.json を編集後、py deploy.py を実行する
 
-
-let roadmapData  = [];
-let termsData    = [];
-let toolsData    = [];
-let casesData    = [];
-let conceptsData = [];
+const roadmapData  = [{"step": 1, "title": "生成AIとは何かを知る", "description": "ChatGPTやClaude.aiにアカウント作成し、日常的な質問を10回以上投げる体験をする。まずは怖がらず使ってみることが最優先。", "actions": ["ChatGPT無料版またはClaude.aiで日常的な質問を10回以上投げる", "AIが間違う場面（ハルシネーション）を意図的に探して体験する", "「できること・できないこと」を自分の言葉でメモする"], "duration": "1〜2週間"}, {"step": 2, "title": "プロンプトの書き方を学ぶ", "description": "AIへの指示の質が出力の質を決める。役割・背景・制約を明示する書き方を身につけ、日常業務の小さな成功体験を積む。", "actions": ["同じ質問を3パターンで試し出力の違いをメモする", "業務の繰り返しタスク用プロンプトを1本作る", "Chain of Thoughtを試し複雑な問題での効果を確認する"], "duration": "2〜3週間"}, {"step": 3, "title": "LLMの仕組みを概念で理解する", "description": "コードを書かなくてもLLMの動作原理を知ることで、AIの限界と得意分野が見えてくる。「なぜそうなるか」を説明できるレベルが目標。", "actions": ["トークン・コンテキストウィンドウを調べAIが「忘れる」現象を確認する", "主要LLMの特徴比較表を自分で作成する", "温度パラメータをPlaygroundで変えてみる"], "duration": "2〜4週間"}, {"step": 4, "title": "API連携と業務自動化の基礎", "description": "APIを使ってAIを自分のツールやワークフローと繋げる。「AIを使う人」から「AIを組み込む人」に変わるステップ。", "actions": ["APIキーを取得しPythonで簡単なAPI呼び出しを動かす", "Make/n8nでAIを使ったメール要約ワークフローを作る", "自分の業務のAI活用マップを1枚書く"], "duration": "1〜2ヶ月"}, {"step": 5, "title": "RAG・エージェント・応用技術を習得", "description": "社内文書検索・自律タスク実行など実務で価値を出す応用技術に踏み込む。社内でAI推進担当として機能できるレベルになる。", "actions": ["LangChain/LlamaIndexでRAGデモを作成する", "エージェント動作を体験し得意・苦手を整理する", "AI活用事例を社内向け報告書1枚にまとめて共有する"], "duration": "2〜3ヶ月"}, {"step": 6, "title": "組織展開・ガバナンス整備でAI推進リーダーになる", "description": "個人活用で実証した成果を組織全体に展開するフェーズ。セキュリティポリシー策定・社内承認取得・チームへの勉強会設計・ROI測定と経営層報告・PDCAとナレッジ管理体制の構築まで一貫して担う。製造業の管理職として「AI推進担当」から「AI変革リーダー」へ移行する。", "actions": ["社内AI利用ガイドライン（情報漏洩リスク・入力禁止データ範囲・承認フロー）を1枚にまとめ、情報システム部門・法務と合意する", "チーム向けAI勉強会を月1回・90分で設計・実施する（第1回: 業務メール活用、第2回: 日報・議事録自動化、第3回: 設備トラブル解析への応用）", "AI活用効果をROI指標（削減工数h/月・削減コスト万円・品質改善件数）で数値化し、四半期ごとに上司・役員に1枚報告書で提出する", "抵抗勢力（「AIは信用できない」「自分の仕事が奪われる」）に対する対話スクリプトを作成し、個別面談で懸念を先出し・解消する", "knowledge/にAI活用ナレッジを月2件以上蓄積するPDCAサイクルを確立し、チーム共有フォルダへの展開ルールを定める"], "duration": "3〜6ヶ月"}];
+const termsData    = [{"term": "大規模言語モデル", "term_en": "LLM", "short": "大量のテキストで学習した言語処理AI", "detail": "大量のテキストデータで事前学習された深層学習モデル。次に来る単語を確率的に予測することで自然な文章を生成する。GPT-4oやClaude 3.5 SonnetなどがLLMの代表例。", "example": "ChatGPTに「この文章を要約して」と依頼すると、LLMが文脈を理解して短い要約を生成する", "level": "入門"}, {"term": "トークン", "term_en": "Token", "short": "LLMが処理するテキストの最小単位", "detail": "LLMはテキストをトークン単位で処理する。英語では約4文字＝1トークンが目安。日本語は1文字が1〜2トークンになることが多い。APIの料金はトークン数で決まるためコスト管理に直結する。", "example": "「今日はいい天気ですね」は約15〜20トークン。長い報告書は数千〜数万トークンを消費する", "level": "入門"}, {"term": "プロンプト", "term_en": "Prompt", "short": "AIへの指示・入力テキスト全体", "detail": "AIモデルへの入力として渡すテキスト全体を指す。役割指定・背景情報・出力形式の指定・例示まで含む。プロンプトの質が出力の質を直接決定する。", "example": "「あなたは電気エンジニアです。以下の設備トラブルについて原因と対策を箇条書きで3つ挙げてください」という入力全体がプロンプト", "level": "入門"}, {"term": "プロンプトエンジニアリング", "term_en": "Prompt Engineering", "short": "AIから望む出力を引き出す指示設計技術", "detail": "LLMから意図した出力を安定して得るためのプロンプト設計・最適化技術。役割付与・Chain of Thought・Few-shot例示・制約明示などの手法がある。コードを書かずにAIの性能を引き出せる。", "example": "「ステップバイステップで考えてください」と追記するだけで算数・論理問題の正答率が大幅に向上する", "level": "入門"}, {"term": "ハルシネーション", "term_en": "Hallucination", "short": "AIが事実と異なる内容を自信満々に生成する現象", "detail": "LLMが存在しない事実・誤った数値・架空の参考文献などを、さも正しいかのように生成する現象。現時点ではどのLLMでも発生する根本的な限界。重要な判断に使う場合は必ず一次情報で確認が必要。", "example": "「この規格の第17条を説明して」とAIに聞くと、実際には存在しない条文内容を自信を持って回答することがある", "level": "入門"}, {"term": "コンテキストウィンドウ", "term_en": "Context Window", "short": "AIが1回の処理で参照できるテキストの上限量", "detail": "LLMが一度に処理・記憶できるトークン数の上限。GPT-4oは128K、Claude 3.5 Sonnetは200Kトークンが上限。この範囲を超えた情報はAIが「見えない」状態になる。", "example": "社内の500ページのマニュアルを丸ごとAIに読ませることはコンテキストウィンドウの制限で困難", "level": "中級"}, {"term": "ベクトルDB", "term_en": "Vector Database", "short": "テキストを数値ベクトルで保存し意味で検索するDB", "detail": "テキストをEmbeddingで数値ベクトルに変換して保存するデータベース。キーワード一致ではなく意味的な類似度でデータを検索できる。RAGシステムの核心技術。", "example": "「インバータが過電流トリップした」とベクトルDBに問い合わせると、「モーター保護継電器が動作した」という別表現の過去事例も検索できる", "level": "中級"}, {"term": "マルチモーダル", "term_en": "Multimodal", "short": "テキスト以外の画像・音声・動画も処理できるAI", "detail": "テキストだけでなく画像・音声・動画等の複数の情報形式を処理できるAIモデル。GPT-4oやClaude 3シリーズは画像入力に対応。現場の写真を撮ってAIに見せるような活用が可能。", "example": "電気盤の内部写真をClaudeに見せて「この配線で気になる点はあるか」と聞くと、目視確認のサポートとして活用できる", "level": "中級"}, {"term": "ファインチューニング", "term_en": "Fine-tuning", "short": "既存LLMを自社データで追加学習させる手法", "detail": "事前学習済みのLLMに対して特定用途のデータセットで追加学習を行い精度を向上させる手法。コストと時間がかかるため、一般的な業務ではまずRAGを検討すべき。", "example": "保全報告書1,000件を学習させたモデルが社内スタイルに合った報告書を自動生成する", "level": "上級"}, {"term": "RAG", "term_en": "Retrieval-Augmented Generation", "short": "外部知識を検索してからAIが回答を生成する手法", "detail": "LLMが回答を生成する前に、ベクトルDBから関連情報を取得しコンテキストに含めて回答させるアーキテクチャ。ハルシネーションを抑制し、社内文書・最新情報を活用できる。", "example": "設備保全マニュアルをベクトルDBに格納し、「ポンプの分解手順は？」と聞くと該当箇所を引用して回答するシステム", "level": "中級"}, {"term": "エージェント", "term_en": "AI Agent", "short": "ツールを使いながら自律的にタスクを実行するAI", "detail": "LLMが「考える→ツールを使う→結果を確認→次の行動を決める」というループを繰り返し複数ステップのタスクを完遂するシステム。Web検索・コード実行・ファイル操作などのツールを持つ。", "example": "「先週のトラブル報告書を全部読んで再発防止策をまとめて」という指示一つでファイル読み込み・分析・文書生成を自動でこなす", "level": "上級"}, {"term": "API", "term_en": "API", "short": "プログラムからAIを呼び出すための接続口", "detail": "AIサービスをプログラムや外部ツールから利用するためのインターフェース。APIを使うことで自社ツールへの組み込みや処理の自動化が可能。料金はトークン従量課金が基本。", "example": "Python3行でAnthropicのAPIを叩き、毎朝8時にメールの要約をSlackに自動投稿するBotを作ることができる", "level": "中級"}, {"term": "MCP", "term_en": "Model Context Protocol", "short": "AIと外部ツール・DBを繋ぐ標準通信規格", "detail": "Anthropicが2024年11月にオープンソースで公開したAIエージェント向けの標準規格。AIモデルと外部ツール・データソースを接続するインターフェースを統一する。USB-Cに例えられる。2025年3月にOpenAIも採用し事実上の業界標準となった。2026年4月時点で5,800以上のMCPサーバーが公開済み。", "example": "Claude CodeがNotionのMCPサーバーを経由してNotionDBを直接読み書きする。AIに「今週のTODOをNotionに登録して」と指示するだけで実行される", "level": "中級"}, {"term": "推論モデル", "term_en": "Reasoning Model", "short": "回答前に内部で思考ステップを実行するLLM", "detail": "最終回答を出す前に問題を分解・検証・反論する「思考チェーン」を内部実行するLLM。通常モデルより高精度だが低速・高コスト。Claude（Extended Thinking）、GPT（o3/o4-mini）、Gemini 2.5（Thinking）が代表。2025年以降、全主要プロバイダが推論モデルを標準提供するようになった。", "example": "「この防爆設備変更が電技解釈に適合するか」という複合判断をClaude Extended Thinkingに問うと、複数規格を順に検証した上で根拠付きの回答が得られる", "level": "中級"}, {"term": "マルチエージェント", "term_en": "Multi-Agent", "short": "複数のAIエージェントが役割分担して協調するシステム", "detail": "単一のLLMが全処理を担う代わりに、調査エージェント・実行エージェント・検証エージェントなど役割特化した複数エージェントが並列・直列に協調する設計。各エージェントが得意な処理に集中することで、単体エージェントより複雑なタスクを高精度・高速に処理できる。Claude Opus 4.6のAgent Teamsが代表実装。", "example": "「先月のトラブルレポートを分析して予防対策書を作成」という依頼に対し、①収集エージェントがファイルを読み込み、②分析エージェントがパターンを抽出、③文書エージェントが報告書を起草する3体協調で完結", "level": "上級"}];
+const toolsData    = [{"name": "ChatGPT", "provider": "OpenAI", "main_models": ["GPT-5", "GPT-4.1", "o3-pro", "o4-mini"], "strengths": ["汎用性の高さ・幅広いタスク対応", "GPTs による拡張性", "コード生成・デバッグ精度（GPT-4.1）", "画像生成（DALL-E統合）", "GPT-5の推論自動切替（通常問答 ⇔ 深い推論）"], "weaknesses": ["無料枠では最新モデルへのアクセス制限あり", "長文ドキュメント処理はClaudeより劣る場面あり"], "free_tier": "GPT-4o miniを無制限、GPT-5は制限付きで利用可", "paid_plan": 20, "context_window": "1M tokens（GPT-4.1 API）", "japanese_quality": "◎", "best_for": "汎用アシスタントとして最多ユーザー実績。GPT-5は通常問答と推論モデルを自動切替する統合モデル。o4-miniは数学・コーディングに低コストで高精度。GPTsカスタマイズによる社内ツール化も容易。", "color": "#10a37f", "icon_label": "GPT"}, {"name": "Claude", "provider": "Anthropic", "main_models": ["Claude Sonnet 4.6", "Claude Opus 4.6", "Claude Haiku 4.5"], "strengths": ["超長文ドキュメントの読解・要約（1M tokens）", "Extended Thinking による高精度推論", "論理的な長文生成・技術レポート作成", "安全性・ハルシネーション抑制", "コーディング精度（SWE-bench 80.8%）"], "weaknesses": ["画像生成機能なし", "リアルタイム情報へのアクセスは限定的"], "free_tier": "Sonnet 4.6を1日の利用制限付きで使用可", "paid_plan": 20, "context_window": "1M tokens", "japanese_quality": "◎", "best_for": "仕様書・規格書・超長文書の読み込みと分析に最強。Extended Thinkingで複雑な設計検討も対応。エージェント用途ではOpus 4.6が業界トップクラスのコーディング精度。", "color": "#d97706", "icon_label": "CLN"}, {"name": "Gemini", "provider": "Google", "main_models": ["Gemini 2.5 Pro", "Gemini 2.5 Flash", "Gemini 2.5 Flash-Lite"], "strengths": ["Google Workspace との深い統合", "マルチモーダル処理（画像・動画・音声）", "1Mトークンのコンテキスト（全2.5系で標準）", "Google検索連携によるリアルタイム情報", "Thinking（推論）機能を全2.5系で標準搭載"], "weaknesses": ["長文生成の一貫性がClaudeより劣る場面あり", "日本語での細かいニュアンス表現がやや不安定"], "free_tier": "Gemini 2.5 Flashを制限付きで無料利用可", "paid_plan": 19.99, "context_window": "1M tokens", "japanese_quality": "○", "best_for": "Google WorkspaceユーザーはGmailやDocsと直結。2.5 Proは推論モデルとしてコーディング・高度分析でトップクラス。動画・音声ファイルを含むマルチモーダル情報整理にも強み。", "color": "#4285f4", "icon_label": "GMN"}, {"name": "Copilot", "provider": "Microsoft", "main_models": ["GPT-5（Microsoft経由）", "GPT-4.1（Copilot Pro）", "o3（Copilot Pro）"], "strengths": ["Microsoft 365 との完全統合", "企業向けセキュリティ・コンプライアンス対応", "Bing検索によるリアルタイム情報取得", "社内データ連携（SharePoint・OneDrive）"], "weaknesses": ["Microsoft 365ライセンスが前提", "プログラミング特化タスクは他に劣る"], "free_tier": "Bing統合Copilotを無料利用可（制限あり）", "paid_plan": 30, "context_window": "128K tokens", "japanese_quality": "○", "best_for": "Microsoft 365環境が整っている企業では最も導入摩擦が少ない。Outlookでのメール下書き・Excelでのデータ分析補助に即戦力。", "color": "#0078d4", "icon_label": "COP"}, {"name": "Perplexity", "provider": "Perplexity AI", "main_models": ["Sonar（自社モデル）", "GPT-5（選択可）", "Claude Sonnet 4.6（選択可）"], "strengths": ["リアルタイムWeb検索＋回答の出典明示", "情報の信頼性確認が容易", "最新ニュース・技術動向の把握に最速", "バックエンドモデルを複数から選択可能"], "weaknesses": ["長文生成・文書作成は専用LLMに劣る", "日本語コンテンツのソース品質にばらつきあり"], "free_tier": "基本検索は無制限無料、Pro検索は1日5回まで", "paid_plan": 20, "context_window": "128K tokens", "japanese_quality": "△", "best_for": "技術情報・規格・市場動向の最新情報収集に特化。調査業務の起点として使い、深掘りは他のLLMに渡すフローが最適。", "color": "#20b2aa", "icon_label": "PPX"}, {"name": "Grok", "provider": "xAI（Elon Musk）", "main_models": ["Grok 3", "Grok 3 mini"], "strengths": ["X（旧Twitter）リアルタイムデータと統合", "連鎖推論（Chain of Thought）強化", "200,000+ H100 GPUで学習した大規模モデル", "リアルタイムWeb検索統合"], "weaknesses": ["Xプレミアム加入が前提で独立利用が限定的", "長文ドキュメント処理はClaudeに劣る場面あり"], "free_tier": "Xプレミアムプランに含む（月額8ドル〜）", "paid_plan": 8, "context_window": "128K tokens", "japanese_quality": "△", "best_for": "SNS・リアルタイムニュースの動向把握に特化。Xの最新議論をリアルタイムで参照しながら回答できる点が他LLMにない強み。英語コンテンツが主体。", "color": "#1a1a1a", "icon_label": "GRK"}, {"name": "Llama（Meta）", "provider": "Meta（オープンソース）", "main_models": ["Llama 4 Scout", "Llama 4 Maverick", "Llama 3.3 70B"], "strengths": ["オープンソース・商用利用可（無料）", "10Mトークンという業界最大級コンテキスト（Scout）", "ローカル環境やオンプレで自由展開可能", "カスタムファインチューニングが容易"], "weaknesses": ["自前インフラが必要（GPU環境・運用コスト）", "最先端閉鎖モデルとの性能差は依然あり"], "free_tier": "モデルウェイト無料公開。API経由ではGroq/Together AI等で低コスト利用可", "paid_plan": 0, "context_window": "10M tokens（Scout）/ 1M tokens（Maverick）", "japanese_quality": "○", "best_for": "機密データを外部送信できない社内用途にオンプレ展開で使えるオープンソースLLM。LoRAによる社内ドメイン特化が可能。ローカルRAGシステムの基盤として有望。", "color": "#0668e1", "icon_label": "LMA"}, {"name": "NotebookLM", "provider": "Google", "main_models": ["Gemini 2.0 Flash（バックエンド）"], "strengths": ["アップロードした資料（PDF・Web・YouTube）を完全に読み込んだ上で回答", "ハルシネーション抑制：回答が必ずアップロード資料に根拠づけられる", "Audio Overview機能でポッドキャスト形式の要約を自動生成", "複数資料の横断検索・比較・要約が一括で可能", "日本語PDFの処理精度が高い（規格書・仕様書・議事録に有効）"], "weaknesses": ["アップロード資料内にない情報は回答できない（外部Web検索なし）", "資料追加・編集はノートブック単位で手動管理が必要", "API提供なし（単独サービスのみ）"], "free_tier": "無料で利用可（ノートブック数・ソース数に上限あり）", "paid_plan": 0, "context_window": "最大50ソース（PDF・Web・YouTube等）", "japanese_quality": "○", "best_for": "規格書・仕様書・技術文書・会議議事録など「手元資料の専門家」として活用。社内文書に特化したRAGを手軽に構築できる。設備投資稟議の根拠整理や電験3種テキスト横断学習にも有効。", "color": "#34a853", "icon_label": "NLM"}, {"name": "DeepSeek", "provider": "DeepSeek AI（中国）", "main_models": ["DeepSeek R1", "DeepSeek V3", "DeepSeek R1-Distill"], "strengths": ["推論モデルとして数学・科学・コーディングで高精度", "MoEアーキテクチャで低コスト（/usr/bin/bash.55/1M tokens）", "オープンソース版をローカル展開可能", "コストパフォーマンスが業界最高水準"], "weaknesses": ["中国企業提供によるデータプライバシーへの懸念", "機密情報・社内データのAPI送信は要注意", "日本語サポートや企業向けSLAが未整備"], "free_tier": "DeepSeek.comで制限付き無料利用可", "paid_plan": 0, "context_window": "128K tokens", "japanese_quality": "○", "best_for": "数学・推論・コーディング性能が高く価格が極めて安い。研究・学習・プロトタイプ用途で有効。ただし機密データの送信は避けローカル版（オープンウェイト）を推奨。", "color": "#4f46e5", "icon_label": "DSK"}, {"name": "Genspark", "provider": "Genspark AI", "main_models": ["Mixture of Agents（GPT-4o・Claude・Gemini等を統合）"], "strengths": ["複数LLMを自動選択・組み合わせる Mixture of Agents 方式", "Sparkpage：調査結果をリッチなまとめページとして自動生成", "AIエージェントによる旅行・料理・ショッピング等の実タスク代行", "リアルタイムWeb検索＋複数モデルの回答を統合して精度を向上", "Auto Agent機能でブラウザ操作・フォーム入力を自動実行"], "weaknesses": ["技術的な深掘りや長文ドキュメント処理は専用LLMに劣る", "日本語コンテンツのソース品質・応答精度にばらつきあり", "エンタープライズ向けセキュリティ・SLAは未整備"], "free_tier": "無料プランあり（利用上限付き）", "paid_plan": 9.99, "context_window": "モデル依存（GPT-4o/Claude等を動的選択）", "japanese_quality": "△", "best_for": "調査・情報収集タスクを複数AIに並列実行させてSparkpageにまとめる用途に特化。旅行計画・市場調査・比較検討など「調べてまとめる」作業を全自動化したい場面に最適。", "color": "#f59e0b", "icon_label": "GSP"}, {"name": "Gemini Enterprise", "provider": "Google", "main_models": ["Gemini 2.5 Pro", "Gemini 2.5 Flash"], "strengths": ["Google Workspace（Gmail・Drive・Docs・Sheets・Meet）との完全統合", "社内データソース（Drive・Gmail・Calendar・Sites）を横断検索するAIエージェント", "複数サービスに散在した情報を自然言語で一元検索・処理", "資料作成・議事録・オンボーディング資料の自動生成", "企業向けセキュリティ（データをGoogleのモデル学習に使用しない）"], "weaknesses": ["Google Workspace契約が前提（Microsoft 365環境では非対応）", "日本語でのエージェント精度はユースケースにより差がある", "カスタムAIエージェント構築にはGoogle Cloud（Vertex AI）の知識が別途必要"], "free_tier": "なし（Business Standard以上のGoogle Workspaceプランに追加）", "paid_plan": 30, "context_window": "1M tokens", "japanese_quality": "○", "best_for": "Google Workspace導入済み企業が全社員にAIを展開する最短ルート。Drive・Gmail・Docs等の既存データを即座にAIエージェントが横断検索できる。パイロット導入（1チーム1ヶ月）→全社展開の実績が多数。製造業・流通業での全社導入事例が増加中（2026年）。", "color": "#1a73e8", "icon_label": "GEnt"}];
+const casesData    = [{"id": "case_001", "title": "設備保全レポートの自動ドラフト生成", "industry": "製造業", "department": "保全", "tool": "Claude", "use_case_type": "文書生成", "overview": "点検記録をOCRでテキスト化し、Claudeに渡して保全報告書のドラフトを自動生成。月次報告書30枚分を1時間以内に初稿完成まで持ち込む運用を確立した。", "effect": "報告書作成時間 約65%削減（8h→3h/月）", "difficulty": "低", "cost": "低コスト", "key_point": "プロンプトに設備種別・異常分類の語彙リストを埋め込むことで出力ばらつきを抑制した。"}, {"id": "case_002", "title": "危険区域設備の仕様書レビュー支援", "industry": "化学・素材", "department": "設計", "tool": "Claude", "use_case_type": "知識検索", "overview": "防爆規格と社内基準をRAG構成でナレッジ化。新規設備の仕様書をアップロードすると規格整合チェックリストを自動生成する。従来2日かかっていたレビュー工程を補助。", "effect": "仕様書初回レビュー時間 約50%短縮（2日→1日）", "difficulty": "高", "cost": "中コスト", "key_point": "AIの出力を最終判断ではなく「指摘リスト」として扱う運用ルールを明示化した。"}, {"id": "case_003", "title": "プラント異常アラームの初動対応支援", "industry": "化学・素材", "department": "保全", "tool": "独自LLM", "use_case_type": "知識検索", "overview": "過去10年分のトラブル記録をLLMにファインチューニング。DCSのアラームコードを入力すると推定原因・初動手順の候補を3案提示。夜間・休日の一人現場担当者の判断支援が主目的。", "effect": "初動判断時間 平均40%短縮、二次トラブル 前年比30%減", "difficulty": "高", "cost": "高コスト", "key_point": "トラブル記録の品質がモデル性能に直結するため、記録フォーマットの標準化を先行実施した。"}, {"id": "case_004", "title": "品質異常報告書（8D）の自動生成", "industry": "製造業", "department": "品質管理", "tool": "ChatGPT", "use_case_type": "文書生成", "overview": "製造ラインの不良データをCSVで渡し、8D報告書フォーマットに沿った初稿を自動生成。なぜなぜ5段階もAIが初期案を提示し、担当者が肉付けする形式に変更。", "effect": "8D報告書作成時間 約55%削減（4h→1.8h/件）", "difficulty": "低", "cost": "低コスト", "key_point": "なぜなぜ分析の深さをプロンプトで指定（5段階展開＋根拠データ付記）することで社内品質基準を満たす水準になった。"}, {"id": "case_005", "title": "設備投資稟議資料の構成支援", "industry": "製造業", "department": "設計", "tool": "Claude", "use_case_type": "文書生成", "overview": "技術要件・コスト・リスクをプロンプトに入力すると稟議書の構成案（エグゼクティブサマリー・投資対効果・リスク評価・代替案比較）を生成。", "effect": "稟議資料作成工数 約45%削減。承認リードタイム 平均1週間短縮", "difficulty": "低", "cost": "低コスト", "key_point": "承認済み稟議書をFew-shot例としてプロンプトに含めることで経営層が求める論理構成の出力が初回から得られた。"}, {"id": "case_006", "title": "化学品SDS改訂差分抽出", "industry": "化学・素材", "department": "品質管理", "tool": "Claude", "use_case_type": "文書生成", "overview": "GHS規制改訂時に旧版SDSと新規制テキストをClaudeに渡し、変更が必要なセクションと改訂案を自動抽出。英語SDSの日本語版生成にも応用。", "effect": "SDS改訂工数 約60%削減。規制対応漏れ件数 ゼロ（前年比3件減）", "difficulty": "中", "cost": "低コスト", "key_point": "AIの出力に必ず「根拠条文」を付記させるプロンプト設計で、規制文書の解釈誤りリスクを低減した。"}, {"id": "case_007", "title": "R&D実験ノートの構造化と知識ベース蓄積", "industry": "化学・素材", "department": "R&D", "tool": "複合", "use_case_type": "知識検索", "overview": "研究者の自由記述実験ノートをClaude APIでJSON構造化しベクトルDBに蓄積。新規実験設計時に類似実験を検索・提示するRAGシステムを構築。", "effect": "類似実験の先行調査時間 約70%削減。新入社員独り立ち期間 6ヶ月→4ヶ月", "difficulty": "高", "cost": "中コスト", "key_point": "研究者に記録フォーマット変更を求めず、自由記述をAIが後処理で変換する設計にしたことで現場の抵抗なく導入できた。"}, {"id": "case_008", "title": "PLCプログラム変更影響調査支援", "industry": "製造業", "department": "保全", "tool": "ChatGPT", "use_case_type": "コード生成", "overview": "PLCのラダー図テキストエクスポートをChatGPTに渡し、変更箇所の影響範囲（関連デバイス・インターロック条件）をリストアップ。「影響分析」としての活用で安全性を担保。", "effect": "変更影響調査時間 約40%削減（5h→3h/件）", "difficulty": "中", "cost": "低コスト", "key_point": "AIに変更を提案させるのではなく「影響リストを出させる」用途に限定したことで安全担当の承認を得やすくなった。"}, {"id": "case_009", "title": "社内規程・マニュアルのQ&Aチャットボット", "industry": "製造業", "department": "人事", "tool": "Copilot", "use_case_type": "知識検索", "overview": "就業規則・各種申請マニュアルをSharePointに集約し、Microsoft Copilot for M365のRAG機能でQ&Aチャットボットを構築。従業員が自然言語でマニュアルを検索できる。", "effect": "HR担当への定型問い合わせ 約40%減。従業員満足度調査 10ポイント改善", "difficulty": "低", "cost": "中コスト", "key_point": "参照元文書の整備・バージョン管理が品質のボトルネックになるため、文書ガバナンスの先行整備が必須。"}, {"id": "case_010", "title": "顧客提案書の個別カスタマイズ自動化", "industry": "IT・ソフトウェア", "department": "営業", "tool": "ChatGPT", "use_case_type": "文書生成", "overview": "CRMから商談情報を取得してChatGPTに渡し、提案書テンプレートを顧客ごとにカスタマイズ。業種別の課題フレーム・事例・ROI計算式をナレッジDBとして動的挿入する仕組みを構築。", "effect": "提案書作成時間 3h→45分/件。受注率 前期比8ポイント改善", "difficulty": "中", "cost": "低コスト", "key_point": "業種別の成功・失敗事例をナレッジDBに蓄積し続けることがROIの維持に直結する。"}, {"id": "case_011", "title": "臨床試験プロトコルのドラフト作成支援", "industry": "医療", "department": "R&D", "tool": "Claude", "use_case_type": "文書生成", "overview": "ICH E6(R3)準拠のプロトコル文書初稿生成にClaudeを活用。適応疾患・評価エンドポイントをプロンプトに与えると必須セクションのドラフトを生成する。", "effect": "プロトコルドラフト作成期間 約35%短縮（3週間→2週間）", "difficulty": "高", "cost": "中コスト", "key_point": "AIには「構成と表現のドラフト」のみを担わせ、数値・文献引用は必ず人間が入力するルールを厳守した。"}, {"id": "case_012", "title": "融資審査コメントの定型文自動生成", "industry": "金融", "department": "法務", "tool": "独自LLM", "use_case_type": "文書生成", "overview": "財務諸表データをインプットとし与信ルール・審査基準を組み込んだプロンプトで定型コメントを出力。審査担当者は数値確認と追記に専念できる形に変更。", "effect": "審査コメント作成時間 約50%削減。処理件数 月20件→32件", "difficulty": "高", "cost": "高コスト", "key_point": "金融業規制への適合を法務部門が事前確認した上でシステム設計したことが社内承認の決め手。"}, {"id": "case_013", "title": "施工図の不整合検出自動化", "industry": "建設", "department": "設計", "tool": "複合", "use_case_type": "業務自動化", "overview": "CADデータと仕様書をAIで解析し施工図の不整合箇所（寸法齟齬・法規要件漏れ）を自動フラグアップ。GPT-4 Visionによる図面読み取りとClaudeによるテキスト照合を組み合わせたハイブリッド構成。", "effect": "施工図レビュー工数 約45%削減。設計変更指示書発行件数 前年比25%減", "difficulty": "高", "cost": "高コスト", "key_point": "不整合の優先度（高/中/低）を自動分類することで担当者が高優先のみ即日確認できる運用に変更できた。"}, {"id": "case_014", "title": "新入社員向けeラーニングコンテンツ自動生成", "industry": "教育", "department": "人事", "tool": "Gemini", "use_case_type": "文書生成", "overview": "社内規程・業務マニュアル・過去研修資料をGeminiに渡し、職種別の研修テキスト・確認クイズ・FAQ集を自動生成。年2回の改訂コストと外部制作委託費の削減が目的。", "effect": "研修コンテンツ制作コスト 約60%削減。外部委託費 年間150万円削減", "difficulty": "低", "cost": "低コスト", "key_point": "AIが生成したクイズの正確性チェックをHRと専門家が分担する役割分担を明確化した。"}, {"id": "case_015", "title": "在庫最適化のための需要予測レポート自動生成", "industry": "小売", "department": "経営企画", "tool": "Copilot", "use_case_type": "データ分析", "overview": "POSデータ・気象データ・イベントカレンダーを統合した需要予測モデルの出力結果を、CopilotでPowerPoint経営向けレポートに自動変換。グラフ・コメント（前月比・要因分析・発注推奨量）を自動生成。", "effect": "週次レポート作成時間 2h→15分。在庫ロス率 前年比12%改善", "difficulty": "中", "cost": "中コスト", "key_point": "AIによるコメント生成の精度は予測モデルの精度に依存するため、モデル改善とレポート自動化を並行して進める体制を組んだ。"}, {"id": "case_016", "title": "AIによる設備予知保全（振動・温度データ分析）", "industry": "製造業", "department": "保全", "tool": "複合", "use_case_type": "データ分析", "overview": "振動センサー・温度センサーのIoTデータをLLM連携パイプラインに取り込み、異常パターンを検出して「X日以内に故障確率XX%」の予測アラートを自動生成。過去トラブル記録をRAGで補完し、初動対応手順まで提示する。", "effect": "計画外停止 約43%削減。ROI達成まで8〜11ヶ月（業界平均実績）", "difficulty": "高", "cost": "高コスト", "key_point": "センサーデータ単体ではなく「過去のトラブル記録との照合」をRAGで行うことで予測精度と現場での説得力が大幅向上した。"}, {"id": "case_017", "title": "AI画像認識による外観検査の自動化", "industry": "製造業", "department": "品質管理", "tool": "複合", "use_case_type": "業務自動化", "overview": "製造ライン上のカメラ映像をマルチモーダルAIで解析し、目視では検出困難なミクロ傷・色ムラ・欠損を自動フラグアップ。不良カテゴリを自動分類してLLMが原因仮説と工程フィードバック案を生成する。", "effect": "不良率 平均0.7%（従来比74%改善）。目視検査員の負荷 約60%削減", "difficulty": "高", "cost": "高コスト", "key_point": "AIを「全件スクリーニング」に使い、疑義品のみ人間が最終確認するヒューマン・イン・ザ・ループ設計で品質保証基準をクリアした。"}, {"id": "case_018", "title": "デジタルツインとLLMを組み合わせた仮想試運転", "industry": "製造業", "department": "設計", "tool": "Claude", "use_case_type": "業務自動化", "overview": "設備の3Dデジタルツインモデルに対してLLMが自然言語で設定変更・シナリオ指示を行い、物理設備を動かさずに試運転・異常シナリオを仮想検証する。設計変更時の影響調査をデジタル空間で完結させる。", "effect": "物理コミッショニング時間 約52%短縮。設計変更後の手戻りコスト 約35%削減", "difficulty": "高", "cost": "高コスト", "key_point": "「LLMへの自然言語指示 → デジタルツインパラメータへの自動変換」の精度を確保するために、設備固有の用語定義をシステムプロンプトに埋め込む設計が鍵。"}, {"id": "case_019", "title": "受信メールの自動分類・返信ドラフト生成", "industry": "製造業", "department": "全部門", "tool": "複合", "use_case_type": "文書生成", "overview": "Outlookの受信メールをAIが自動分類（依頼・確認・クレーム・情報共有）し、優先度付けと返信ドラフトを自動生成。担当者は内容確認と送信ボタンのみ。Claude/Copilotを使ったPower Automate連携で実現。", "effect": "メール処理時間 約55%削減（1.5h→40分/日）。見落とし・返信漏れ ほぼゼロ", "difficulty": "中", "cost": "低コスト", "key_point": "返信ドラフトに「[要確認]」プレースホルダーを必ず挿入させるプロンプト設計で、AI生成そのまま送信のリスクを排除した。"}, {"id": "case_020", "title": "会議議事録の自動生成とアクションアイテム抽出", "industry": "製造業", "department": "全部門", "tool": "Copilot", "use_case_type": "文書生成", "overview": "Microsoft TeamsのCopilotが会議をリアルタイム文字起こしし、会議終了後30秒で要約・決定事項・担当者別アクションアイテムを自動生成。「電計チームの担当アクション一覧だけ抽出」など自然言語で後から絞り込み可能。", "effect": "議事録作成時間 約80%削減（60分→12分/回）。アクション漏れ件数 前年比60%減", "difficulty": "低", "cost": "低コスト", "key_point": "AIが生成した議事録をTeamsチャンネルに自動投稿するフローを組み、全員が5分以内に確認できる運用に変更したことで会議後のフォロー品質が向上した。"}, {"id": "case_021", "title": "工場エネルギー管理のAI最適化・コスト削減", "industry": "製造業", "department": "設備管理", "tool": "複合", "use_case_type": "データ分析", "overview": "電力監視システムのデマンドデータ・設備稼働データをLLMパイプラインに接続。ピーク電力の原因設備を自動特定し「この設備の起動を○分遅らせることでデマンドが△kW削減できる」という最適化提案を日次で自動生成。担当者は提案の承認のみ。", "effect": "デマンドピーク 平均8%削減。電力コスト 年間120万円削減（工場規模により変動）", "difficulty": "高", "cost": "中コスト", "key_point": "LLMへの指示ではなく「提案→人間承認→実行」のループを設計したことで、製造課の信頼を得ながら段階的に自動化範囲を拡大できた。"}, {"id": "case_022", "title": "全社AI活用基盤「LIXIL AI PORTAL」でセキュアな生成AI展開", "industry": "製造業", "department": "全社（DX推進）", "tool": "Vertex AI（Google Cloud）", "use_case_type": "情報収集・文書生成", "overview": "生成AIへの送信データが外部流出するリスクに対応するため、Vertex AIを活用した社内専用の生成AIポータル「LIXIL AI PORTAL」を開発。Cloud Data Loss Prevention（DLP）で個人情報を自動マスク処理し、利用ログをBigQueryに蓄積してセキュリティ監査にも活用。議事録作成・メール返信・コード生成など多様な業務に対応。", "effect": "開設後わずか半年で月間アクティブユーザー約4,000人に到達。社内業務改善が加速", "difficulty": "中", "cost": "中コスト", "key_point": "DLP連携による個人情報マスク・利用ログのBigQuery蓄積がセキュリティ担当の承認獲得に不可欠だった。クローズド環境構築が社員の心理的安全性を高め利用率向上につながった。"}, {"id": "case_023", "title": "Gemini Code Assistでレガシーコード（Fortran等）を現代言語へ自動変換", "industry": "製造業", "department": "設計・開発", "tool": "Gemini Code Assist（Google Cloud）", "use_case_type": "コード生成", "overview": "タイヤ設計に使う解析ソフトウェアが複数の異なる言語で構築されており、社内で使える人材が減少していた。Gemini Code Assistを使い、Fortranなどのレガシー言語を現代言語へ半自動変換。新規コード生成・単体テストプログラムの自動生成も実施。完成物はCloud Run上のWebアプリとして管理。（住友ゴム工業株式会社）", "effect": "アプリ開発から維持までのコストを大幅削減。エンジニアの負担減とバージョン管理の容易化を実現", "difficulty": "中", "cost": "中コスト", "key_point": "コード変換と同時に単体テストも自動生成させることで品質担保と省人化を同時実現した。変換後はWebアプリ化してGoogle Cloud上に配置することでアクセス制限・バージョン管理が容易になった。"}, {"id": "case_024", "title": "類似図面検索システムで設計ナレッジの属人化を解消", "industry": "製造業", "department": "設計・営業", "tool": "Vertex AI（Google Cloud）", "use_case_type": "知識検索", "overview": "スパークプラグ・産業用セラミックを製造する日本特殊陶業では、類似図面の検索がベテラン社員の記憶に依存し属人化が深刻だった。GeminiとVertex AI Vector Searchを活用し、PDFの図面をアップロードするだけで過去の類似図面をスコア・ランキングで表示するシステムを開発。設計・見積もりへのリンクも表示し根拠の明確化も実現。（日本特殊陶業株式会社）", "effect": "類似図面検索時間を大幅短縮。トップ5再現率80%以上の高精度を実現。新人社員でも蓄積ナレッジにアクセス可能に", "difficulty": "高", "cost": "中コスト", "key_point": "ベクトル検索（意味的類似度）により、型番が違っても形状・仕様が近い図面を発見できる。マルチモーダルEmbedding APIで図面PDF自体をベクトル化している点が特徴。"}, {"id": "case_025", "title": "特許公報の生成AI要約で開発活動・事業活動を効率化", "industry": "消費財・製造業", "department": "研究開発・知財", "tool": "Vertex AI Search（Google Cloud）", "use_case_type": "文書生成・知識検索", "overview": "難解でボリュームが多い特許公報の読解に膨大な時間と専門知識が必要だった。社内AI利用環境「UniChat」に「特許サマリ生成」機能を追加。出願番号入力またはPDFアップロードで、対象技術と課題解決内容をわかりやすく要約し、経営層・従業員向け共有資料も同時出力。（ユニ・チャーム株式会社）", "effect": "1件あたり約4分で出力。社内発信リードタイムが約1/3に短縮。年間2,040時間削減見込み", "difficulty": "低", "cost": "低コスト", "key_point": "経営層向け資料も同時出力させることで「特許に触れない人材」への情報共有も促進。開発活動だけでなく事業活動全体へ波及効果が出ている。"}, {"id": "case_026", "title": "Vertex AIによるAI需要予測で在庫最適化と意思決定を高速化", "industry": "消費財・製造業", "department": "サプライチェーン・営業", "tool": "Vertex AI（Google Cloud）", "use_case_type": "データ分析", "overview": "経験・勘に頼っていた需要予測がデジタル化・生活様式変化のスピードに対応できなくなっていた。Vertex AIで週単位の販売データを更新し予測値を自動算出するAI需要予測を実装。併せてBigQueryの営業日報テキストからRAGで重要情報を抽出しLooker Studioで関係部門と共有する仕組みも構築。（ライオン株式会社）", "effect": "全製品の約7割で従来手法より高精度な需要予測を実現。在庫最適化と迅速な需要変動対応を達成", "difficulty": "高", "cost": "高コスト", "key_point": "AI需要予測とRAGによる情報連携の2軸で効果を出している。営業日報という非構造化テキストからRAGで情報抽出し意思決定に活かす発想は保全記録・点検報告書にも横展可能。"}, {"id": "case_027", "title": "マルチAIエージェント「V-DAG」でデータ分析を2.5ヶ月→1ヶ月に短縮", "industry": "電気・ガス・水道", "department": "DX推進・データ分析", "tool": "ADK（Agent Development Kit）/ Vertex AI（Google Cloud）", "use_case_type": "データ分析", "overview": "従来のデータ分析ヒアリングからレポート作成まで約2.5ヶ月かかっていた。5つのAIエージェントで構成される「V-DAG（Virtual Data Analytics Group）」をADKとGoogle Cloud製品で開発。一貫した自動実行で高精度なデータ活用を実現。将来的に全社展開しデータ人材不足にも対応予定。（東京電力エナジーパートナー株式会社）", "effect": "分析期間を約2.5ヶ月→約1ヶ月に短縮。人間同等以上の品質の分析レポートをわずか30分で作成可能に", "difficulty": "高", "cost": "高コスト", "key_point": "5エージェントを役割分担させることで単一エージェントより品質と速度を両立。電力会社のデータ分析チームが「バーチャルチーム」としてAIを運用する先進事例。電計チームのデータ活用にも参考になるアーキテクチャ。"}];
+const conceptsData = [{"id": "rag", "name": "RAG（検索拡張生成）", "name_en": "Retrieval-Augmented Generation", "category": "応用技術", "short": "外部DBを検索してからLLMが回答を生成する手法", "how_it_works": "ユーザーの質問をベクトル化し、事前に登録した文書DBから意味的に近い情報を検索する。取得した文書をプロンプトに埋め込み、LLMに文脈付きで回答させる。ハルシネーションを抑制し、出典明示も可能になる。", "when_to_use": ["社内マニュアル・設備仕様書など更新頻度が高いドキュメントを参照させたい場合", "回答の根拠・出典を明示させたい場合", "LLMの学習データにない最新情報を扱いたい場合"], "when_not_to_use": ["DB登録文書が少なく検索の意味がない小規模用途", "リアルタイム性より深い推論が求められる数学・コーディング問題"], "vs": "RAG vs ファインチューニング：RAGは知識をDBに外出しして検索で補う。ファインチューニングはモデル自体に知識を焼き込む。RAGは更新が容易でコスト低。", "difficulty": "中", "real_example": "設備保全マニュアル全文をベクトルDB化し、「ポンプP-101の定期点検手順は？」と聞くと該当箇所を引用して回答するシステム。"}, {"id": "fine_tuning", "name": "ファインチューニング", "name_en": "Fine-Tuning", "category": "基礎技術", "short": "事前学習済みモデルを特定タスク向けに追加学習させる手法", "how_it_works": "大規模事前学習済みモデルに対し、タスク固有の少量データセットで再学習する。元の汎用能力を保ちながらドメイン特化の挙動を獲得できる。必要なデータ量は数百〜数千件程度。", "when_to_use": ["特定の出力形式・文体・語彙を一貫して使わせたい場合", "RAGでは拾えない暗黙的なドメイン知識を埋め込みたい場合", "推論時のプロンプトを短くして応答速度・コストを改善したい場合"], "when_not_to_use": ["学習データ収集コストが高くROIが見込めない場合", "知識が頻繁に更新される用途（更新のたびに再学習が必要）", "Few-shotプロンプティングで解決できるタスク"], "vs": "ファインチューニング vs RAG：ファインチューニングはモデルの「振る舞い・スタイル」を変える。RAGは参照する「知識」を変える。まずRAGを試し不十分ならファインチューニングを検討する。", "difficulty": "高", "real_example": "保全報告書500件でファインチューニングすると、「させていただく」禁止・結論先出し・数値必須という社内文体を自動で守るモデルが作れる。"}, {"id": "ai_agent", "name": "AIエージェント", "name_en": "AI Agent", "category": "応用技術", "short": "LLMが自律的に計画・行動・判断を繰り返すシステム", "how_it_works": "LLMをコントローラとして「考える→ツールを使う→結果を観察→次の行動を決める」というReActループを自律的に繰り返す。Web検索・コード実行・ファイル操作・APIコールなど外部ツールと接続することで現実世界に作用できる。", "when_to_use": ["複数ステップにまたがる自動化タスク（調査→整理→保存など）", "条件分岐が多く事前に全手順を定義しきれないワークフロー", "開発・ファイル操作を伴う技術作業の自動化"], "when_not_to_use": ["1〜2ステップで完結する単純なQ&Aタスク", "金銭・設備制御など取り消し不能な高リスク環境（Human-in-the-Loopが必須）", "レスポンス速度が最優先の場合（Agentループは遅い）"], "vs": "エージェント vs 通常のLLM：通常は1回入力→1回出力。エージェントは目標達成まで何度もLLMを呼び出しツール実行を挟みながら自律的に進める。", "difficulty": "高", "real_example": "「今週の設備トラブル記録を読み込み、既知パターンと照合し、高リスクをピックアップしてメール下書きを作れ」という複合タスクをエージェントが1命令で完遂。"}, {"id": "mcp", "name": "MCP（モデルコンテキストプロトコル）", "name_en": "Model Context Protocol", "category": "開発技術", "short": "LLMと外部ツール・データを接続する標準プロトコル", "how_it_works": "Anthropicが2024年11月に公開したオープン規格。LLMアプリケーションと外部データソース・ツールをUSB-Cポートのように標準化された方法で接続する。一度MCPサーバーを実装すればどのMCP対応クライアントからも呼び出せる。", "when_to_use": ["社内システム（Notion・GitHub・社内DB）をClaudeから操作させたい場合", "複数のAIクライアントから同一のツール群を使い回したい場合"], "when_not_to_use": ["単発のスクリプト実行で十分な場合", "セキュリティ要件が厳しく外部プロトコル経由の接続が許可されない環境"], "vs": "MCP vs Function Calling：Function Callingはモデルごとに異なる独自仕様。MCPはその標準化レイヤーで一度作れば複数モデル・クライアントで再利用できる。", "difficulty": "中", "real_example": "NotionのMCPサーバーを立てることで、Claude Codeから「AI知識インボックスDBに新規エントリを追加」を直接実行可能。"}, {"id": "prompt_engineering", "name": "プロンプトエンジニアリング", "name_en": "Prompt Engineering", "category": "基礎技術", "short": "LLMから最大の性能を引き出すための入力設計技術", "how_it_works": "LLMへの入力を体系的に設計して出力品質を最大化する技術。Zero-shot・Few-shot・Chain-of-Thought・ReActなどの手法がある。役割設定・出力形式の指定・制約条件の明示・具体例の提示が4大要素。同じモデルでも設計次第で品質が3〜5倍変わる。", "when_to_use": ["ファインチューニング前にまず試すべき最初の手段", "出力形式・トーン・制約が明確に定義できるタスク", "AIの振る舞いをファイルで定義したい場合"], "when_not_to_use": ["タスクが複雑すぎてプロンプトが管理困難になる場合", "ルールベース処理で十分な単純タスク"], "vs": "プロンプトエンジニアリング vs ファインチューニング：プロンプトは実行時に指示を与える（低コスト・即時変更可）。ファインチューニングはモデル自体を変える（高コスト・高性能）。", "difficulty": "低", "real_example": "FACTORY.md・REPORT.md・STYLE.mdをプロジェクトルートに置くことで、Claude Codeが「防爆規格を毎回確認する」「結論を冒頭に書く」という振る舞いをゼロ追加学習で実現している。"}, {"id": "vector_db", "name": "ベクトルデータベース", "name_en": "Vector Database", "category": "基礎技術", "short": "テキストを数値ベクトルで保存し意味的類似度で検索するDB", "how_it_works": "テキストをEmbeddingモデルで高次元のベクトルに変換して保存する。検索時はクエリもベクトル化し、コサイン類似度で近いベクトルを返す。キーワード一致ではなく意味的な類似性で検索できる。代表的なOSSはChroma・Qdrant・Weaviate。", "when_to_use": ["大量の非構造化テキストを意味検索したい場合", "RAGシステムのバックエンドとして文書ストアを構築する場合", "類似トラブル事例の検索など類似度判定が必要な場合"], "when_not_to_use": ["完全一致検索・正確なIDでの検索が主目的な場合", "文書数が数十件以下の小規模で単純なキーワード検索で十分な場合"], "vs": "ベクトルDB vs 全文検索：全文検索はキーワードの出現頻度で順位付け。ベクトルDBは意味的な近さで順位付け。「モーター過熱」で「巻線温度上昇」も引っかかるのがベクトルDB。", "difficulty": "中", "real_example": "工場の過去トラブルログ3年分をChromaに格納し、新規トラブル発生時に類似事例をTop5で自動提示するシステム。"}, {"id": "langchain", "name": "LangChain / オーケストレーション", "name_en": "LangChain / Orchestration", "category": "開発技術", "short": "LLMを使ったアプリ構築を抽象化するフレームワーク", "how_it_works": "複数のLLM呼び出し・ツール実行・メモリ管理・プロンプトテンプレートを「Chain」として組み合わせてアプリケーションを構築するフレームワーク。RAGパイプライン・エージェント・マルチステップワークフローを標準コンポーネントで組み立てられる。", "when_to_use": ["RAG・エージェントなどの標準パターンを素早くプロトタイプしたい場合", "複数LLMプロバイダーを切り替えながら開発する場合"], "when_not_to_use": ["シンプルな1〜2回のAPI呼び出しで完結するスクリプト", "挙動の完全制御が必要でデバッグを困難にしたくない場合"], "vs": "LangChain vs 直接API呼び出し：LangChainはボイラープレートを減らし統合を楽にする反面、抽象化コストでデバッグが難しくなる。シンプルなユースケースはSDKを直接使う方が透明性が高い。", "difficulty": "中", "real_example": "LangChainでRAGチェーンを組み、「ドキュメント読み込み→チャンキング→ベクトルDB格納→クエリ→回答生成」を20行で実装できる。"}, {"id": "multi_agent", "name": "マルチエージェント", "name_en": "Multi-Agent System", "category": "応用技術", "short": "複数のAIエージェントが役割分担して協調するシステム", "how_it_works": "役割の異なる複数エージェントを協調させるアーキテクチャ。オーケストレーターが全体計画を立て専門サブエージェントに委譲する「階層型」が一般的。並列実行で処理速度向上、相互レビューでエラー検出が可能。CrewAI・LangGraph・AutoGenが主要フレームワーク。", "when_to_use": ["タスクが並列化可能な独立したサブタスクに分解できる場合", "単一エージェントのコンテキスト長を超える大規模タスク", "異なる専門性を分離してミス検出を強化したい場合"], "when_not_to_use": ["タスクが逐次的で並列化の余地がない場合", "デバッグ・監査のしやすさが最優先でシステム"], "vs": "マルチエージェント vs 単一エージェント：単一は1つのLLMが全ステップ担当（シンプル・追跡容易）。マルチは役割分担で品質・速度向上が可能だが複雑性が増す。", "difficulty": "高", "real_example": "設備投資稟議作成を「調査→分析→文書化→レビュー」の4エージェントで分担。単独より品質向上と時間短縮を両立。"}, {"id": "function_calling", "name": "Function Calling / Tool Use", "name_en": "Function Calling / Tool Use", "category": "基礎技術", "short": "LLMが必要に応じて外部関数やAPIを呼び出す機能", "how_it_works": "LLMに利用可能な関数の仕様をJSON Schemaで渡しておき、LLMが「この質問にはこの関数が必要」と判断したとき、関数呼び出しの構造化データを出力する。アプリ側が実際に関数を実行し結果をLLMに返すと最終回答を生成する。MCPはこれの標準化・外部化レイヤー。", "when_to_use": ["LLMにリアルタイムデータ・外部APIを参照させたい場合", "自然言語の指示をDB操作・ファイル書き込みなど具体的なアクションに変換したい場合"], "when_not_to_use": ["外部処理が不要なテキスト生成タスク", "関数の数が50を超えLLMが正しい関数を選べなくなる場合"], "vs": "Function Calling vs RAG：RAGは情報取得に特化。Function Callingはアクション実行も含む（メール送信・DB更新なども可）。RAGはFunction Callingの一形態として実装されることが多い。", "difficulty": "中", "real_example": "「今日のTODOファイルにタスクを追加して」という自然言語指示を受け、LLMがwrite_fileツールを呼び出しパラメータを生成、アプリ側がファイル書き込みを実行。"}, {"id": "lora", "name": "LoRA", "name_en": "Low-Rank Adaptation", "category": "基礎技術", "short": "少ないパラメータで効率的にモデルを追加学習する手法", "how_it_works": "フルファインチューニングでは全パラメータを更新するが、LoRAは元の重み行列を固定し低ランク行列（A×B）だけを追加・学習する。更新パラメータ数を0.1〜1%程度に削減できるためコンシューマGPUでも7B〜13Bクラスのモデルをファインチューニング可能。", "when_to_use": ["フルファインチューニングするGPUリソースがなく少ないハードウェアでモデルを特化させたい場合", "同一ベースモデルに複数の用途別アダプタを切り替えたい場合", "LlamaなどオープンソースモデルをDIYで調整する場合"], "when_not_to_use": ["GPT-4oやClaudeなどAPIのみ提供されるクローズドモデル（重みにアクセス不可）", "推論インフラ管理コストを払えずAPI+プロンプトで十分な場合"], "vs": "LoRA vs フルファインチューニング：フルFTは全重みを更新するため最高精度・最高コスト。LoRAは差分のみ学習するため低コスト。LoRAはフルFTの20分の1以下のGPUメモリで動作する。", "difficulty": "高", "real_example": "Llama-3 8BにLoRAで社内文書500件を学習させ、社内専門用語・設備略称を理解するローカルモデルを構築。外部にデータを出せない機密情報処理にも活用可能。"}, {"id": "extended_thinking", "name": "推論モデル / Extended Thinking", "name_en": "Reasoning Model / Extended Thinking", "category": "応用技術", "short": "回答前に内部で推論ステップを実行して精度を高めるLLM技術", "how_it_works": "LLMが最終回答を出す前に「考える」ステップ（思考チェーン）を内部で実行する。ユーザーには通常の回答として届くが、内部では問題を分解・検証・反論してから結論に至る。Claude（Extended Thinking）、GPT（o3/o4-mini）、Gemini 2.5（Thinking）が実装。推論トークンが別途消費されるため通常より費用が増える。", "when_to_use": ["数学的計算・複雑な技術設計・コード生成など多段階推論が必要な問題", "「なぜそうなるか」の根拠を重視する設備投資判断・仕様検討", "一発回答では品質が不安定なタスク（要件定義・リスク分析など）"], "when_not_to_use": ["単純なQ&Aやメール返信など1ステップで完結するタスク", "レスポンス速度が最優先（推論モードは通常比2〜5倍遅い）", "コストが制約になる大量バッチ処理"], "vs": "推論モデル vs 通常モデル：通常モデルは即座に回答を生成（高速・低コスト）。推論モデルは内部で検証を繰り返してから回答（低速・高コスト・高精度）。複雑なタスクは推論モデル、定型処理は通常モデルと使い分けるのが最適。", "difficulty": "中", "real_example": "設備投資案件で「この仕様変更が防爆基準に適合するか」という複合判断をClaude Extended Thinkingに問うと、電技解釈・IECEx規格・既存設備との整合性を順に検証した上で根拠付きの回答を得られる。"}, {"id": "computer_use", "name": "Computer Use（AIによるPC操作）", "name_en": "Computer Use / GUI Agent", "category": "応用技術", "short": "AIがスクリーンを見てマウス・キーボードを操作し、PCを人間の代わりに操作する技術", "how_it_works": "マルチモーダルLLMがスクリーンショットを「見て」操作対象を認識し、クリック・テキスト入力・スクロールなどのGUI操作を自動実行する。APIが提供されていないGUI専用アプリ（社内システム・古いWebシステムなど）でも操作可能なため、RPA的な自動化が可能。Claude Computer Use、PerplexityのComputerエージェントが代表。", "when_to_use": ["APIが提供されていない社内システム・レガシーシステムの操作自動化", "複数ツールを横断して情報収集・転記するルーティン業務", "手順が固定されたGUI操作を完全自動化したい場合"], "when_not_to_use": ["設備制御・PLCプログラム変更など取り消しリスクが高い操作（Human-in-the-Loopが必須）", "処理量が多くAPIで対応できる場合（APIの方が速くて安定）", "セキュリティ上スクリーン情報を外部送信できない環境"], "vs": "Computer Use vs RPA：RPA（Robotic Process Automation）は事前に操作手順をスクリプト化するため変更に弱い。Computer UseはAIが画面を見て判断するため、UIが変わっても対応できる柔軟性がある。ただし精度・速度ではRPAに劣る場面がある。", "difficulty": "高", "real_example": "社内の設備管理システムへのデータ入力（点検記録・アラームログ）をClaude Computer Useで自動化。APIがない旧システムでも操作可能なため、基幹系システムへの手入力業務を大幅削減できる可能性がある。"}, {"id": "adk", "name": "ADK（エージェント開発キット）", "name_en": "Agent Development Kit", "category": "開発技術", "short": "Google CloudのマルチAIエージェント構築フレームワーク", "how_it_works": "Googleが提供するオープンソースのエージェント開発フレームワーク（2025年公開）。複数のAIエージェントを「オーケストレーター＋サブエージェント」の階層構造で構築できる。Vertex AI・BigQuery・Cloud Storageなど他のGoogle Cloudサービスとの統合が容易。Python SDKで記述し、Cloud Run上でホスティング。Geminiモデルをベースに多段階の推論・ツール実行・状態管理を実装できる。", "when_to_use": ["Google Cloud環境でマルチエージェントシステムを構築する場合", "データ分析・レポート生成を自動化する複数エージェントを組む場合", "Vertex AI・BigQueryと連携したエンタープライズ向けエージェントを開発する場合"], "when_not_to_use": ["Google Cloud以外の環境で開発する場合（LangChain等の方が汎用的）", "シンプルな1エージェント構成で十分な場合", "Googleサービス以外の外部ツールとの連携が主体の場合"], "vs": "ADK vs LangChain：LangChainはマルチプロバイダー対応の汎用フレームワーク。ADKはGoogle Cloud特化で統合がシームレスだが、他クラウドへの移植性は低い。Google Cloud環境での開発ならADKが最短距離。", "difficulty": "高", "real_example": "東京電力エナジーパートナーが5エージェントのマルチAIシステム「V-DAG」をADKで構築。ヒアリング→分析→レポート生成までを一貫自動化し、分析期間を2.5ヶ月→1ヶ月に短縮した。"}, {"id": "vertex_ai_search", "name": "Vertex AI Search（エンタープライズRAG）", "name_en": "Vertex AI Search", "category": "応用技術", "short": "Google Cloud提供のマネージドRAG・エンタープライズ検索サービス", "how_it_works": "Googleが提供するフルマネージドの検索・RAGサービス。PDFやドキュメントをアップロードするだけで自動的にインデックス化・ベクトル化し、自然言語での検索・回答生成ができる環境を構築できる。キーワード検索とベクトル検索を組み合わせたハイブリッド検索に対応。Google Drive・BigQuery等のデータソースと直接接続可能。インフラ管理不要でRAGを本番環境に展開できる。", "when_to_use": ["社内マニュアル・仕様書・保全記録をRAG化したいが自前インフラを管理したくない場合", "PDF・HTMLなど異なる形式の文書を横断検索させたい場合", "エンタープライズ規模（数万件以上の文書）で高い検索精度が必要な場合"], "when_not_to_use": ["文書数が数十件以下でNotebookLMやChromaで十分な小規模用途", "Google Cloud以外のインフラで展開する必要がある場合", "コストを極限まで抑えたい場合（マネージドサービスのためコストは発生）"], "vs": "Vertex AI Search vs NotebookLM：NotebookLMは個人・チーム向けの手軽なRAGツールでAPIなし。Vertex AI SearchはAPI経由でアプリに組み込み可能なエンタープライズ向けサービス。本番システム化が目的ならVertex AI Search、まず試したいならNotebookLMから始める。", "difficulty": "中", "real_example": "シスメックスが検査機器・試薬の膨大な保全マニュアルをVertex AI Searchでインデックス化。保全担当者が「ポンプP-101の定期点検手順は？」と問い合わせると該当箇所を引用して回答するシステムを構築。担当者の知識レベルによらない均質な回答品質を実現。"}];
 
 document.addEventListener('DOMContentLoaded', () => {
-  Promise.all([
-    fetch('data/roadmap.json').then(r  => r.json()),
-    fetch('data/terms.json').then(r    => r.json()),
-    fetch('data/tools.json').then(r    => r.json()),
-    fetch('data/cases.json').then(r    => r.json()),
-    fetch('data/concepts.json').then(r => r.json())
-  ])
-  .then(([roadmap, terms, tools, cases, concepts]) => {
-    roadmapData  = roadmap;
-    termsData    = terms;
-    toolsData    = tools;
-    casesData    = cases;
-    conceptsData = concepts;
-    init();
-  })
-  .catch(err => {
-    console.warn('JSON読み込み失敗:', err);
-    init();
-  });
+  init();
 });
 
 function init() {
@@ -1986,22 +1903,7 @@ function init() {
   renderM365License();
   renderSecurity();
   renderSecurityFAQ();
-  renderPromptLib();
-  renderAntiPatterns();
-  renderROISummary();
-  updateStats();
   if (typeof lucide !== 'undefined') lucide.createIcons();
-}
-
-function updateStats() {
-  const s = document.getElementById('stat-terms');
-  const t = document.getElementById('stat-tools');
-  const c = document.getElementById('stat-cases');
-  const cn = document.getElementById('stat-concepts');
-  if (s) s.textContent = termsData.length + '語';
-  if (t) t.textContent = toolsData.length + 'サービス';
-  if (c) c.textContent = casesData.length + '件';
-  if (cn) cn.textContent = conceptsData.length + '件';
 }
 
 // ===== CROSS-LINK & MAP FUNCTIONS =====
@@ -2140,6 +2042,13 @@ function renderRoadmap() {
         <span>${a}</span>
       </li>`;
     }).join('');
+    const criteriaHtml = d.criteria ? `
+  <div style="margin-top:var(--sp-4);padding-top:var(--sp-3);border-top:1px solid var(--color-border)">
+    <div style="font-size:0.75rem;color:var(--color-success);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:var(--sp-2);font-weight:600">&#x2705; 達成基準</div>
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:var(--sp-1)">
+      ${d.criteria.map(c => `<li style="display:flex;align-items:flex-start;gap:var(--sp-2);font-size:0.82rem;color:var(--color-muted);line-height:1.55"><span style="color:var(--color-success);flex-shrink:0;margin-top:1px">›</span>${c}</li>`).join('')}
+    </ul>
+  </div>` : '';
     return `
     <div class="roadmap-card">
       <div class="roadmap-header">
@@ -2160,6 +2069,7 @@ function renderRoadmap() {
       <ul class="actions-list">
         ${actionsHtml}
       </ul>
+      ${criteriaHtml}
     </div>`;
   }).join('');
 }
@@ -2333,7 +2243,6 @@ function renderConcepts() {
         </div>
         <div class="vs-box" style="margin-top:var(--sp-3)"><strong>比較:</strong> ${c.vs}</div>
         <div class="real-example-box"><strong style="color:var(--color-accent)">実例:</strong> ${c.real_example}</div>
-        ${buildConceptCrosslinks(c.id)}
       </div>
     </div>
   `).join('');
@@ -2379,52 +2288,10 @@ const m365ScenariosData = [
   {"id":"m365_019","title":"設備保全FAQボット構築","app":"Copilot Studio","role":"チームリーダー","situation":"若手担当者からの「この設備の点検周期は？」「インバータのアラームコードの意味は？」などの質問対応に週数時間を使っている。","how_to":["Copilot Studioで新規ボットを作成し、SharePointの保全手順書・技術マニュアルをナレッジソースとして登録","設備種別・アラームコード・点検手順の質問パターンを20件テストして精度確認","「回答が見つからない場合はチームリーダーにエスカレーション」のフローを設定","TeamsチャンネルにボットをインストールしてQRコードで現場周知"],"effect":"若手からの基本質問対応週3時間→週30分（83%削減）","before_after":{"before":"若手から同じ質問を繰り返し受けて回答。担当者がいない時は作業が止まる","after":"ボットが24時間対応。マニュアル根拠付きで回答し、不明な場合のみエスカレーション"}},
   {"id":"m365_020","title":"法定点検記録の自動整理とアラート","app":"Power Automate","role":"担当者","situation":"電気設備の法定点検（年次・月次）の実施記録管理と期限アラートを手動のExcel管理表で運用しており、期限漏れリスクがある。","how_to":["SharePointに点検記録リスト（設備種別・点検区分・前回実施日・次回期限・担当者）を作成","Power AutomateのCopilotで「次回点検期限の30日前と7日前にTeamsで担当者に通知するフローを作成して」と自然言語で指示","生成されたフローを確認・有効化。点検完了時にSharePointリストを更新するフォームも作成","月次で期限超過リストをPDFに変換してメールで管理職に自動送信"],"effect":"点検期限漏れリスクの排除・管理工数月3時間→0（完全自動化）","before_after":{"before":"Excelの管理表を週1回確認して期限をチェック。漏れに気づかないリスク","after":"期限30日前・7日前に自動アラート。担当者が見落とすことがない仕組みを構築"}},
   {"id":"m365_021","title":"定型メール・申請フローの自動化","app":"Power Automate","role":"担当者","situation":"設備作業前の関係部署への連絡メール、作業完了後の報告メールなど定型メールを毎回手動で作成・送信している。","how_to":["Power AutomateのCopilotで「SharePointのリストにアイテムが追加されたら関係者にTeamsメッセージを送信するフロー」と自然言語入力","フロー生成後に送信先・テンプレート文面・条件分岐（緊急/通常）を調整","作業完了ボタン（PowerApps）を現場タブレットに設置し完了報告を自動化","フォーム入力→承認ルート自動付与→完了通知の一連フローを3日で構築"],"effect":"定型連絡業務週2時間→週15分（88%削減）","before_after":{"before":"定型文をコピーして宛先・日程を変えて手動送信。送り忘れが発生","after":"リスト更新をトリガーに自動送信。送り忘れゼロ・記録も自動でSharePointに蓄積"}},
-  {"id":"m365_022","title":"保全コスト・工数の月次集計レポート自動生成","app":"Power BI / Excel","role":"チームリーダー","situation":"保全作業の材料費・外注費・工数をExcelで集計して月次レポートを作成する作業が毎月4〜5時間かかる。","how_to":["保全作業記録（作業日・設備種別・材料費・外注費・工数）をExcelまたはSharePointリストに統一フォーマットで蓄積","Power BIでデータを読み込み、Copilotに「設備種別・月別・費用区分のクロス集計表と予算対比グラフを作成」と指示","「コスト上位5設備と前年同月比のコメントを生成」と追加指示","月初にPower Automateで自動更新・PDF出力・管理職メール送信をスケジュール化"],"effect":"月次保全レポート作成5時間→30分（90%削減）","before_after":{"before":"複数Excelファイルを手動統合・集計・グラフ化。コメントも一から作成","after":"データ入力するだけで集計・グラフ・コメントが自動生成。月初に自動配信"}},
-  {"id":"m365_023","title":"品質データのSPCチャート自動作成","app":"Excel","role":"品質担当","situation":"寸法測定値のSPC管理図を手動で作成しており、管理限界値の計算と更新に毎月2〜3時間かかっている。","how_to":["寸法測定データをExcelシートに貼り付け","「寸法測定値_内径列をもとに管理限界値（UCL/LCL）を計算して新列に追加」と入力","「管理限界値を含むSPCチャート（折れ線グラフ）を作成」と続けて指示","管理外れ点が赤くなるよう条件付き書式の追加も依頼"],"effect":"SPC分析・グラフ作成90分→10分（89%削減）","before_after":{"before":"管理限界値を手計算、Excelで手動グラフ作成。毎月更新が手間","after":"測定データを貼るだけでSPCチャートが自動生成。異常点の早期検知が容易に"}},
-  {"id":"m365_024","title":"安全インシデントの根本原因分析レポート","app":"Copilot Chat","role":"安全担当","situation":"工場内の事故・ヒヤリハット報告データを手動で整理して安全分析レポートを作成するのに毎回4〜5時間かかる。","how_to":["事故・ヒヤリハット報告データ（Excel）をCopilot Chatに読み込み","「直接原因・根本原因の分析、重大度別リスク評価、対策案（実施計画付き）を含む安全分析レポートを作成」と入力","「対策案を優先度・担当部署・完了期限の表形式で整理」と追加指示","出力をWordに貼り付けてレビュー後配布"],"effect":"安全報告書作成4時間→45分（81%削減）","before_after":{"before":"報告書ごとに手動集計・分析・フォーマット整形。観点漏れリスクあり","after":"データ読み込みで根本原因分析・リスク評価・対策案が一括生成"}},
-  {"id":"m365_025","title":"取扱説明書から安全手順書の自動作成","app":"Word","role":"設備担当","situation":"設備メーカーの取扱説明書（英文・長文）から新入社員向け安全手順書を作成する作業が1設備あたり3〜4時間かかる。","how_to":["設備取扱説明書のWordまたはPDFをCopilot for Wordに読み込み","「操作未経験の新入社員向けに、作業前点検・操作手順・緊急停止手順を含む安全手順書をA4一枚に作成」と指示","日本語で出力させ、専門用語には注釈を追加するよう依頼","現場熟練者によるレビュー後に正式版として保存"],"effect":"安全手順書作成3〜4時間→30分（85%削減）","before_after":{"before":"英文マニュアルを読み解きながら一から日本語手順書を作成","after":"マニュアルを渡すだけで現場レベルの手順書が自動生成"}},
-  {"id":"m365_026","title":"特許情報の自動要約・複数特許比較","app":"Copilot Chat","role":"設計・技術担当","situation":"競合特許や関連特許の読み込みと要約に1件あたり2〜3時間かかり、複数件の比較が特に手間。","how_to":["調査対象の特許PDFをCopilot Chatに読み込み","「出願番号・発明の課題・解決手段・請求項の範囲・先行技術との差異を含む要約を作成」と入力","複数特許の場合は「2つのファイルの差分を表形式で、類似点・相違点がわかるよう比較」と指示","比較結果をExcelに転記して知財管理台帳に追加"],"effect":"特許要約1件2時間→15分（87%削減）、3社比較分析を従来の1/5の時間で実施","before_after":{"before":"英文特許を読み解き、手動で要約・比較表を作成。知財担当以外には難しい作業","after":"PDFを渡すだけで統一フォーマットの要約と比較表が自動生成"}},
-  {"id":"m365_027","title":"ISO9001対応 品質マニュアル更新チェック","app":"Copilot Chat","role":"品質担当","situation":"ISO9001審査前に品質マニュアルの対応漏れ箇所を確認する作業に16〜20時間かかり、見落としも発生する。","how_to":["既存の品質マニュアルをCopilot Chatに読み込み","「ISO 9001:2015の要求事項に基づき、アップデートが必要な項目を優先度の高い順に説明してください」と入力","「各指摘事項に対して、マニュアルの該当箇所と推奨修正内容を具体的に示して」と追加指示","出力を品質管理担当がレビューして対応計画に落とし込む"],"effect":"マニュアル差分分析16時間→2時間（87%削減）。審査員指摘との重複漏れが減少","before_after":{"before":"規格書と対照しながら手動でチェックリストを作成。観点の個人差が大きい","after":"規格との差分を自動抽出。担当者のスキルに依存せず網羅的なチェックが可能"}}
+  {"id":"m365_022","title":"保全コスト・工数の月次集計レポート自動生成","app":"Power BI / Excel","role":"チームリーダー","situation":"保全作業の材料費・外注費・工数をExcelで集計して月次レポートを作成する作業が毎月4〜5時間かかる。","how_to":["保全作業記録（作業日・設備種別・材料費・外注費・工数）をExcelまたはSharePointリストに統一フォーマットで蓄積","Power BIでデータを読み込み、Copilotに「設備種別・月別・費用区分のクロス集計表と予算対比グラフを作成」と指示","「コスト上位5設備と前年同月比のコメントを生成」と追加指示","月初にPower Automateで自動更新・PDF出力・管理職メール送信をスケジュール化"],"effect":"月次保全レポート作成5時間→30分（90%削減）","before_after":{"before":"複数Excelファイルを手動統合・集計・グラフ化。コメントも一から作成","after":"データ入力するだけで集計・グラフ・コメントが自動生成。月初に自動配信"}}
 ];
 
-const m365PromptsData = [
-  {"id":"p001","title":"週次会議議事録テンプレート","app":"Teams","category":"会議","template":"この会議を以下の形式でまとめてください。\n【決定事項】（箇条書き、各項目に決定理由を1文）\n【アクションアイテム】（担当者 | 内容 | 期限：YYYY-MM-DD）\n【継続検討事項】（未決定の理由と次回確認内容）\n【次回議題候補】（2〜3件）\n曖昧な期限（「なるべく早く」等）は記載しないこと。","output_example":"決定事項・担当者・期限が表形式で整理され、即共有できる状態になる","tip":"会議前に今日の議題をTeamsチャットに投稿しておくとCopilotの精度が上がる"},
-  {"id":"p002","title":"製造課への設備停止依頼メール","app":"Outlook","category":"メール","template":"製造課[担当者名]さん宛に設備停止作業依頼メールを作成してください。\n作業内容：[作業内容]\n停止時間：[時間]時間（[開始]〜[終了]）\n影響ライン：[ライン名]\n希望日程：第1候補[日程]、第2候補[日程]\n代替案：[代替案または「代替案なし」]\n件名に停止時間と影響ラインを含め、影響を冒頭に記載し製造課の生産計画優先のトーンで。","output_example":"件名「[ライン名] X時間停止作業依頼 — [日程]」で始まる影響先行の依頼メール","tip":"「代替案なし」の場合は理由（年次点検等）を明記するとCopilotが適切な表現を選ぶ"},
-  {"id":"p003","title":"設備トラブル緊急連絡文","app":"Teams","category":"メール","template":"設備トラブルの緊急連絡文を作成してください。\n発生時刻：[時刻]\n設備種別：[例：動力盤、センサー類]\n現象：[何が起きているか]\n影響：[停止ライン、停止時間見込み]\n現在の対応：[実施中の対処]\n復旧見込み：[時間または「調査中」]\n冒頭に影響範囲を記載し箇条書きで。「させていただきます」は使わないこと。","output_example":"「[ライン名]が[時刻]より停止中」から始まる影響論先行の簡潔な連絡文","tip":"テンプレートをTeamsのマイノートに保存しておくとトラブル時に素早く呼び出せる"},
-  {"id":"p004","title":"設備点検結果の報告書","app":"Word","category":"報告書","template":"以下の点検結果データを元に設備点検報告書を作成してください。\n点検設備：[設備種別]\n点検日：[日付]\n点検項目と結果：[測定値一覧]\n異常箇所：[あれば記載、なければ「異常なし」]\n\n構成：①点検概要（1段落）②測定結果一覧（表形式）③異常・要注意箇所（根拠数値付き）④推奨対処（期限付き）⑤次回点検推奨時期\n総合所見を冒頭1行で。","output_example":"「総合所見：異常なし / 〇〇に要注意」から始まり測定結果が表で整理された報告書","tip":"測定値はCSV形式で貼り付けると表変換の精度が上がる"},
-  {"id":"p005","title":"電力使用量の異常値分析","app":"Excel","category":"分析","template":"このExcelデータの電力使用量を分析してください。\n①デマンドピーク上位3件（日時・値・前日比）\n②月間使用量の前月比（%）\n③平均値から2σ以上乖離している日時と値\n④トレンド（直近3ヶ月：増加/横ばい/減少）\n⑤異常値がある場合の推定要因（設備起因/操業変化/季節要因）\n経営報告向けに200字以内のコメントも生成すること。","output_example":"デマンドピーク・前月比・異常値が箇条書きで整理され、200字の報告コメントが自動生成","tip":"過去12ヶ月分のデータを含めると季節変動の判定精度が上がる"},
-  {"id":"p006","title":"部下へのフィードバックメッセージ","app":"Teams","category":"メール","template":"以下の内容で部下[名前/役職]へのフィードバックメッセージを作成してください。\n評価対象業務：[業務内容]\n良かった点：[具体的な行動・成果]\n改善してほしい点：[具体的な行動・場面]\n\nWhy先行（なぜそのフィードバックをするかから入る）、1項目1アクション、最後に「どう思う？」で締める。説教調にならず次のアクションが明確になる文体で。","output_example":"「〇〇の理由から△△は良かった。次は□□を意識してほしい。どう思う？」という対話促進型の短いフィードバック","tip":"「改善してほしい点」は行動ベース（「積極性が足りない」→「会議で1回以上発言してほしい」）で入力すると具体的になる"},
-  {"id":"p007","title":"設備投資5軸評価レポート","app":"Word","category":"報告書","template":"以下の設備投資案件を5軸評価してください。\n案件名：[案件名]\n投資内容：[内容]\n投資額：[金額]万円\n\n評価軸（各5点満点でスコアリングし根拠1〜2文）：\n①安全（法規制適合・防爆・作業安全性）\n②信頼性（設備稼働率・MTBF・実績）\n③保全性（現場作業性・予備品調達・特殊工具の要否）\n④拡張性（将来の増設・通信プロトコル適合性）\n⑤コスト（初期投資・LCC・ROI年数）\n\n総合評価と推奨判断を結論先で。","output_example":"5軸スコア表と根拠、「推奨する / 条件付き推奨 / 推奨しない」の判断が結論先で出力される","tip":"競合案が複数ある場合は「案A vs 案B」形式で入力すると比較マトリクスが自動生成される"},
-  {"id":"p008","title":"他工場情報交換の知見整理","app":"Teams","category":"分析","template":"以下の他工場との情報交換メモから、自工場への適用可能な知見を抽出してください。\n[情報交換メモをここに貼り付け]\n\n出力形式：\n【適用可能性：高】（即実行できる施策）\n【適用可能性：中】（検討・調査が必要な施策）\n【適用可能性：低】（設備・環境が異なり適用困難）\n\n各項目に①内容②自工場への適用イメージ③必要なアクション（担当部門・期限）を付けること。","output_example":"「適用可能性：高」の施策が冒頭に整理され、次アクションが担当・期限付きで明確になる","tip":"「自工場の特徴」（防爆エリアあり、PLC多用環境等）をプロンプト冒頭に追記すると適用判断の精度が上がる"},
-  {"id":"p009","title":"月次業務サマリー（上司向け）","app":"Outlook","category":"報告書","template":"以下の今月の業務実績を上司向け月次サマリーに整理してください。\n完了業務：[完了した主要業務一覧]\n数値実績：[KPI・工数・件数等]\n課題・懸念：[発生した問題と対処状況]\n来月の予定：[主要予定]\n\n構成：結論（今月の総合評価1行）→実績ハイライト（数値付き3点）→課題と対策→来月重点事項。A4半ページ以内。「させていただきます」「ご確認いただけますでしょうか」は使わないこと。","output_example":"「今月の総合評価：計画通り達成 / 〇〇に課題」から始まる簡潔な報告書","tip":"「数値実績」に具体的な数字（達成率・件数・金額）を入れると説得力のある報告書になる"},
-  {"id":"p010","title":"会議アジェンダ作成（製造課調整）","app":"Teams","category":"会議","template":"以下の目的で製造課との調整会議アジェンダを作成してください。\n会議目的：[例：Q2定修計画の日程調整]\n参加者：電計チーム[人数]名、製造課[人数]名\n会議時間：[分]分\n決めたいこと：[決定事項]\n共有したい情報：[情報]\n\n各項目に所要時間・担当（電計/製造課/共同）・目標（決定/情報共有/議論）を付けること。製造課の関心事（生産計画への影響）を議題の優先順位に反映すること。","output_example":"時間配分・担当・目標が明記されたアジェンダが生成され会議の空転を防ぐ","tip":"「製造課が最も気にすること」を1行添えると議題の順序と所要時間が最適化される"},
-  {"id":"p011","title":"トラブルナレッジの構造化","app":"OneNote","category":"分析","template":"以下のトラブル記録を標準形式に構造化してください。\n[トラブルメモをここに貼り付け]\n\n出力形式：\n【現象】いつ・どの設備種別・何が起きたか（1〜2文）\n【推定原因】可能性が高い順に3つ（根拠付き）\n【実施した対処法】手順と所要時間\n【結果】復旧確認内容\n【再発防止策】具体的なアクション（期限付き）\n【次回点検時の確認ポイント】","output_example":"現象・原因・対処・再発防止が標準フォーマットで整理され既知パターンとの照合が容易になる","tip":"「設備種別・現象の概要」だけのメモからでも構造化できる。詳細は後から補完すればよい"},
-  {"id":"p012","title":"定修作業リスト生成","app":"Excel","category":"計画","template":"以下の情報を元に年次定修の作業リストを作成してください。\n過去作業記録：[記録]\n法定点検スケジュール：[スケジュール]\n今年の設備更新工事：[工事内容]\n\n各作業に①分類（法定/予防保全/更新工事/確認）②優先度（高/通常）③推定工数（時間）④必要人員を付けること。停止時間合計と短縮可能な作業も整理すること。","output_example":"分類・優先度・工数付きの定修作業リストが生成され、製造課との日程調整資料として即使える","tip":"「今年特に注意すべき設備（老朽化・不具合履歴あり）」を明記するとそれを優先リストの冒頭に配置してくれる"},
-  {"id":"p013","title":"育成計画の月次進捗レビュー","app":"Word","category":"計画","template":"部下[役職・経験年数]の育成計画に対する今月の進捗レビューコメントを作成してください。\n今月の目標：[目標]\n実際の行動・成果：[実績]\n達成度：[%または定性評価]\n\n①達成度評価（数値・事実ベース）②良かった行動（具体的場面）③来月の重点課題（1〜2点、行動ベース）④チームリーダーとして提供できるサポート。説教・抽象的な励ましは使わず次のアクションで締めること。","output_example":"「目標の〇%達成。△△の場面での□□行動が良かった。来月は◇◇を意識してほしい」という具体的なレビューコメント","tip":"「良かった行動」は必ず具体的な場面・日時を入力する。「頑張っていた」ではCopilotも曖昧なコメントしか生成できない"},
-  {"id":"p014","title":"技術仕様確認のメーカー問い合わせ","app":"Outlook","category":"メール","template":"以下の内容でメーカーへの技術仕様確認メールを作成してください。\n対象機器：[機器種別]\n確認したい仕様：[仕様項目1、仕様項目2、仕様項目3]\n確認が必要な背景：[導入検討中/既設機更新/法的要件のため等]\n回答期限：[YYYY-MM-DD]\n\n敬語は最小限・仕様は数値で質問・「ご検討ください」は使わず「〇月〇日までに回答ください」と明記。質問番号を振り回答しやすくすること。","output_example":"Q1, Q2, Q3と番号付きの明確な質問リストと期限明記メールが生成される","tip":"「現在使用中の類似機器のメーカー・型番」を添えると互換性・置き換え可能性の質問を自動追加してくれる"},
-  {"id":"p017","title":"プロンプト精度を上げる4つの工夫","app":"Copilot","category":"汎用","template":"【工夫①：目的・背景を書く】
-この質問は〇〇を作成するために聞いています。背景として△△の状況があります。
-
-【工夫②：欲しい回答の例を示す】
-以下の例を参考に、類似のものを出してください：[例]
-
-【工夫③：書式・分量を指定する】
-箇条書き3点で / 200字以内で / 表形式で（横軸：A・B・C）
-
-【工夫④：テイスト・立場を指定する】
-高校生でもわかるように / 電気主任技術者の立場で / 上司への報告書のトーンで
-
-→ 4つ全部使う必要はない。詰まったら①から順に追加していく。","output_example":"目的・例・形式・テイストを組み合わせるほど、一発で使える回答が返ってくる確率が上がる","tip":"一度で完璧な回答が出なくても正常。工夫①→③の順に要素を追加しながら精度を上げていくのがコツ。MCG社内勉強会（2024/10）で紹介された手法"},
-  {"id":"p016","title":"3Rプロンプト（MCG推奨テンプレート）","app":"Copilot","category":"汎用","template":"あなたは{役割（Role）}です。
-{依頼（Request）}を実行して、
-{形式（Format）}の形式で出力してください。
-
-【電計業務での記入例】
-あなたは電計チームリーダーです。
-以下の設備トラブル事象の原因仮説を3つ挙げて、
-可能性が高い順に根拠付き箇条書きで出力してください。","output_example":"役割・依頼・形式が明確になり、AIが適切な視点と出力形式で回答する。一度で思った回答が出なければ役割か形式を変えて試す","tip":"形式には「箇条書き3点」「表形式」「200字以内」「PREP法で」など具体的に指定するほど精度が上がる。MCG社内勉強会（2024/10、Microsoft提供）で紹介された基本テンプレート"},
-  {"id":"p015","title":"チーム向け技術共有資料のサマリー","app":"PowerPoint","category":"報告書","template":"以下の技術情報・調査結果をチーム向け共有資料にまとめてください。\n[技術情報・資料をここに貼り付け]\n\n対象：電気計装チーム（担当者〜チームリーダー）\n目的：[例：新型センサーの特徴把握、法改正の周知]\n\n構成：①TL;DR（3行以内・結論先）②背景・必要な理由③重要ポイント（3〜5項目、数値・規格番号付き）④現場への適用時の注意点⑤次のアクション（誰が・何を・いつまでに）。専門用語はそのまま使い不要な解説は省くこと。","output_example":"「TL;DR：〇〇は××に変更。[日付]までに△△の対応が必要」から始まる実務直結の共有資料","tip":"「チームの現在のスキルレベル」を添えると説明の詳細度が最適化される"}
-];
+const m365PromptsData = [{"id":"p001","title":"週次会議議事録テンプレート","app":"Teams","category":"会議","template":"この会議を以下の形式でまとめてください。\n【決定事項】（箇条書き、各項目に決定理由を1文）\n【アクションアイテム】（担当者 | 内容 | 期限：YYYY-MM-DD）\n【継続検討事項】（未決定の理由と次回確認内容）\n【次回議題候補】（2〜3件）\n曖昧な期限（「なるべく早く」等）は記載しないこと。","output_example":"決定事項・担当者・期限が表形式で整理され、即共有できる状態になる","tip":"会議前に今日の議題をTeamsチャットに投稿しておくとCopilotの精度が上がる"},{"id":"p002","title":"製造課への設備停止依頼メール","app":"Outlook","category":"メール","template":"製造課[担当者名]さん宛に設備停止作業依頼メールを作成してください。\n作業内容：[作業内容]\n停止時間：[時間]時間（[開始]〜[終了]）\n影響ライン：[ライン名]\n希望日程：第1候補[日程]、第2候補[日程]\n代替案：[代替案または「代替案なし」]\n件名に停止時間と影響ラインを含め、影響を冒頭に記載し製造課の生産計画優先のトーンで。","output_example":"件名「[ライン名] X時間停止作業依頼 — [日程]」で始まる影響先行の依頼メール","tip":"「代替案なし」の場合は理由（年次点検等）を明記するとCopilotが適切な表現を選ぶ"},{"id":"p003","title":"設備トラブル緊急連絡文","app":"Teams","category":"メール","template":"設備トラブルの緊急連絡文を作成してください。\n発生時刻：[時刻]\n設備種別：[例：動力盤、センサー類]\n現象：[何が起きているか]\n影響：[停止ライン、停止時間見込み]\n現在の対応：[実施中の対処]\n復旧見込み：[時間または「調査中」]\n冒頭に影響範囲を記載し箇条書きで。「させていただきます」は使わないこと。","output_example":"「[ライン名]が[時刻]より停止中」から始まる影響論先行の簡潔な連絡文","tip":"テンプレートをTeamsのマイノートに保存しておくとトラブル時に素早く呼び出せる"},{"id":"p004","title":"設備点検結果の報告書","app":"Word","category":"報告書","template":"以下の点検結果データを元に設備点検報告書を作成してください。\n点検設備：[設備種別]\n点検日：[日付]\n点検項目と結果：[測定値一覧]\n異常箇所：[あれば記載、なければ「異常なし」]\n\n構成：①点検概要（1段落）②測定結果一覧（表形式）③異常・要注意箇所（根拠数値付き）④推奨対処（期限付き）⑤次回点検推奨時期\n総合所見を冒頭1行で。","output_example":"「総合所見：異常なし / 〇〇に要注意」から始まり測定結果が表で整理された報告書","tip":"測定値はCSV形式で貼り付けると表変換の精度が上がる"},{"id":"p005","title":"電力使用量の異常値分析","app":"Excel","category":"分析","template":"このExcelデータの電力使用量を分析してください。\n①デマンドピーク上位3件（日時・値・前日比）\n②月間使用量の前月比（%）\n③平均値から2σ以上乖離している日時と値\n④トレンド（直近3ヶ月：増加/横ばい/減少）\n⑤異常値がある場合の推定要因（設備起因/操業変化/季節要因）\n経営報告向けに200字以内のコメントも生成すること。","output_example":"デマンドピーク・前月比・異常値が箇条書きで整理され、200字の報告コメントが自動生成","tip":"過去12ヶ月分のデータを含めると季節変動の判定精度が上がる"},{"id":"p006","title":"部下へのフィードバックメッセージ","app":"Teams","category":"メール","template":"以下の内容で部下[名前/役職]へのフィードバックメッセージを作成してください。\n評価対象業務：[業務内容]\n良かった点：[具体的な行動・成果]\n改善してほしい点：[具体的な行動・場面]\n\nWhy先行（なぜそのフィードバックをするかから入る）、1項目1アクション、最後に「どう思う？」で締める。説教調にならず次のアクションが明確になる文体で。","output_example":"「〇〇の理由から△△は良かった。次は□□を意識してほしい。どう思う？」という対話促進型の短いフィードバック","tip":"「改善してほしい点」は行動ベース（「積極性が足りない」→「会議で1回以上発言してほしい」）で入力すると具体的になる"},{"id":"p007","title":"設備投資5軸評価レポート","app":"Word","category":"報告書","template":"以下の設備投資案件を5軸評価してください。\n案件名：[案件名]\n投資内容：[内容]\n投資額：[金額]万円\n\n評価軸（各5点満点でスコアリングし根拠1〜2文）：\n①安全（法規制適合・防爆・作業安全性）\n②信頼性（設備稼働率・MTBF・実績）\n③保全性（現場作業性・予備品調達・特殊工具の要否）\n④拡張性（将来の増設・通信プロトコル適合性）\n⑤コスト（初期投資・LCC・ROI年数）\n\n総合評価と推奨判断を結論先で。","output_example":"5軸スコア表と根拠、「推奨する / 条件付き推奨 / 推奨しない」の判断が結論先で出力される","tip":"競合案が複数ある場合は「案A vs 案B」形式で入力すると比較マトリクスが自動生成される"},{"id":"p008","title":"他工場情報交換の知見整理","app":"Teams","category":"分析","template":"以下の他工場との情報交換メモから、自工場への適用可能な知見を抽出してください。\n[情報交換メモをここに貼り付け]\n\n出力形式：\n【適用可能性：高】（即実行できる施策）\n【適用可能性：中】（検討・調査が必要な施策）\n【適用可能性：低】（設備・環境が異なり適用困難）\n\n各項目に①内容②自工場への適用イメージ③必要なアクション（担当部門・期限）を付けること。","output_example":"「適用可能性：高」の施策が冒頭に整理され、次アクションが担当・期限付きで明確になる","tip":"「自工場の特徴」（防爆エリアあり、PLC多用環境等）をプロンプト冒頭に追記すると適用判断の精度が上がる"},{"id":"p009","title":"月次業務サマリー（上司向け）","app":"Outlook","category":"報告書","template":"以下の今月の業務実績を上司向け月次サマリーに整理してください。\n完了業務：[完了した主要業務一覧]\n数値実績：[KPI・工数・件数等]\n課題・懸念：[発生した問題と対処状況]\n来月の予定：[主要予定]\n\n構成：結論（今月の総合評価1行）→実績ハイライト（数値付き3点）→課題と対策→来月重点事項。A4半ページ以内。「させていただきます」「ご確認いただけますでしょうか」は使わないこと。","output_example":"「今月の総合評価：計画通り達成 / 〇〇に課題」から始まる簡潔な報告書","tip":"「数値実績」に具体的な数字（達成率・件数・金額）を入れると説得力のある報告書になる"},{"id":"p010","title":"会議アジェンダ作成（製造課調整）","app":"Teams","category":"会議","template":"以下の目的で製造課との調整会議アジェンダを作成してください。\n会議目的：[例：Q2定修計画の日程調整]\n参加者：電計チーム[人数]名、製造課[人数]名\n会議時間：[分]分\n決めたいこと：[決定事項]\n共有したい情報：[情報]\n\n各項目に所要時間・担当（電計/製造課/共同）・目標（決定/情報共有/議論）を付けること。製造課の関心事（生産計画への影響）を議題の優先順位に反映すること。","output_example":"時間配分・担当・目標が明記されたアジェンダが生成され会議の空転を防ぐ","tip":"「製造課が最も気にすること」を1行添えると議題の順序と所要時間が最適化される"},{"id":"p011","title":"トラブルナレッジの構造化","app":"OneNote","category":"分析","template":"以下のトラブル記録を標準形式に構造化してください。\n[トラブルメモをここに貼り付け]\n\n出力形式：\n【現象】いつ・どの設備種別・何が起きたか（1〜2文）\n【推定原因】可能性が高い順に3つ（根拠付き）\n【実施した対処法】手順と所要時間\n【結果】復旧確認内容\n【再発防止策】具体的なアクション（期限付き）\n【次回点検時の確認ポイント】","output_example":"現象・原因・対処・再発防止が標準フォーマットで整理され既知パターンとの照合が容易になる","tip":"「設備種別・現象の概要」だけのメモからでも構造化できる。詳細は後から補完すればよい"},{"id":"p012","title":"定修作業リスト生成","app":"Excel","category":"計画","template":"以下の情報を元に年次定修の作業リストを作成してください。\n過去作業記録：[記録]\n法定点検スケジュール：[スケジュール]\n今年の設備更新工事：[工事内容]\n\n各作業に①分類（法定/予防保全/更新工事/確認）②優先度（高/通常）③推定工数（時間）④必要人員を付けること。停止時間合計と短縮可能な作業も整理すること。","output_example":"分類・優先度・工数付きの定修作業リストが生成され、製造課との日程調整資料として即使える","tip":"「今年特に注意すべき設備（老朽化・不具合履歴あり）」を明記するとそれを優先リストの冒頭に配置してくれる"},{"id":"p013","title":"育成計画の月次進捗レビュー","app":"Word","category":"計画","template":"部下[役職・経験年数]の育成計画に対する今月の進捗レビューコメントを作成してください。\n今月の目標：[目標]\n実際の行動・成果：[実績]\n達成度：[%または定性評価]\n\n①達成度評価（数値・事実ベース）②良かった行動（具体的場面）③来月の重点課題（1〜2点、行動ベース）④チームリーダーとして提供できるサポート。説教・抽象的な励ましは使わず次のアクションで締めること。","output_example":"「目標の〇%達成。△△の場面での□□行動が良かった。来月は◇◇を意識してほしい」という具体的なレビューコメント","tip":"「良かった行動」は必ず具体的な場面・日時を入力する。「頑張っていた」ではCopilotも曖昧なコメントしか生成できない"},{"id":"p014","title":"技術仕様確認のメーカー問い合わせ","app":"Outlook","category":"メール","template":"以下の内容でメーカーへの技術仕様確認メールを作成してください。\n対象機器：[機器種別]\n確認したい仕様：[仕様項目1、仕様項目2、仕様項目3]\n確認が必要な背景：[導入検討中/既設機更新/法的要件のため等]\n回答期限：[YYYY-MM-DD]\n\n敬語は最小限・仕様は数値で質問・「ご検討ください」は使わず「〇月〇日までに回答ください」と明記。質問番号を振り回答しやすくすること。","output_example":"Q1, Q2, Q3と番号付きの明確な質問リストと期限明記メールが生成される","tip":"「現在使用中の類似機器のメーカー・型番」を添えると互換性・置き換え可能性の質問を自動追加してくれる"},{"id":"p016","title":"3Rプロンプト（MCG推奨テンプレート）","app":"Copilot","category":"汎用","template":"あなたは{役割（Role）}です。\n{依頼（Request）}を実行して、\n{形式（Format）}の形式で出力してください。\n\n【記入例 — 電計業務版】\nあなたは電計チームリーダーです。\n以下の設備トラブル事象の原因仮説を3つ挙げて、\n可能性が高い順に根拠付き箇条書きで出力してください。","output_example":"役割・依頼・形式が明確になり、AIが適切な視点と出力形式で回答する。一度で思った回答が出なければ役割か形式を変えて試す","tip":"形式には『箇条書き3点』『表形式』『200字以内』『PREP法で』など具体的に指定するほど精度が上がる。MCG社内勉強会（2024/10、Microsoft提供）で紹介された基本テンプレート"},{"id":"p015","title":"チーム向け技術共有資料のサマリー","app":"PowerPoint","category":"報告書","template":"以下の技術情報・調査結果をチーム向け共有資料にまとめてください。\n[技術情報・資料をここに貼り付け]\n\n対象：電気計装チーム（担当者〜チームリーダー）\n目的：[例：新型センサーの特徴把握、法改正の周知]\n\n構成：①TL;DR（3行以内・結論先）②背景・必要な理由③重要ポイント（3〜5項目、数値・規格番号付き）④現場への適用時の注意点⑤次のアクション（誰が・何を・いつまでに）。専門用語はそのまま使い不要な解説は省くこと。","output_example":"「TL;DR：〇〇は××に変更。[日付]までに△△の対応が必要」から始まる実務直結の共有資料","tip":"「チームの現在のスキルレベル」を添えると説明の詳細度が最適化される"},{"id":"p017","title":"法定点検前チェックリスト生成","app":"Word","category":"計画","template":"高圧受変電設備の法定点検前チェックリストを作成してください。\n点検設備種別：[設備種別（例：高圧受変電設備、非常用発電機）]\n点検形態：[自主点検 / 電気保安法人委託 / 年次停電点検]\n確認事項として以下を含める：\n- 事前準備（停電計画・連絡先・工具・保護具）\n- 当日手順（検電・接地・安全確認順序）\n- 記録様式（測定値の記入欄・合否判定基準）\n- 完了後確認（復電手順・書類整理）\n各項目に担当者欄と完了チェック欄をつけること。「させていただきます」は使わないこと。","output_example":"担当者欄・チェック欄付きの法定点検チェックリストがWord形式で生成される","tip":"設備種別と点検形態を具体的に指定するほど、関連規格（電気事業法・消防法等）に即した内容になる"},{"id":"p018","title":"保護リレー整定値の根拠文書化","app":"Word","category":"報告書","template":"保護リレーの整定値変更に関する根拠文書を作成してください。\n変更対象：[保護リレー種別（過電流・地絡・差動等）]\n変更前整定値：[値と単位]\n変更後整定値：[値と単位]\n変更理由：[設備増設・負荷変更・保護協調見直し等]\n計算根拠：[計算式または参考値]\n確認事項：[既設機器との協調確認・メーカー確認有無]\n文書構成：①変更概要 ②変更前後比較表 ③根拠計算 ④リスク評価 ⑤承認欄\n断定調で記述し「なるべく」「できれば」は使わないこと。","output_example":"整定値変更の根拠が①〜⑤の構成で記述された技術文書","tip":"「計算根拠」欄に電流値・時間特性の数値を入れると、計算過程を含む根拠文書が生成される"},{"id":"p019","title":"設備投資比較軸の設定と評価表","app":"Excel","category":"分析","template":"以下の設備更新案件について5軸評価表を作成してください。\n案件名：[設備名・更新内容]\n比較対象：[メーカーA案 / メーカーB案 / 現状維持]\n評価軸（各20点満点）：\n1. 安全性（防爆対応・法規適合・リスク低減効果）\n2. 信頼性（MTBF・故障履歴・冗長構成）\n3. 保全性（現場単独保全可否・予備品調達性・特殊工具不要）\n4. 拡張性（将来の増設容易性・通信規格互換性）\n5. コスト（初期投資・LCC・ROI・回収期間）\n各軸にスコア根拠を1行で記載し、総合スコアと推奨案を最後に示すこと。","output_example":"5軸×3案の比較表と根拠付き推奨案が表形式で出力される","tip":"現状維持を比較対象に含めると「やらない場合のリスク」が自動で可視化される"},{"id":"p020","title":"他工場への情報交換・ベンチマーク依頼メール","app":"Outlook","category":"メール","template":"他工場の電計担当者へベンチマーク情報交換の依頼メールを作成してください。\n宛先工場：[工場名または「○○工場電計グループ」]\n照会したい内容：[例：インバータ保護設定の整定基準 / 計装機器の定期交換サイクル / AI活用の取組み状況]\n自分側の提供情報：[相手にとってメリットになる情報]\n希望する回答形式：[メール返信 / WEB会議30分 / 現地見学]\n期限：[YYYY-MM-DDまでに回答希望]\n件名に照会テーマを含め、相手のメリット（情報交換の相互利益）を冒頭に記載すること。","output_example":"照会テーマと相互メリットを明示した依頼メールの下書き","tip":"「自分側の提供情報」を具体的にするほど、相手にとって価値ある交換提案になる"}];
 
 const m365LicenseData = [
   {"name":"Business Basic","price_jpy":900,"copilot":false,"key":"メール・Teams・SharePoint基本"},
@@ -2672,7 +2539,6 @@ const securityFAQData = [
   {"q":"Copilot for Outlookで取引先へのメール返信を作成してもいい？","a":"社内テナント内での処理のため基本的にOK。ただし生成文には禁止表現（「させていただきます」等）が含まれる場合があるため必ず編集してから送信すること。金額・納期・技術仕様の数値は必ず自分で確認・修正すること。","category":"M365"},
   {"q":"取引先名を出さずにメーカーへの問い合わせメールを作れる？","a":"作れる。「設備メーカーへの問い合わせ」「電気機器メーカー向け」のように抽象化して依頼すればOK。生成後に社名・担当者名・型番等を追記する。金額・納期はプレースホルダーで生成させて自分で記入すること。","category":"外部AI"},
   {"q":"電験3種の勉強にChatGPTを使っていい？","a":"個人の資格学習は業務機密情報を含まないためOK。ただし計算問題の解法はAIが誤答を生成する場合があるため、過去問の公式解答と照合して使うこと。公式・定義の確認・フェインマン式問答には有効。","category":"外部AI"},
-  {"q":"画像生成AIで作った画像を社内資料・SNSに使っていい？","a":"使用には注意が必要。以下の3リスクがある。①著作権：既存作品に類似した画像を公表・販売すると著作権侵害になる可能性。②商標・意匠権：既存ロゴ・デザインに類似した生成物の商用利用は差止・損害賠償の対象になりうる。③パブリシティ権：著名人の氏名・肖像を使った生成物の商用利用は禁止。「◯◯氏の画風で」「◯◯に似たロゴを作って」などの指示は避けること。社内研修資料など非商用・限定利用でも、社外公表前に法務確認を推奨する。","category":"外部AI"},
   {"q":"外部AIで作った文書の著作権はどうなる？","a":"AIが生成したコンテンツの著作権帰属は現時点で法的に不明確。社内文書・稟議・技術資料として使用する場合は「AI生成を素材として担当者が作成」の位置づけで最終的な人間の編集・確認を必ず挟むこと。","category":"外部AI"},
   {"q":"外部AIに過去トラブルの詳細を入力して原因分析してもいい？","a":"設備ID・日時・ライン名・担当者名を除いた「種別レベル」の記述ならOK。固有情報を含む場合はM365 Copilotを使用するか、情報を匿名化してから外部AIに入力すること。","category":"外部AI"}
 ];
@@ -2736,469 +2602,6 @@ function renderSecurityFAQ() {
   }).join('');
   if (typeof lucide !== 'undefined') lucide.createIcons();
 }
-
-const promptLibData = [
-  {id:'pl001',title:'技術調査レポートの作成',tool:'Claude',category:'調査・リサーチ',template:'以下のテーマについて技術調査レポートを作成してください。\nテーマ：[テーマ]\n対象読者：[例：電気計装担当者、製造業マネージャー]\n\n構成：\n①エグゼクティブサマリー（3行以内・結論先）\n②背景と現状（数値・データ付き）\n③主要技術・手法の比較（表形式）\n④製造業での適用可能性と留意点\n⑤推奨アクション（優先度・期限付き）\n\n抽象的な表現は避け、数値・規格番号・具体例で記述すること。',tip:'Claudeは長文分析が得意。事前に参考文献のURLや資料テキストを貼り付けると精度が上がる。',output_example:'目次付きの構造化レポート。比較表と数値根拠が含まれる'},
-  {id:'pl002',title:'会議の議事録要約（汎用）',tool:'汎用',category:'議事録要約',template:'以下の会議メモ・文字起こしを要約してください。\n\n[メモ・文字起こしをここに貼り付け]\n\n出力形式：\n【日時・参加者】\n【決定事項】（番号付き・根拠1文）\n【アクションアイテム】（担当者｜内容｜期限）\n【継続検討事項】（未決の理由）\n【次回確認事項】\n\n「なるべく早く」「できれば」などの曖昧な期限は「[期限要確認]」とプレースホルダーを置くこと。',tip:'文字起こしが長い場合は最初に「この会議の主題は○○です」と補足すると精度が上がる。',output_example:'決定事項・担当者・期限が整理され即共有できる議事録'},
-  {id:'pl003',title:'メール返信の下書き（製造業向け）',tool:'汎用',category:'メール作成',template:'以下のメールへの返信下書きを作成してください。\n\n受信メール：\n[受信メールをここに貼り付け]\n\n返信の方向性：[承諾/断り/情報提供/確認依頼]\n宛先の立場：[例：取引先メーカー、製造課長、上司]\n\n結論を件名と本文冒頭に置き、根拠を添えること。「させていただきます」「ご確認いただけますでしょうか」は使わないこと。回答期限がある場合は日付を明記すること。',tip:'「返信の方向性」を明確にするほど意図に合った文体になる。断りの場合は代替案も伝えると関係が壊れにくい。',output_example:'件名に結論が入り、本文が結論→根拠→次アクションの順で構成されたメール'},
-  {id:'pl004',title:'設備トラブル原因分析（ブレスト）',tool:'Claude',category:'ブレスト',template:'以下の設備トラブルについて、原因仮説をブレストしてください。\n\n設備種別：[例：インバータ系動力ライン、圧力センサー]\n現象：[何が起きているか]\n発生条件：[いつ・どういう状況で]\n既に確認したこと：[実施済みの確認]\n\n原因仮説を可能性の高い順に8〜10個リストアップし、各仮説に①確認方法②必要な測定器・手順③優先度（高/中/低）を付けること。\n既知のアンチパターン（ノイズ・劣化・電源品質等）も考慮すること。',tip:'「既に確認したこと」を詳しく書くほど仮説の重複が減り有益なアイデアが出る。FACTORY.mdの既知パターンと照合すること。',output_example:'原因仮説8〜10件が優先度・確認手順付きでリスト化される'},
-  {id:'pl005',title:'Pythonデータ分析スクリプト生成',tool:'ChatGPT',category:'コード生成',template:'以下の要件でPythonデータ分析スクリプトを生成してください。\n\nデータ形式：[CSV/Excel、カラム名：列1, 列2, ...]\n分析したいこと：[例：月別電力消費量の推移、設備別トラブル件数集計]\n出力：[グラフ/CSV/印刷]\nライブラリ制約：[例：pandas/matplotlib のみ、社内環境でインストール済み]\n\n要件：\n- コードにコメントを日本語で記述\n- エラーハンドリングを含める\n- ファイルパスは変数で先頭に定義',tip:'「ライブラリ制約」に社内環境の制約を書くと実行できないコードが生成されるリスクが減る。',output_example:'実行可能なPythonスクリプト（コメント付き）とグラフのイメージ説明'},
-  {id:'pl006',title:'報告書の結論先変換',tool:'汎用',category:'報告書作成',template:'以下の文章を「結論先・根拠後」の構造に書き直してください。\n\n[現在の文章をここに貼り付け]\n\n変換ルール：\n① 最初の1〜2文に「結論（何をすべきか・何が判明したか）」を置く\n② 根拠・背景・詳細はその後に続ける\n③ 「させていただきます」→「します」\n④ 「なるべく早く」→「[日付]までに」\n⑤ 体言止め・箇条書きを優先\n\n対象読者：[上司/部下/製造課/社外]',tip:'「対象読者」を指定するとトーンと詳細度が最適化される。社外向けは敬語レベルを指定すること。',output_example:'冒頭に結論が来る構造化された文章。禁止表現がすべて代替表現に変換される'},
-  {id:'pl007',title:'競合・選択肢の比較分析',tool:'Claude',category:'調査・リサーチ',template:'以下の選択肢を多角的に比較分析してください。\n\n比較対象：[選択肢A / 選択肢B / 選択肢C]\n判断基準：[例：コスト、保全性、信頼性、拡張性、安全性]\n文脈：[例：製造ライン用センサーの選定、AIツールの導入検討]\n\n出力形式：\n① 比較マトリクス表（評価軸×選択肢、5段階スコア付き）\n② 各選択肢の強み・弱みの要約（2〜3点ずつ）\n③ 推奨選択肢と根拠（条件付きの場合はその条件を明記）\n④ 意思決定を保留にすべき条件（追加情報が必要なケース）',tip:'「判断基準」に重みをつけて入力すると（例：コスト:3、安全:5）重み付きスコアが出力される。',output_example:'5軸比較マトリクスと推奨選択肢の根拠、留保条件が整理される'},
-  {id:'pl008',title:'会議アジェンダの設計',tool:'汎用',category:'議事録要約',template:'以下の目的で会議アジェンダを設計してください。\n\n会議目的：[何を決めるか・何を共有するか]\n参加者：[役職・人数]\n制限時間：[分]\n事前情報として参加者が知っていること：[情報]\n\n各議題に以下を付与すること：\n- 所要時間（分）\n- 議題の種類（決定/情報共有/議論）\n- 担当ファシリテーター\n- 期待するアウトプット（具体的な成果物や合意事項）\n\n会議が脱線しやすいポイントと対処法も最後に追記すること。',tip:'「参加者の立場・関心」を補足すると議題の優先順位付けが最適化される。',output_example:'時間・担当・種類・期待アウトプット付きの構造化アジェンダ'},
-  {id:'pl009',title:'技術文書の英訳（製造業向け）',tool:'ChatGPT',category:'翻訳・校正',template:'以下の技術文書を英訳してください。\n\n[日本語テキストをここに貼り付け]\n\n要件：\n- 製造業・電気計装の技術文書として適切な専門用語を使用\n- JIS/IEC規格の用語は国際標準の英語表記を優先\n- 曖昧な日本語表現は文脈から判断して明確な英語に変換\n- 固有名詞・型番・数値はそのまま保持\n\n翻訳後に「判断が必要な箇所」（意味が複数解釈できる表現）をリストアップすること。',tip:'「JIS/IEC規格用語を優先」と明示すると専門用語の精度が上がる。判断が分かれる箇所を確認できる点が便利。',output_example:'専門用語を正確に使用した英訳文と、意味が曖昧だった箇所のリスト'},
-  {id:'pl010',title:'リスクアセスメントのブレスト',tool:'Claude',category:'ブレスト',template:'以下の変更・作業に関するリスクをブレストしてください。\n\n変更・作業内容：[内容]\n実施環境：[例：防爆エリア、高圧設備、製造ライン稼働中]\n\nリスクを以下のカテゴリで洗い出し、各リスクに①発生可能性（高/中/低）②影響度（高/中/低）③現在の対策④追加推奨対策を付けること：\n\n- 安全リスク（人身・防爆・感電）\n- 設備リスク（停止・故障・品質影響）\n- 作業リスク（ヒューマンエラー・手順漏れ）\n- コンプライアンスリスク（法令・規格）\n\n「最も見落とされやすいリスク」を最後に1つ指摘すること。',tip:'実施環境の具体的な条件（防爆エリア・高圧・稼働中等）を明示すると製造業特有のリスクが多く出る。',output_example:'カテゴリ別リスクマトリクスと見落とされやすいリスクの指摘'},
-  {id:'pl011',title:'SQLクエリ生成（設備データ分析）',tool:'ChatGPT',category:'コード生成',template:'以下の要件でSQLクエリを生成してください。\n\nテーブル構成：\n- テーブル名: [テーブル名]\n- カラム: [カラム名と型の一覧]\n\n取得したいデータ：[例：設備種別ごとの月次トラブル件数、停止時間の合計]\n\n条件：[例：過去12ヶ月、設備種別=「インバータ」]\n\n要件：\n- コメントを日本語で記述\n- NULLの扱いを明示\n- 実行速度を考慮したインデックス提案も含める',tip:'テーブルのカラム名・型を正確に入力するほど精度が上がる。コメント付き出力でチームメンバーが理解しやすくなる。',output_example:'コメント付きSQLクエリとインデックス最適化の提案'},
-  {id:'pl012',title:'Excelマクロ（VBA）生成',tool:'ChatGPT',category:'コード生成',template:'以下の作業を自動化するExcel VBAマクロを作成してください。\n\n自動化したい作業：[例：複数シートのデータを1枚に集約、フィルターした結果をCSVに出力]\n現在のシート構成：[シート名・データ配置の説明]\n\n要件：\n- コードにコメントを日本語で記述\n- エラー発生時にメッセージボックスで通知\n- 処理前に確認ダイアログを表示\n- 変数宣言を明示（Option Explicit）',tip:'「現在のシート構成」を具体的に書くほど動作するコードが生成される。VBAは生成後に必ずテスト環境で確認すること。',output_example:'Option Explicit付き・コメント入り・エラーハンドリングを含むVBAコード'},
-  {id:'pl013',title:'論文・技術記事の要約',tool:'Gemini',category:'調査・リサーチ',template:'以下の論文・技術記事を要約してください。\n\n[テキストまたはURLをここに貼り付け]\n\n要約形式：\n① タイトル・著者・発行年\n② 研究目的・背景（2〜3文）\n③ 手法の概要\n④ 主な結論・成果（数値付き）\n⑤ 製造業・電気計装分野への適用可能性\n⑥ 限界・注意点\n\n専門用語は略さず、数値・単位を保持すること。',tip:'GeminiはPDF/URLを直接読み込める。URLを渡すだけで最新論文の要約が得られる。',output_example:'6項目構成の構造化要約。数値・適用可能性の評価付き'},
-  {id:'pl014',title:'文章の校正・読みやすさ改善',tool:'汎用',category:'翻訳・校正',template:'以下の文章を校正し、読みやすく改善してください。\n\n[文章をここに貼り付け]\n\n修正方針：\n① 誤字・脱字の修正\n② 一文が長い箇所（40字超）を分割\n③ 受け身表現→能動態に変換\n④ 重複表現の削除\n⑤ 数値の表記統一（漢数字↔算用数字）\n\n修正前後を対比表示し、修正理由を簡潔に記載すること。「大幅に書き換えた箇所」はその旨を明示すること。',tip:'「修正前後の対比」を要求することで自分が意図した内容と違う修正を発見しやすくなる。',output_example:'修正前後の対比と修正理由リスト'},
-  {id:'pl015',title:'設備投資稟議の背景・根拠整理',tool:'Claude',category:'報告書作成',template:'以下の設備投資案件について、稟議書の「背景・根拠」セクションを整理してください。\n\n設備種別：[設備種別]\n更新・導入の理由：[箇条書きで入力]\n現状の課題（数値付き）：[例：故障件数月X件、停止時間年Xh]\n投資しない場合のリスク：[リスクの内容]\n\n出力：\n① 現状の問題点（数値根拠付き、3点以内）\n② 更新の必要性（法的・安全・経済的観点から）\n③ 投資しない場合のリスクシナリオ（最悪ケース・確率付き）\n④ 判断期限と理由\n\n感情的な訴えを避け、データと論理で経営層を説得する文体で。',tip:'「現状の課題に数値を付ける」のがポイント。「故障が多い」ではなく「月X件・停止時間年Xh・機会損失XXX万円」と入力すること。',output_example:'数値根拠と投資しない場合のリスクシナリオが明確な稟議背景セクション'},
-  {id:'pl016',title:'データ分析結果の経営向け説明文',tool:'汎用',category:'報告書作成',template:'以下のデータ分析結果を経営層向けに説明する文章を作成してください。
-
-分析内容：[分析内容や数値]
-目的：[何を決めたいか・何を伝えたいか]
-
-出力形式：
-① 結論（1行・数値入り）
-② 要因（3点以内・各箇所に数値）
-③ 推奨アクション（投資額・期間・効果予測）
-④ リスクと対策（最悪ケース・確率）
-
-技術用語は最小限にし、経歴年数が少ない役員にも伝わる表現で。',tip:'「説明対象の技術理解レベル」を指定するとより適切な抽象度になる。「技術細部は別添」と併記すると本文が簡潔にまとまる。',output_example:'結論先・数値根拠・推奨アクションが整理された1ページ説明文'},
-  {id:'pl017',title:'設備保全手順書のドラフト作成',tool:'Claude',category:'報告書作成',template:'以下の作業に対する保全手順書のドラフトを作成してください。
-
-設備種別：[設備種別]
-作業内容：[作業内容]
-作業環境：[例：高圧エリア・防爆エリア・通常環境]
-特記事項：[制限事項・注意点]
-
-必須セクション：
-① 作業前確認事項（停電・検電・接地・防爆設備等）
-② 必要工具・資材リスト
-③ 作業手順（ステップ番号・担当・時間の目安）
-④ 安全チェックリスト（作業中・作業後）
-⑤ 異常発生時の対処手順
-
-実際に現場レベルの担当者が単独で実施できる内容で作成すること。',tip:'FACTORY.mdの設計制約セクションを参照して作業環境を記入すると現場固有の安全要件が組み込まれる。',output_example:'安全チェックリスト・手順・異常対応が整理された保全手順書ドラフト'},
-  {id:'pl018',title:'トラブル報告書（履歴記録用）の整形',tool:'汎用',category:'報告書作成',template:'以下のトラブル内容を履歴記録に残せる構造化トラブル報告書に整形してください。
-
-[メモ・口頭説明をここに貼り付け]
-
-出力形式：
-【発生日時】
-【設備種別】
-【現象】（五感で観察した事実のみ）
-【推定原因】（確認済・仮説区別を明記）
-【処置・対応内容】
-【再発防止策】
-【影響範囲】（停止時間・影響ライン数）
-
-履歴データになるため冗長な表現・のっている説明は突き放すこと。',tip:'「五感で観察した事実のみ」と「仮説」を分けることが重要。後日の分析で原因紐い込みを防ぐ。',output_example:'現象・推定原因・対応・影響範囲が整理された構造化トラブル記録'},
-  {id:'pl019',title:'技術研修の内容計画書作成',tool:'Gemini',category:'議事録要約',template:'以下の条件で技術研修の内容計画書ドラフトを作成してください。
-
-対象者：[例：電気計装担当・団長指導職1年目]
-研修目的：[何をできるようになるか]
-研修期間：[時間／回数]
-
-必須セクション：
-① 研修目標（行動変容定義）
-② カリキュラム設計（テーマ・日数・形式）
-③ 実践課題（現場で実施するコンテンツ）
-④ 理解度確認方法（テスト・レポート・巡察）
-⑤ 完了基準（評価指標）
-
-導入後3ヶ月で成果が確認できる内容で設計すること。',tip:'「行動変容定義」を最初に書くことで評価指標が明確になる。「知識の習得」でなく「現場でできること」で目標を定義すると良い。',output_example:'目標・カリキュラム・完了基準が展開された研修計画書ドラフト'},
-  {id:'pl020',title:'AI活用効果のROI計算テンプレート',tool:'汎用',category:'報告書作成',template:'以下のAI活用についてROI計算と導入根拠資料を作成してください。
-
-活用内容：[活用内容]
-対象業務：[業務名・現在の作業時間]
-対象人数：[人数]
-導入コスト：[ツール費用・導入工数]
-
-出力形式：
-① 現在工数小計（人・時間・年間工数換算×単価円）
-② AI導入後の工数加減小計（削減率の根拠を示す）
-③ 年間コスト削減額
-④ 投資回収期間（月数）
-⑤ 数値化できない価値（品質向上・ミス島騒減・属人極少化）
-
-保守的な削減率（40%）と楽観的な削減率（70%）の2ケースを並列表示すること。',tip:'「工数×単価×年間回数」の計算式を先に入力すると、楽観・保守の2ケースが自動生成される。このROIサマリータブの数値と照合すること。',output_example:'保守・楽観の2ケースROI表と投資回収期間の比較'},
-  {id:'pl021',title:'応募要領書・仕様書のドラフト作成',tool:'Claude',category:'報告書作成',template:'以下の設備・サービスに対する応募要領書（設備仕様書）ドラフトを作成してください。
-
-設備種別：[設備種別]
-用途・設置環境：[用途・環境条件]
-必須機能：[機能要件箇条書き]
-制約・既存機器との互換性：[制約]
-
-出力形式：
-① 実績用急要件一覧
-② 実績用希望要件一覧
-③ 除外要件（非機能要件）
-④ 評価基準項目一覧
-
-ベンダー名・型番の断定推薦はしないこと。仕様要件の展開のみ。',tip:'「除外要件」を明示することで見積もり慶遠や機能過小設計を防ぐ。必須・希望の2段階分類が、交渉指示に役立つ。',output_example:'必須要件・希望要件・除外要件・評価基準が分類された応募要領書'},
-  {id:'pl022',title:'社内プレゼン資料の構成案生成',tool:'Gemini',category:'ブレスト',template:'以下のプレゼンについて、聴衆者が理解・賛成しやすい構成案を生成してください。
-
-プレゼン目的：[何を承認・決定してほしいか]
-聴衆者：[役職・人数・技術レベル]
-利用可能時間：[分钟]
-伝えたいメッセージ：[これだけ記憶してほしいこと]
-
-各スライドに必要な要素を配置し、補辺スライドの機能（ダイアグラム・表・グラフ）の提案も含めること。',tip:'GeminiはGoogleスライド込みができる。構成案生成後に「ダイアグラムやグラフの内容もみて」と続けるとシームレスに資料作成まで進める。',output_example:'スライド構成案（タイトル・要素・煽れ栄山付き）と補辺コンテンツの提案'},
-  {id:'pl023',title:'テキストから表・データの抽出',tool:'ChatGPT',category:'データ分析',template:'以下のテキストから指定のデータを抽出して表形式に変換してください。
-
-[テキストをここに貼り付け]
-
-抽出したい項目：[例：設備名・発生日時・現象・対応内容・停止時間]
-
-出力：マークダウン表形式（ヘッダーは指定項目を使用）
-抽出できない項目は「[情報なし]」と入力すること。',tip:'ChatGPTは構造化データ抽出が得意。CSVにそのまま貼り込める表形式で出力させるとExcel従業に使いやすい。',output_example:'指定項目カラムのマークダウン表。情報なしのセルは明記'},
-  {id:'pl024',title:'アンケート・調査設計',tool:'Gemini',category:'データ分析',template:'以下の目的で社内アンケートを設計してください。
-
-目的：[例：AI活用の障壁要因調査・設備保全ニーズ把握]
-対象者：[人数・層別・分析単位]
-工数：[測定想定工数]
-
-設計要件：
-① 設問10件以内（応答率を下げないため）
-② 選択式と記述式を適切に使い分ける
-③ 分析しやすい形式（5段階リッカート・複数選択・自由記述の組み合わせ）
-④ 注意事項（誘導小・二重否定回避）
-
-設問文と選択肢の全文も作成すること。',tip:'設問数を「10件以内」と制限することで応答率が上がる。分析グラフの形式も指定するとExcel集計が楽になる。',output_example:'設問文・選択肢・分析法が展開されたアンケート設計'},
-  {id:'pl025',title:'複雑な問題をステップ分解して解決する',tool:'Claude',category:'ブレスト',template:'以下の問題を解決するため、ステップバイステップで考えてください。
-
-問題：[問題の記述]
-
-分解手順：
-① 問題を「本当の問題」と「表面的な現象」に分く
-② 複数の解決アプローチを列挙（3案以上）
-③ 各アプローチのトレードオフ評価（実行可能性・コスト・効果）
-④ 推奨アプローチと根拠
-⑤ 実行に必要な情報・連絡先・期限
-
-最後に「決定する前に確認すべき事項」を列挙すること。',tip:'問題を貼り付ける前に「自分は何を決めたいか」を一行先入力すると、推奨アプローチの精度が大幅に上がる。',output_example:'問題構造・解決案3案・推奨案・次アクションの流れ'},
-  {id:'pl026',title:'新技術導入の務実性評価',tool:'Claude',category:'調査・リサーチ',template:'以下の新技術・ツールの導入判断に必要な務実性評価を行ってください。
-
-技術・ツール名：[名称]
-導入目的：[目的]
-導入環境：[例：製造業・電気計装部門・社内承認フローあり]
-
-評価軸：
-① 技術成熟度（導入事例数・商用サポート安定性）
-② 導入起再規制リスク（法規・認証・データポリシーの観点）
-③ 既存システムとの相容性（農連携・API・データフロー）
-④ かけるコストと期待効果の比（ROIコメント）
-⑤ 猛点・代替案との比較
-
-最後に「導入するべきタイミングと条件」を展開すること。',tip:'「導入環境」に社内承認フロー・ステークホルダーの情報を入れるとより実践的な評価になる。',output_example:'5軸評価・猛点整理・導入タイミングと条件展開'},
-  {id:'pl027',title:'メールベースのチーム展開向け文章',tool:'汎用',category:'メール作成',template:'以下の内容をチーム展開用のメール文章に整形してください。
-
-内容：[内容を箇条書きで入力]
-展開スコープ：[例：電計チーム4名・全工場当該業務品質管理担当者]
-番号：[第1弾・円内展開・定期配信]
-
-件名は「結論」で始まること。本文は①共有目的②内容概要③行動依頼事項の3機能のみ。「かわいい」「っていいですね」の不要。',tip:'「展開スコープ」を指定することで経由不明なチーム展開メールが防ぐ。番号指定は定期配信の追跡に役立つ。',output_example:'結論件名・しっかり本文・行動依頼を含むチーム展開メール'},
-  {id:'pl028',title:'識別・認識差異の分析',tool:'ChatGPT',category:'データ分析',template:'以下の2つの資料・書面の識別・認識差異を分析してください。
-
-資料A：[資料A]
-資料B：[資料B]
-
-出力形式：
-① 共通項目（イコイコ図イメージ）
-② Aのみに存在する内容
-③ Bのみに存在する内容
-④ 最も重要な相違点・競番3位（対峙表形式）
-⑤ まとめ：どちらを採用すべきか・両者を組み合わせる法はあるか',tip:'仕立様書・設計案の2案比較、全社と他社のアプローチ比較など、「どちらも正しい可能性がある」時に特に有効。',output_example:'共通・相違・採用推奨が対峙構造で整理された差異分析'},
-  {id:'pl029',title:'問題の原因特定（なぜなぜ5回支援）',tool:'汎用',category:'ブレスト',template:'以下の問題の真の原因を「なぜなぜ5回」で特定する手助けをしてください。
-
-問題：[問題を具体的に記述]
-和右界情報：[尋などすでに検証したこと]
-
-手順：
-① 現象の直接原因（第1なぜ）を提示
-② その原因の原因（第2なぜ）をあなたが訴える形式で辺りる質問をしてくる
-③ 近件が判明したら第3・4・5なぜを順に深掘りする
-④ 5回目対答後に「今回の対策と根本対策の違い」を整理する
-
-進行が止まったら機械・規制・組織といった切り口を窺める窓を掘り込む目を経ること。',tip:'1回のチャットで全部完結させず、「第1なぜは？」と問うだけに留めて対話形式で進めると深い洗い出しができる。',output_example:'層次化された原因特定ツリーと根本対策の対比'},
-  {id:'pl030',title:'OJTプラン・育成計画のドラフト',tool:'Claude',category:'調査・リサーチ',template:'以下の条件でOJTプラン・育成計画のドラフトを作成してください。
-
-対象者：[層別・小将困スキル]
-目標達成期限：[対象期間]
-業務内容：[業務内容簡要]
-
-必須セクション：
-① 現状診断（できること・できないこと）
-② 月別目標（行動変容で定義）
-③ OJTタスク一覧（タスク・期間・確認方法）
-④ マイルストーン（中間チェックポイント）
-⑤ フィードバックのタイミングと形式
-
-評価者負担が大きくならないよう、タスク自体に完了条件を内包する設計にすること。',tip:'「小将困スキル」を正直に入力すると現実的なステップになる。「6ヶ月で独り立ち」は目標でなく、「3ヶ月で単独検点実施」のように行動ベースに落とすこと。',output_example:'現状診断・月別目標・タスク一覧・マイルストーンが展開されたOJTプラン'},
-  {id:'pl031',title:'品質インシデントの根本原因分析（製造業）',tool:'Claude',category:'報告書作成',template:'以下の品質インシデント・ヒヤリハットについて、根本原因分析レポートを作成してください。
-
-[事故・インシデントの概要をここに記述]
-
-出力形式：
-① 直接原因（5M：Man/Machine/Material/Method/Measurementで分類）
-② 根本原因（なぜその直接原因が発生したか）
-③ 重大度評価（人身・設備・品質・法規コンプライアンスの4軸で高/中/低）
-④ 対策案リスト（即時対策・中期対策・根本対策を分けて）
-⑤ 各対策の担当部署・完了期限・効果確認方法
-
-「推測」と「確認済み事実」を明確に区別して記述すること。',tip:'「直接原因」と「根本原因」を分けることが品質管理の核心。直接原因の対策だけでは再発防止にならない。「なぜその状況が生まれたか」まで掘り下げること。',output_example:'5M分類による直接原因・根本原因・3段階対策・KPI付き根本原因分析レポート'},
-  {id:'pl032',title:'特許情報の要約・比較テンプレート',tool:'Copilot',category:'調査・リサーチ',template:'以下の特許について要約を作成してください。
-
-[特許PDFまたはテキストをここに貼り付け]
-
-要約形式：
-① 基本情報（出願番号・出願日・発明の名称・出願人）
-② 技術情報
-　- 発明が解決しようとした課題
-　- 解決手段の概要
-　- 請求項（クレーム）の主要範囲
-③ 先行技術との差異点（新規性・進歩性のポイント）
-④ 自社業務への適用可能性評価（高/中/低・理由）
-
-複数特許を比較する場合は「2つのファイルを比較し、類似点・相違点を表形式で整理」と指示を追加すること。',tip:'英文特許の場合は「日本語で要約してください」を冒頭に追加。「請求項の範囲」は法的解釈が必要な部分もあるため、重要案件は知財担当の確認を経ること。',output_example:'統一フォーマットの特許要約と複数特許比較表（類似点・相違点・自社への適用評価）'},
-  {id:'pl033',title:'SPC管理図の作成依頼（Excel Copilot）',tool:'Copilot',category:'データ分析',template:'以下の手順でExcel CopilotにSPC管理図の作成を依頼してください。
-
-ステップ①：管理限界値の計算
-「[測定値列名]をもとに管理限界値（UCL：上方管理限界・LCL：下方管理限界・CL：中心線）を計算し、新しい列に追加してください」
-
-ステップ②：SPCチャートの作成
-「[測定値列名]の折れ線グラフを作成し、UCL・LCL・CLの横線を追加してください。管理限界値は[UCL列名]と[LCL列名]の値を使用してください」
-
-ステップ③（任意）：異常点の強調
-「管理限界を外れたデータポイントを赤でマークする条件付き書式を追加してください」',tip:'2段階に分けて依頼するのがコツ。まず管理限界値列を作成させてから、それを参照してグラフ化する。Excel Copilot with Pythonは2025年1月時点で英語環境のみ。日本語環境ではステップ①②の基本機能を使う。',output_example:'UCL/LCL/CL付きSPC折れ線グラフと管理限界値列が追加されたExcelシート'}
-];
-
-// ===== ANTI-PATTERNS DATA =====
-const antiPatternsData = [
-  {id:'ap001',title:'機密情報をそのまま外部AIに貼り付ける',category:'セキュリティ事故',severity:'高',icon:'🔴',symptom:'設備ID・取引先名・見積金額を含む資料をChatGPT/Claudeに入力し、情報が社外サーバーに送信される',cause:'「ChatGPTは便利だから」と業務データを深く考えずに貼り付けてしまう。無料版は学習データとして利用される可能性がある',solution:'外部AIには匿名化・抽象化した情報のみ入力。機密情報はM365 Copilot（テナント内処理）を使用。セキュリティタブの「NG入力」リストを事前確認'},
-  {id:'ap002',title:'AIが生成した技術数値をそのまま使用',category:'ハルシネーション',severity:'高',icon:'⚠️',symptom:'接地抵抗値・絶縁抵抗判定基準・保護協調設定値をAIが生成した数値のまま設計書や稟議書に記載する',cause:'AIは確率的に「もっともらしい数値」を生成する。正しい規格値であることとは無関係。特に電技解釈の条文数値は誤生成リスクが高い',solution:'技術数値は必ず電技解釈・JIS・IEC原文で確認。AIは「どの規格を参照すべきか」の案内役として使い、数値判断は人間が行う'},
-  {id:'ap003',title:'防爆規格・安全規格の判断をAIに委ねる',category:'ハルシネーション',severity:'高',icon:'🔥',symptom:'「この機器は防爆Zone1に設置できますか？」「この作業は特別教育が必要ですか？」をAIに聞いてそのまま従う',cause:'AIは法規制・安全規格の適用判断を正確に行えない。製品の最新認定状況・工場固有の危険区域区分はAIのトレーニングデータに含まれない',solution:'防爆・安全規格の適用判断は電気主任技術者・保安担当が実施。AIは「関連する規格・条文を探す補助」としてのみ使用する'},
-  {id:'ap004',title:'プロンプトが曖昧で望む出力が得られない',category:'プロンプト設計ミス',severity:'中',icon:'📝',symptom:'「この設備の資料を作って」「報告書をまとめて」と入力するが、トーン・構成・対象読者が全く違う出力になる',cause:'AIは文脈が不足すると「平均的な出力」を生成する。「誰向けに・何の目的で・どんな構成で」が指定されないと外れる',solution:'プロンプトに①対象読者②目的・用途③構成の指定④禁止表現・制約の4要素を含める。このデータベースのプロンプトテンプレートを参考にする'},
-  {id:'ap005',title:'AIの出力を編集せずにそのまま提出',category:'プロンプト設計ミス',severity:'中',icon:'📄',symptom:'Copilotが生成したメール・報告書をレビューなしで送信・提出する。禁止表現や数値ミスが含まれている',cause:'「AIが作ったから正しい」という思い込み。AIは数値・日付・固有名詞を誤生成することがある',solution:'AI生成物は必ず人間がレビュー。特に数値・期限・相手の名前・法規制関連の記述は一次情報で確認する'},
-  {id:'ap006',title:'ChatGPTを業務全体に導入してルール整備なし',category:'組織・運用ミス',severity:'中',icon:'🏢',symptom:'各自が個人アカウントで外部AIを使い始め、入力情報のセキュリティルールが存在しない状態になる',cause:'現場の自発的な活用を止めたくないあまり、ルール整備が後回しになる。「まず使ってみよう」フェーズが長期化する',solution:'最低限の利用ガイドライン（NG入力リスト・推奨ツール・承認フロー）を先に整備。このデータベースのセキュリティタブを社内ルールのベースとして活用'},
-  {id:'ap007',title:'「AIに全部やらせる」期待値で導入する',category:'期待値ミスマッチ',severity:'中',icon:'🎯',symptom:'「AIを入れれば業務が自動化される」と経営層・現場に伝えて導入したが、実際には人間のレビューが必要で期待外れになる',cause:'生成AIは「補助・加速ツール」であり「完全自動化ツール」ではない。特に製造業では最終判断に人間が必要なケースが多い',solution:'導入前に「AIが得意なこと（初稿生成・検索・要約）」と「人間が必要なこと（数値確認・安全判断・責任の所在）」を明確に伝える'},
-  {id:'ap008',title:'設備仕様をAIが生成した内容で設計する',category:'ハルシネーション',severity:'高',icon:'⚙️',symptom:'「この用途に適したPLCの仕様を教えて」とAIに聞き、生成された仕様要件をそのまま調達仕様書に記載する',cause:'AIは一般的なベストプラクティスを出力するが、工場固有の環境条件（防爆・温度・振動・既存システムとの互換性）を考慮できない',solution:'AIは「仕様要件のひな形・チェックリスト生成」に使用し、工場固有条件の織り込みは担当エンジニアが行う。FACTORY.mdの設計制約と必ず照合する'},
-  {id:'ap009',title:'AI活用の効果測定をしない',category:'組織・運用ミス',severity:'低',icon:'📊',symptom:'AIツールを導入したが「なんとなく便利」で終わり、経営層への報告や次のステップにつながらない',cause:'時間削減効果を事前に計測せず、Before/After比較ができない状態で導入する',solution:'導入前に「現在の作業時間」を計測・記録。導入後3ヶ月で効果を数値化してレポート。このデータベースのROIサマリーを参考に測定項目を設定する'},
-  {id:'ap010',title:'ベテランの暗黙知がAIに奪われる恐怖感',category:'期待値ミスマッチ',severity:'低',icon:'👥',symptom:'ベテラン担当者が「自分の知識がAIに代替される」と感じてAI活用に抵抗を示す。チーム内に温度差が生まれる',cause:'AI導入のコミュニケーションが「効率化・削減」のメッセージになっており、ベテランを脅かす表現になっている',solution:'フレーミングを「AIに教える役割がベテラン」に転換。ベテランの知識をプロンプト設計・AI監視・品質確認に活かす形で役割を再定義する'},
-  {id:'ap011',title:'ハルシネーションを見抜けず法令違反資料を作成',category:'ハルシネーション',severity:'高',icon:'📋',symptom:'「電気事業法の自家用電気工作物の定義」をAIに聞き、誤った内容（電圧の閾値違い等）が含まれた資料を社外に提出する',cause:'法令の細かい数値・条件はAIが誤生成しやすい。特に改正された条文は古い内容を出力することがある',solution:'法令・規格の数値は必ず電気事業法・電技解釈・消防法の原文で確認。AIには「どの条文を見ればいいか」を聞く使い方に留める'},
-  {id:'ap012',title:'AI生成コードを検証なしに本番システムで実行',category:'セキュリティ事故',severity:'高',icon:'💻',symptom:'ChatGPTが生成したPythonスクリプト・VBAマクロを設備データシステムで直接実行し、データ破損や予期しない動作が発生する',cause:'AIのコードは「動きそうに見える」が、実際のデータ構造・例外処理・セキュリティ考慮が不十分なことがある',solution:'AI生成コードは必ずテスト環境で動作確認。本番実行前にコードレビューを実施。設備制御システムへのコード適用は情報システム部門の承認を得る'}
-];
-
-// ===== PROMPT LIB STATE =====
-const plibState = { tool: 'all', cat: 'all' };
-let apCurrentFilter = 'all';
-
-function setPlibFilter(type, val, btn) {
-  plibState[type] = val;
-  const containerId = type === 'tool' ? 'plib-tool-filters' : 'plib-cat-filters';
-  document.querySelectorAll('#' + containerId + ' .filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderPromptLib();
-}
-
-function setApFilter(val, btn) {
-  apCurrentFilter = val;
-  document.querySelectorAll('#ap-cat-filters .filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAntiPatterns();
-}
-
-function renderPromptLib() {
-  const q = normalizeSearch(document.getElementById('plib-search').value);
-  const filtered = promptLibData.filter(p => {
-    const matchTool = plibState.tool === 'all' || p.tool === plibState.tool;
-    const matchCat  = plibState.cat  === 'all' || p.category === plibState.cat;
-    const matchQ    = !q || normalizeSearch(p.title).includes(q) || normalizeSearch(p.category).includes(q) || normalizeSearch(p.tip).includes(q);
-    return matchTool && matchCat && matchQ;
-  });
-  const grid = document.getElementById('plib-grid');
-  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">該当するテンプレートがありません</div>'; return; }
-  const toolTagClass = {'Claude':'tool-tag-claude','ChatGPT':'tool-tag-chatgpt','Gemini':'tool-tag-gemini','汎用':'tool-tag-generic'};
-  const catColors = {'メール作成':'badge-purple','議事録要約':'badge-blue','報告書作成':'badge-green','データ分析':'badge-yellow','コード生成':'badge-orange','ブレスト':'badge-muted','調査・リサーチ':'badge-blue','翻訳・校正':'badge-muted'};
-  grid.innerHTML = filtered.map(p => `
-    <div class="prompt-lib-card">
-      <div class="prompt-lib-header">
-        <div class="prompt-lib-title">${p.title}</div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-          <span class="tool-tag ${toolTagClass[p.tool]||'tool-tag-generic'}">${p.tool}</span>
-          <button class="m365-copy-btn" onclick="copyPlibPrompt(this,'${p.id}')">
-            <i data-lucide="clipboard"></i> コピー
-          </button>
-        </div>
-      </div>
-      <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap;margin-bottom:var(--sp-3)">
-        <span class="badge ${catColors[p.category]||'badge-muted'}">${p.category}</span>
-      </div>
-      <div class="m365-prompt-template" id="plib-tmpl-${p.id}">${escapeHtml(p.template)}</div>
-      <div class="m365-output-box"><strong>出力イメージ:</strong> ${p.output_example}</div>
-      <div class="m365-tip-box">${p.tip}</div>
-    </div>
-  `).join('');
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-}
-
-function copyPlibPrompt(btn, id) {
-  const tmpl = promptLibData.find(p => p.id === id);
-  if (!tmpl) return;
-  navigator.clipboard.writeText(tmpl.template).then(() => {
-    btn.classList.add('copied');
-    btn.innerHTML = '<i data-lucide="check"></i> コピーしました！';
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = '<i data-lucide="clipboard"></i> コピー';
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    }, 2000);
-  });
-}
-
-function renderAntiPatterns() {
-  const filtered = apCurrentFilter === 'all' ? antiPatternsData : antiPatternsData.filter(a => a.category === apCurrentFilter);
-  const grid = document.getElementById('ap-grid');
-  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">該当するパターンがありません</div>'; return; }
-  const sevClass = {'高':'antipattern-severity-high','中':'antipattern-severity-mid','低':'antipattern-severity-low'};
-  const sevBadge = {'高':'<span class="badge" style="background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.3)">深刻度: 高</span>','中':'<span class="badge" style="background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.3)">深刻度: 中</span>','低':'<span class="badge" style="background:rgba(100,116,139,0.2);color:#94a3b8;border:1px solid rgba(100,116,139,0.3)">深刻度: 低</span>'};
-  const catColor = {'セキュリティ事故':'#f87171','ハルシネーション':'#fbbf24','プロンプト設計ミス':'#38bdf8','組織・運用ミス':'#a78bfa','期待値ミスマッチ':'#4ade80'};
-  grid.innerHTML = filtered.map(a => {
-    const col = catColor[a.category] || '#64748b';
-    return `
-    <div class="antipattern-card ${sevClass[a.severity]||'antipattern-severity-low'}" onclick="toggleAccordion(this.querySelector('.antipattern-header'))">
-      <div class="antipattern-header">
-        <div class="antipattern-icon">${a.icon}</div>
-        <div style="flex:1">
-          <div class="antipattern-title">${a.title}</div>
-          <div style="display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;margin-top:4px">
-            <span style="font-size:0.75rem;background:${col}22;color:${col};border:1px solid ${col}44;border-radius:3px;padding:1px 6px">${a.category}</span>
-            ${sevBadge[a.severity]||''}
-          </div>
-        </div>
-      </div>
-      <div class="accordion-content">
-        <div class="symptom-box"><strong>症状:</strong> ${a.symptom}</div>
-        <div class="cause-box"><strong>なぜ起きるか:</strong> ${a.cause}</div>
-        <div class="solution-box"><strong>対策:</strong> ${a.solution}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ===== ROI SUMMARY =====
-function renderROISummary() {
-  const kpiGrid = document.getElementById('roi-kpi-grid');
-  const toolBars = document.getElementById('roi-tool-bars');
-  const typeBars = document.getElementById('roi-type-bars');
-  if (!kpiGrid || !casesData.length) return;
-
-  // 件数
-  const total = casesData.length;
-  const byDiff = {'低':0,'中':0,'高':0};
-  casesData.forEach(c => { if (byDiff[c.difficulty] !== undefined) byDiff[c.difficulty]++; });
-
-  // 効果数値の抽出（%削減数値）
-  const reductions = [];
-  casesData.forEach(c => {
-    const m = c.effect.match(/(\d+)%/);
-    if (m) reductions.push(parseInt(m[1]));
-  });
-  const avgReduction = reductions.length ? Math.round(reductions.reduce((a,b)=>a+b,0)/reductions.length) : 0;
-  const maxReduction = reductions.length ? Math.max(...reductions) : 0;
-
-  kpiGrid.innerHTML = [
-    {val: total+'件', label: '導入事例数', sub: '製造業中心'},
-    {val: avgReduction+'%', label: '平均時間削減率', sub: '効果数値のある事例'},
-    {val: maxReduction+'%', label: '最大削減率', sub: '同カテゴリ内最高値'},
-    {val: byDiff['低']+'件', label: '難易度:低（すぐ使える）', sub: 'AIツール操作のみ'},
-    {val: byDiff['中']+'件', label: '難易度:中', sub: 'API基礎知識あり'},
-    {val: byDiff['高']+'件', label: '難易度:高', sub: 'システム設計要'},
-  ].map(k => `
-    <div class="roi-kpi-card">
-      <div class="roi-kpi-value">${k.val}</div>
-      <div class="roi-kpi-label">${k.label}</div>
-      <div class="roi-kpi-sub">${k.sub}</div>
-    </div>`).join('');
-
-  // ツール別件数
-  const toolCounts = {};
-  casesData.forEach(c => { toolCounts[c.tool] = (toolCounts[c.tool]||0)+1; });
-  const maxTool = Math.max(...Object.values(toolCounts));
-  toolBars.innerHTML = Object.entries(toolCounts).sort((a,b)=>b[1]-a[1]).map(([tool,cnt]) => `
-    <div class="roi-bar-item">
-      <span class="roi-bar-name">${tool}</span>
-      <div class="roi-bar-bg"><div class="roi-bar-fill" style="width:${Math.round(cnt/maxTool*100)}%"></div></div>
-      <span class="roi-bar-val">${cnt}件</span>
-    </div>`).join('');
-
-  // 用途タイプ別件数
-  const typeCounts = {};
-  casesData.forEach(c => { typeCounts[c.use_case_type] = (typeCounts[c.use_case_type]||0)+1; });
-  const maxType = Math.max(...Object.values(typeCounts));
-  typeBars.innerHTML = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]).map(([type,cnt]) => `
-    <div class="roi-bar-item">
-      <span class="roi-bar-name">${type}</span>
-      <div class="roi-bar-bg"><div class="roi-bar-fill" style="width:${Math.round(cnt/maxType*100)}%"></div></div>
-      <span class="roi-bar-val">${cnt}件</span>
-    </div>`).join('');
-}
-
-// ===== CHANGELOG TOGGLE =====
-function toggleChangelog() {
-  const body = document.getElementById('changelog-body');
-  const toggle = document.getElementById('changelog-toggle');
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  toggle.classList.toggle('open', !isOpen);
-}
-
-// ===== CROSS-LINK HELPERS =====
-function buildConceptCrosslinks(conceptId) {
-  const keywords = {
-    'rag':['文書','知識検索','FAQ'],
-    'fine_tuning':['カスタム','ファインチューニング'],
-    'prompt_engineering':['プロンプト','文書生成'],
-    'ai_agent':['自動化','エージェント'],
-    'function_calling':['API','自動化'],
-    'mcp':['自動化'],
-    'vector_db':['知識検索','FAQ'],
-    'langchain':['自動化','エージェント'],
-    'multi_agent':['業務自動化'],
-    'lora':['カスタム']
-  };
-  const kws = keywords[conceptId];
-  if (!kws || !casesData.length) return '';
-  const related = casesData.filter(cs =>
-    kws.some(function(kw){ return (cs.use_case_type||'').includes(kw) || cs.title.includes(kw) || (cs.overview||'').includes(kw); })
-  ).slice(0,2);
-  if (!related.length) return '';
-  const btns = related.map(function(r){
-    const kw = r.title.substring(0,10);
-    return '<div style="font-size:var(--fs-sm)"><button onclick="event.stopPropagation();jumpToCasesTab(decodeURIComponent(this.dataset.kw))" data-kw="'+encodeURIComponent(kw)+'" class="crosslink-btn">'+r.title+' →</button></div>';
-  }).join('');
-  return '<div style="margin-top:var(--sp-3)"><div style="font-size:0.72rem;color:var(--color-accent);font-weight:600;margin-bottom:var(--sp-1)">▸ 関連活用事例</div>'+btns+'</div>';
-}
-
-// ===== CROSS-LINK: Jump to Cases Tab =====
-function jumpToCasesTab(keyword) {
-  switchTab(3);
-  requestAnimationFrame(() => {
-    const searchEl = document.getElementById('case-search');
-    if (searchEl) {
-      searchEl.value = keyword;
-      renderCases();
-      searchEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  });
-}
-
-// ===== INIT =====
-</script>
-</body>
-</html>
 
 // ===== INIT =====
 </script>
