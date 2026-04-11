@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root {
   /* Premium Dark palette — Deep Cyber */
@@ -2534,6 +2535,37 @@ After 時間   : _____ 分
     </div>
   </div>
 
+  <!-- ===== ビジュアルチャートエリア ===== -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin:var(--sp-8) 0 var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="pie-chart"></i> 一目でわかるAI適用全体像
+  </h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-8)" class="ws-chart-grid">
+    <!-- ドーナツチャート: ◎○△×分布 -->
+    <div style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4);text-align:center">
+      <div style="font-size:var(--fs-sm);font-weight:600;color:var(--color-muted);margin-bottom:var(--sp-2)">AI適用度の分布</div>
+      <canvas id="ws-chart-donut" style="max-height:220px"></canvas>
+    </div>
+    <!-- レーダーチャート: カテゴリ別AI適用力 -->
+    <div style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4);text-align:center">
+      <div style="font-size:var(--fs-sm);font-weight:600;color:var(--color-muted);margin-bottom:var(--sp-2)">カテゴリ別 AI適用力</div>
+      <canvas id="ws-chart-radar" style="max-height:220px"></canvas>
+    </div>
+    <!-- 横棒チャート: カテゴリ別年間削減時間 -->
+    <div style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4);text-align:center">
+      <div style="font-size:var(--fs-sm);font-weight:600;color:var(--color-muted);margin-bottom:var(--sp-2)">カテゴリ別 年間削減時間</div>
+      <canvas id="ws-chart-bar" style="max-height:220px"></canvas>
+    </div>
+  </div>
+
+  <!-- バブルチャート: 業務インパクトマップ -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="scatter-chart"></i> 業務インパクトマップ
+  </h3>
+  <div style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4);margin-bottom:var(--sp-8)">
+    <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-2)">横軸: 削減率(%) / 縦軸: 年間削減時間(h) / バブルサイズ: インパクト大</div>
+    <canvas id="ws-chart-bubble" style="max-height:320px"></canvas>
+  </div>
+
   <!-- TOP5 -->
   <h3 style="font-size:var(--fs-h3);font-weight:700;margin:var(--sp-8) 0 var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
     <i data-lucide="zap"></i> 即効性 TOP5（◎業務・削減時間順）
@@ -3875,7 +3907,7 @@ let wsCurrentCategory = 'all';
 
 function setWsCategory(cat, btn) {
   wsCurrentCategory = cat;
-  document.querySelectorAll('#ws-cat-filters .ws-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.closest('div').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderWorksheet();
 }
@@ -3939,6 +3971,7 @@ function renderWorksheet() {
   `).join('');
 
   renderWsSummary(filtered);
+  renderWsCharts();
 }
 
 function renderWsSummary(filtered) {
@@ -4016,6 +4049,199 @@ function renderWsSummary(filtered) {
           </div>
         </div>
       `).join('');
+  }
+}
+
+// ===== WORKSHEET CHARTS =====
+let wsChartDonut = null;
+let wsChartRadar = null;
+let wsChartBar = null;
+let wsChartBubble = null;
+
+function renderWsCharts() {
+  if (typeof Chart === 'undefined') return;
+
+  const data = wsCurrentCategory === 'all'
+    ? worksheetData
+    : worksheetData.filter(d => d.category === wsCurrentCategory);
+
+  // --- 1) ドーナツ: ◎○△×分布 ---
+  const levelCounts = { '◎': 0, '○': 0, '△': 0, '×': 0 };
+  data.forEach(d => { if (levelCounts[d.aiLevel] !== undefined) levelCounts[d.aiLevel]++; });
+
+  const donutCtx = document.getElementById('ws-chart-donut');
+  if (donutCtx) {
+    if (wsChartDonut) wsChartDonut.destroy();
+    wsChartDonut = new Chart(donutCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['◎ 即適用', '○ 部分適用', '△ 限定的', '× 困難'],
+        datasets: [{
+          data: [levelCounts['◎'], levelCounts['○'], levelCounts['△'], levelCounts['×']],
+          backgroundColor: ['#4ade80', '#38bdf8', '#fbbf24', '#64748b'],
+          borderColor: '#0f1729',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        cutout: '55%',
+        plugins: {
+          legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 }, padding: 12, usePointStyle: true, pointStyleWidth: 8 } },
+          tooltip: { backgroundColor: '#1e293b', titleColor: '#e2e8f0', bodyColor: '#e2e8f0', borderColor: 'rgba(56,189,248,0.3)', borderWidth: 1 }
+        }
+      }
+    });
+  }
+
+  // --- 2) レーダー: カテゴリ別AI適用力 ---
+  const categories = ['マネジメント', '設備投資', '保全', '法規制・変更管理', 'DX推進', '事務・管理', 'コミュニケーション'];
+  const catScores = categories.map(cat => {
+    const items = data.filter(d => d.category === cat);
+    if (items.length === 0) return 0;
+    const scoreMap = { '◎': 4, '○': 3, '△': 2, '×': 1 };
+    return items.reduce((s, d) => s + (scoreMap[d.aiLevel] || 1), 0) / items.length;
+  });
+  const catSavings = categories.map(cat => {
+    return data.filter(d => d.category === cat).reduce((s, d) => s + d.annualSavingH, 0);
+  });
+  const maxCatSaving = Math.max(...catSavings, 1);
+
+  const radarCtx = document.getElementById('ws-chart-radar');
+  if (radarCtx) {
+    if (wsChartRadar) wsChartRadar.destroy();
+    wsChartRadar = new Chart(radarCtx, {
+      type: 'radar',
+      data: {
+        labels: categories.map(c => c.length > 5 ? c.substring(0, 5) + '..' : c),
+        datasets: [
+          {
+            label: 'AI適用度 (平均)',
+            data: catScores,
+            backgroundColor: 'rgba(56,189,248,0.15)',
+            borderColor: '#38bdf8',
+            borderWidth: 2,
+            pointBackgroundColor: '#38bdf8',
+            pointRadius: 3
+          },
+          {
+            label: '削減時間 (正規化)',
+            data: catSavings.map(v => v / maxCatSaving * 4),
+            backgroundColor: 'rgba(167,139,250,0.12)',
+            borderColor: '#a78bfa',
+            borderWidth: 2,
+            pointBackgroundColor: '#a78bfa',
+            pointRadius: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          r: {
+            beginAtZero: true,
+            max: 4,
+            ticks: { display: false, stepSize: 1 },
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            angleLines: { color: 'rgba(255,255,255,0.06)' },
+            pointLabels: { color: '#94a3b8', font: { size: 10 } }
+          }
+        },
+        plugins: {
+          legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 }, padding: 10, usePointStyle: true, pointStyleWidth: 8 } },
+          tooltip: { backgroundColor: '#1e293b', titleColor: '#e2e8f0', bodyColor: '#e2e8f0', borderColor: 'rgba(56,189,248,0.3)', borderWidth: 1 }
+        }
+      }
+    });
+  }
+
+  // --- 3) 横棒チャート: カテゴリ別削減時間 ---
+  const barCtx = document.getElementById('ws-chart-bar');
+  if (barCtx) {
+    if (wsChartBar) wsChartBar.destroy();
+    const sortedCats = categories.map((c, i) => ({ cat: c, val: catSavings[i] })).sort((a, b) => b.val - a.val);
+    wsChartBar = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: sortedCats.map(c => c.cat.length > 6 ? c.cat.substring(0, 6) + '..' : c.cat),
+        datasets: [{
+          data: sortedCats.map(c => c.val),
+          backgroundColor: sortedCats.map((_, i) => {
+            const colors = ['#38bdf8', '#a78bfa', '#4ade80', '#fbbf24', '#fb923c', '#f472b6', '#64748b'];
+            return colors[i % colors.length];
+          }),
+          borderRadius: 4,
+          barPercentage: 0.7
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8', font: { size: 10 } }, title: { display: true, text: '年間削減(h)', color: '#64748b', font: { size: 10 } } },
+          y: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 10 } } }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { backgroundColor: '#1e293b', titleColor: '#e2e8f0', bodyColor: '#e2e8f0', borderColor: 'rgba(56,189,248,0.3)', borderWidth: 1,
+            callbacks: { label: (ctx) => ctx.raw + 'h/年' }
+          }
+        }
+      }
+    });
+  }
+
+  // --- 4) バブルチャート: 業務インパクトマップ ---
+  const bubbleCtx = document.getElementById('ws-chart-bubble');
+  if (bubbleCtx) {
+    if (wsChartBubble) wsChartBubble.destroy();
+    const colorMap = { '◎': '#4ade80', '○': '#38bdf8', '△': '#fbbf24', '×': '#64748b' };
+    const bubbleData = data.map(d => ({
+      x: d.reduction,
+      y: d.annualSavingH,
+      r: Math.max(d.annualSavingH * 0.35, 4),
+      label: d.name,
+      level: d.aiLevel
+    }));
+    const grouped = {};
+    bubbleData.forEach(b => {
+      if (!grouped[b.level]) grouped[b.level] = [];
+      grouped[b.level].push(b);
+    });
+
+    wsChartBubble = new Chart(bubbleCtx, {
+      type: 'bubble',
+      data: {
+        datasets: Object.entries(grouped).map(([level, points]) => ({
+          label: level + ' 業務',
+          data: points,
+          backgroundColor: colorMap[level] + '80',
+          borderColor: colorMap[level],
+          borderWidth: 1.5
+        }))
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          x: { title: { display: true, text: '削減率 (%)', color: '#64748b', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8', callback: v => v + '%' }, min: 0, max: 80 },
+          y: { title: { display: true, text: '年間削減 (h)', color: '#64748b', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8' }, min: 0 }
+        },
+        plugins: {
+          legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 }, padding: 12, usePointStyle: true, pointStyleWidth: 8 } },
+          tooltip: {
+            backgroundColor: '#1e293b', titleColor: '#e2e8f0', bodyColor: '#e2e8f0', borderColor: 'rgba(56,189,248,0.3)', borderWidth: 1,
+            callbacks: {
+              title: (items) => items[0].raw.label || '',
+              label: (ctx) => `削減率: ${ctx.raw.x}% / 年間: ${ctx.raw.y}h`
+            }
+          }
+        }
+      }
+    });
   }
 }
 
@@ -4124,10 +4350,12 @@ function renderWsSummary(filtered) {
 .ws-cat-bar-item { margin-bottom: var(--sp-4); }
 @media (max-width: 768px) {
   .ws-kpi-grid { grid-template-columns: 1fr 1fr; }
+  .ws-chart-grid { grid-template-columns: 1fr !important; }
   .ws-td-tools { display: none; }
 }
 @media (max-width: 480px) {
   .ws-kpi-grid { grid-template-columns: 1fr; }
+  .ws-chart-grid { grid-template-columns: 1fr !important; }
   .ws-td-freq, .ws-td-time { display: none; }
 }
 */
