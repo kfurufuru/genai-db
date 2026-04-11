@@ -1342,6 +1342,442 @@ footer span { color: var(--color-accent); }
   border-color: rgba(129,140,248,0.6);
   box-shadow: 0 0 12px rgba(129,140,248,0.2);
 }
+
+/* ===== WORKSHEET TAB ===== */
+/* ===== TAB 10: 業務棚卸しワークシート ===== */
+
+/* カテゴリ選択グリッド（3列） */
+.ws-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-6);
+}
+
+/* カテゴリボタン */
+.ws-cat-btn {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  font-family: var(--font-base);
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ws-cat-btn:hover {
+  color: var(--color-text);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.15);
+}
+.ws-cat-btn.active {
+  color: var(--color-accent);
+  background: rgba(56,189,248,0.12);
+  border-color: rgba(56,189,248,0.4);
+}
+
+/* テーブルラッパー（横スクロール対応） */
+.ws-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--sp-8);
+  -webkit-overflow-scrolling: touch;
+}
+.ws-table-wrap::-webkit-scrollbar {
+  height: 4px;
+}
+.ws-table-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ws-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(56,189,248,0.25);
+  border-radius: 2px;
+}
+
+/* 業務一覧テーブル */
+.ws-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  min-width: 900px;
+}
+.ws-table thead tr {
+  background: rgba(56,189,248,0.06);
+  border-bottom: 1px solid rgba(56,189,248,0.2);
+}
+.ws-table thead th {
+  padding: var(--sp-3) var(--sp-4);
+  text-align: left;
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ws-table tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition);
+}
+.ws-table tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+.ws-table tbody tr:hover {
+  background: rgba(56,189,248,0.05);
+}
+.ws-table tbody td {
+  padding: var(--sp-3) var(--sp-4);
+  color: var(--color-text);
+  vertical-align: middle;
+}
+.ws-table tbody td:first-child {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* AI適用度バッジ */
+.ws-badge-maru-maru {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px var(--sp-2);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(74,222,128,0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74,222,128,0.35);
+  white-space: nowrap;
+}
+.ws-badge-maru {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px var(--sp-2);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(56,189,248,0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56,189,248,0.35);
+  white-space: nowrap;
+}
+.ws-badge-sankaku {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px var(--sp-2);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(251,191,36,0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251,191,36,0.35);
+  white-space: nowrap;
+}
+.ws-badge-batsu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px var(--sp-2);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(100,116,139,0.2);
+  color: #94a3b8;
+  border: 1px solid rgba(100,116,139,0.3);
+  white-space: nowrap;
+}
+
+/* サマリーヒーロー */
+.ws-summary-hero {
+  background: linear-gradient(135deg, rgba(56,189,248,0.08) 0%, rgba(167,139,250,0.08) 50%, rgba(74,222,128,0.06) 100%);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-8) var(--sp-6);
+  margin-bottom: var(--sp-6);
+  text-align: center;
+}
+
+/* 優先施策カード */
+.ws-priority-card {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.ws-priority-card:hover {
+  transform: var(--hover-lift);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.ws-priority-rank {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(56,189,248,0.3), rgba(167,139,250,0.3));
+  border: 1px solid rgba(56,189,248,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* KPIカード3列グリッド */
+.ws-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+/* KPIカード（glassmorphism） */
+.ws-kpi-card {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-6) var(--sp-4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: center;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.ws-kpi-card:hover {
+  transform: var(--hover-lift);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  border-color: rgba(56,189,248,0.2);
+}
+.ws-kpi-card .kpi-value {
+  font-size: 2.2rem;
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  line-height: 1.1;
+  margin-bottom: var(--sp-1);
+}
+.ws-kpi-card .kpi-label {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.ws-kpi-card .kpi-sub {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-top: var(--sp-1);
+  opacity: 0.7;
+}
+
+/* チーム展開ステップ */
+.ws-step-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.ws-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: background var(--transition);
+}
+.ws-step-item:hover {
+  background: rgba(56,189,248,0.04);
+}
+.ws-step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(56,189,248,0.1);
+  border: 1px solid rgba(56,189,248,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+.ws-step-content h4 {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.ws-step-content p {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+
+/* 凡例 */
+.ws-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  align-items: center;
+}
+.ws-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+
+/* 空状態 */
+.ws-empty {
+  text-align: center;
+  padding: var(--sp-16) var(--sp-6);
+  color: var(--color-muted);
+}
+.ws-empty svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.3;
+  margin-bottom: var(--sp-3);
+}
+
+/* セクション見出し */
+.ws-section-title {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  margin-bottom: var(--sp-4);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.ws-section-title svg {
+  color: var(--color-accent);
+}
+
+/* 削減見込みバー */
+.ws-saving-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+.ws-saving-bar-inner {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.ws-saving-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent), #a78bfa);
+  border-radius: 2px;
+}
+
+/* ===== RESPONSIVE: 768px ===== */
+@media (max-width: 768px) {
+  .ws-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ws-kpi-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-3);
+  }
+  .ws-kpi-card .kpi-value {
+    font-size: 1.8rem;
+  }
+
+  /* テーブル → カード形式に切り替え */
+  .ws-table-wrap {
+    overflow-x: visible;
+    border: none;
+    background: transparent;
+  }
+  .ws-table,
+  .ws-table thead,
+  .ws-table tbody,
+  .ws-table th,
+  .ws-table td,
+  .ws-table tr {
+    display: block;
+  }
+  .ws-table thead {
+    display: none;
+  }
+  .ws-table tbody tr {
+    background: var(--color-glass);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--sp-3);
+    padding: var(--sp-4);
+    backdrop-filter: blur(12px);
+    min-width: unset;
+  }
+  .ws-table tbody tr:nth-child(even) {
+    background: var(--color-glass);
+  }
+  .ws-table tbody td {
+    padding: var(--sp-1) 0;
+    border: none;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-2);
+    font-size: var(--fs-sm);
+  }
+  .ws-table tbody td::before {
+    content: attr(data-label);
+    font-size: 0.72rem;
+    color: var(--color-accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    min-width: 80px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .ws-table tbody td:first-child {
+    font-size: 0.72rem;
+    color: var(--color-accent);
+  }
+  .ws-priority-card {
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .ws-step-item {
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .ws-legend {
+    gap: var(--sp-2);
+  }
+}
+
+@media (max-width: 480px) {
+  .ws-category-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .ws-cat-btn {
+    font-size: 0.78rem;
+    padding: var(--sp-2);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1386,6 +1822,10 @@ footer span { color: var(--color-accent); }
   </button>
   <button class="tab-btn" onclick="switchTab(7)" id="tab-btn-7">
     <i data-lucide="zap"></i> 推進のコツ
+  </button>
+
+  <button class="tab-btn" onclick="switchTab(8)" id="tab-btn-8">
+    <i data-lucide="clipboard-list"></i> 業務棚卸し
   </button>
 </nav>
 
@@ -2026,6 +2466,112 @@ After 時間   : _____ 分
 
 </div>
 
+
+<!-- ===== TAB 8: 業務棚卸しワークシート ===== -->
+<div class="tab-panel" id="tab-8">
+
+  <!-- ヒーロー -->
+  <div style="background:linear-gradient(135deg,rgba(56,189,248,0.08),rgba(167,139,250,0.08));border:1px solid rgba(56,189,248,0.2);border-radius:var(--radius-lg);padding:var(--sp-8) var(--sp-6);margin-bottom:var(--sp-8);text-align:center">
+    <div style="font-size:0.82rem;color:var(--color-accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:var(--sp-2)">電計チームリーダー 業務分析</div>
+    <div style="font-size:1.9rem;font-weight:700;color:var(--color-text);line-height:1.2;margin-bottom:var(--sp-3)">業務 × 生成AI <span style="color:var(--color-accent)">適用マトリクス</span></div>
+    <div style="color:var(--color-muted);font-size:var(--fs-sm);max-width:600px;margin:0 auto">自分の業務をすべて書き出して、何が適用できるか見ることが生成AI活用の第一歩。全37業務を◎○△×で判定済み。</div>
+  </div>
+
+  <!-- カテゴリフィルター -->
+  <div style="display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-4)">
+    <button class="filter-btn active" onclick="setWsCategory('all',this)">すべて</button>
+    <button class="filter-btn" onclick="setWsCategory('マネジメント',this)">マネジメント</button>
+    <button class="filter-btn" onclick="setWsCategory('設備投資',this)">設備投資</button>
+    <button class="filter-btn" onclick="setWsCategory('保全',this)">保全</button>
+    <button class="filter-btn" onclick="setWsCategory('法規制・変更管理',this)">法規制・変更管理</button>
+    <button class="filter-btn" onclick="setWsCategory('DX推進',this)">DX推進</button>
+    <button class="filter-btn" onclick="setWsCategory('事務・管理',this)">事務・管理</button>
+    <button class="filter-btn" onclick="setWsCategory('コミュニケーション',this)">コミュニケーション</button>
+  </div>
+
+  <!-- 凡例 -->
+  <div style="display:flex;flex-wrap:wrap;gap:var(--sp-4);margin-bottom:var(--sp-6);font-size:var(--fs-sm);align-items:center">
+    <span class="badge badge-green">◎ 即適用可</span>
+    <span class="badge badge-blue">○ 部分適用</span>
+    <span class="badge badge-yellow">△ 限定的</span>
+    <span class="badge badge-muted">× 困難</span>
+    <span style="color:var(--color-muted)">— 右端の数字は年間削減見込み時間</span>
+  </div>
+
+  <!-- 業務テーブル -->
+  <div class="ws-table-wrap">
+    <table class="ws-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>業務</th>
+          <th>頻度</th>
+          <th>所要時間</th>
+          <th>AI適用度</th>
+          <th>具体的な活用手段</th>
+          <th style="text-align:right">年間削減</th>
+        </tr>
+      </thead>
+      <tbody id="ws-table-body">
+        <tr><td colspan="7" style="text-align:center;padding:var(--sp-8);color:var(--color-muted)">読み込み中...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- KPIカード -->
+  <div class="ws-kpi-grid">
+    <div id="ws-kpi-total" class="ws-kpi-card">
+      <div class="ws-kpi-value" style="font-size:2rem;font-weight:700;color:var(--color-accent)">—</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-top:var(--sp-1)">対象業務数</div>
+    </div>
+    <div id="ws-kpi-excellent" class="ws-kpi-card">
+      <div class="ws-kpi-value" style="font-size:2rem;font-weight:700;color:#4ade80">—</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-top:var(--sp-1)">◎ 即効性高い業務数</div>
+    </div>
+    <div id="ws-kpi-saving" class="ws-kpi-card">
+      <div class="ws-kpi-value" style="font-size:2rem;font-weight:700;color:#fbbf24">—</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-top:var(--sp-1)">年間削減見込み（h）</div>
+    </div>
+  </div>
+
+  <!-- TOP5 -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin:var(--sp-8) 0 var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="zap"></i> 即効性 TOP5（◎業務・削減時間順）
+  </h3>
+  <ul id="ws-top5-list" style="list-style:none;display:flex;flex-direction:column;gap:var(--sp-3);margin-bottom:var(--sp-8)"></ul>
+
+  <!-- カテゴリ別バー -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="layers"></i> カテゴリ別 年間削減見込み
+  </h3>
+  <div id="ws-cat-bars" style="display:flex;flex-direction:column;gap:var(--sp-3);margin-bottom:var(--sp-8)"></div>
+
+  <!-- チーム展開 -->
+  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+    <i data-lucide="users"></i> チームへの展開方法
+  </h3>
+  <div style="display:flex;flex-direction:column;gap:var(--sp-3);margin-bottom:var(--sp-8)">
+    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(56,189,248,0.15);border:2px solid var(--color-accent);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--color-accent);flex-shrink:0">1</div>
+      <div><div style="font-weight:700;margin-bottom:4px">チームMTGでこの画面を共有</div><div style="color:var(--color-muted);font-size:var(--fs-sm)">◎の多さを全員で確認。「今すぐ使える」業務が見えるようになる</div></div>
+    </div>
+    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(167,139,250,0.15);border:2px solid #a78bfa;display:flex;align-items:center;justify-content:center;font-weight:700;color:#a78bfa;flex-shrink:0">2</div>
+      <div><div style="font-weight:700;margin-bottom:4px">各メンバーが自分の業務版を作成</div><div style="color:var(--color-muted);font-size:var(--fs-sm)">担当業務に絞って棚卸し。個人単位でTOP3を特定する</div></div>
+    </div>
+    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(74,222,128,0.15);border:2px solid #4ade80;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4ade80;flex-shrink:0">3</div>
+      <div><div style="font-weight:700;margin-bottom:4px">◎項目から優先的に試す</div><div style="color:var(--color-muted);font-size:var(--fs-sm)">メール作成＋議事録だけで230h/年。まずこの2点から始める</div></div>
+    </div>
+    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(251,191,36,0.15);border:2px solid #fbbf24;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fbbf24;flex-shrink:0">4</div>
+      <div><div style="font-weight:700;margin-bottom:4px">3ヶ月後に効果測定</div><div style="color:var(--color-muted);font-size:var(--fs-sm)">before/after の時間を計測・数値化。全社DXプロジェクトにフィードバック</div></div>
+    </div>
+  </div>
+
+</div>
+
+
 <!-- FOOTER -->
 <footer>
   <p>製造業・AI活用推進用 — <span>個人学習・社内展開リファレンス</span></p>
@@ -2057,6 +2603,7 @@ function init() {
   renderM365License();
   renderSecurity();
   renderSecurityFAQ();
+  renderWorksheet();
   if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
@@ -2861,6 +3408,816 @@ function renderSecurityFAQ() {
   }).join('');
   if (typeof lucide !== 'undefined') lucide.createIcons();
 }
+
+
+// ===== WORKSHEET DATA & FUNCTIONS =====
+// ===== WORKSHEET DATA =====
+const worksheetData = [
+  // --- マネジメント業務 ---
+  {
+    id: 'M-01',
+    name: '年間計画作成（保全・設備投資）',
+    category: 'マネジメント',
+    freq: '年1-2回',
+    time: '8-16h',
+    aiLevel: '○',
+    tools: '過去実績データからドラフト生成、予算テンプレート自動作成',
+    reduction: 40,
+    annualSavingH: 5
+  },
+  {
+    id: 'M-02',
+    name: '部下への業務指示・分担決定',
+    category: 'マネジメント',
+    freq: '毎日',
+    time: '30min',
+    aiLevel: '△',
+    tools: 'タスク管理ツール連携で負荷可視化は可能だが、判断は人間',
+    reduction: 10,
+    annualSavingH: 5
+  },
+  {
+    id: 'M-03',
+    name: '部下の進捗管理',
+    category: 'マネジメント',
+    freq: '週次',
+    time: '1h',
+    aiLevel: '○',
+    tools: '進捗報告の定型化→AIサマリー生成→ボトルネック自動検出',
+    reduction: 30,
+    annualSavingH: 16
+  },
+  {
+    id: 'M-04',
+    name: 'チームMTG主催・司会',
+    category: 'マネジメント',
+    freq: '週1回',
+    time: '1h',
+    aiLevel: '○',
+    tools: 'アジェンダ自動生成、議事録自動作成（M365 Copilot）、前回アクションの自動追跡',
+    reduction: 30,
+    annualSavingH: 16
+  },
+  {
+    id: 'M-05',
+    name: '部下指導・育成（OJT）',
+    category: 'マネジメント',
+    freq: '随時',
+    time: '2h/週',
+    aiLevel: '△',
+    tools: '育成計画のドラフト生成、スキルマップ管理は可能。指導自体は対面必須',
+    reduction: 15,
+    annualSavingH: 16
+  },
+  {
+    id: 'M-06',
+    name: '機械チーム/企画調整チームのフォロー',
+    category: 'マネジメント',
+    freq: '随時',
+    time: '2h/週',
+    aiLevel: '△',
+    tools: '情報共有の自動化は可能だが、関係構築・調整は人間',
+    reduction: 10,
+    annualSavingH: 10
+  },
+  {
+    id: 'M-07',
+    name: '人事評価・フィードバック面談',
+    category: 'マネジメント',
+    freq: '半期',
+    time: '4h',
+    aiLevel: '○',
+    tools: '評価コメントのドラフト生成、過去評価との整合性チェック',
+    reduction: 30,
+    annualSavingH: 2
+  },
+
+  // --- 設備投資業務 ---
+  {
+    id: 'I-01',
+    name: '要件定義（現場要望整理→仕様化）',
+    category: '設備投資',
+    freq: '案件毎',
+    time: '4-8h',
+    aiLevel: '○',
+    tools: 'ヒアリング内容からAIが仕様書ドラフト生成。過去類似案件の自動参照',
+    reduction: 40,
+    annualSavingH: 12
+  },
+  {
+    id: 'I-02',
+    name: '電計設備仕様の設計（ハード/ソフト）',
+    category: '設備投資',
+    freq: '案件毎',
+    time: '8-40h',
+    aiLevel: '△',
+    tools: '部品選定候補リスト生成、仕様書テンプレート作成は可能。設計判断は人間',
+    reduction: 15,
+    annualSavingH: 8
+  },
+  {
+    id: 'I-03',
+    name: 'PLCネットワーク検討・既設取り合い確認',
+    category: '設備投資',
+    freq: '案件毎',
+    time: '4-8h',
+    aiLevel: '△',
+    tools: '既存構成の情報整理支援。設計自体はエンジニア判断',
+    reduction: 10,
+    annualSavingH: 3
+  },
+  {
+    id: 'I-04',
+    name: '見積依頼・見積査定',
+    category: '設備投資',
+    freq: '案件毎',
+    time: '2-4h',
+    aiLevel: '◎',
+    tools: '見積依頼書の自動生成（フォーマット既存）、複数社の見積比較表自動作成',
+    reduction: 50,
+    annualSavingH: 8
+  },
+  {
+    id: 'I-05',
+    name: '予算化・稟議資料作成',
+    category: '設備投資',
+    freq: '案件毎',
+    time: '4-8h',
+    aiLevel: '◎',
+    tools: '5軸評価の自動ドラフト（secretary既存）、投資対効果の定型化',
+    reduction: 50,
+    annualSavingH: 16
+  },
+  {
+    id: 'I-06',
+    name: '施工監理（工程・品質・安全管理）',
+    category: '設備投資',
+    freq: '案件毎',
+    time: '現場作業',
+    aiLevel: '×',
+    tools: '現場立会いが必須。チェックリスト生成は可能',
+    reduction: 5,
+    annualSavingH: 1
+  },
+  {
+    id: 'I-07',
+    name: '試運転・動作確認',
+    category: '設備投資',
+    freq: '案件毎',
+    time: '現場作業',
+    aiLevel: '×',
+    tools: '試運転チェックリスト生成のみ。実作業は現場必須',
+    reduction: 5,
+    annualSavingH: 1
+  },
+  {
+    id: 'I-08',
+    name: 'メーカー・ベンダーとの技術打合せ',
+    category: '設備投資',
+    freq: '随時',
+    time: '1-2h',
+    aiLevel: '○',
+    tools: '打合せ準備（仕様確認事項リスト生成）、議事録ドラフト',
+    reduction: 30,
+    annualSavingH: 8
+  },
+
+  // --- 保全業務 ---
+  {
+    id: 'H-01',
+    name: '中長期保全計画の立案',
+    category: '保全',
+    freq: '年1-2回',
+    time: '8-16h',
+    aiLevel: '○',
+    tools: '過去トラブルデータ+設備劣化傾向からAIが優先順位案を生成',
+    reduction: 35,
+    annualSavingH: 4
+  },
+  {
+    id: 'H-02',
+    name: '点検結果によるリスク再評価・計画見直し',
+    category: '保全',
+    freq: '随時',
+    time: '2-4h',
+    aiLevel: '○',
+    tools: '点検データの傾向分析、異常値検出、リスクスコアリング',
+    reduction: 40,
+    annualSavingH: 8
+  },
+  {
+    id: 'H-03',
+    name: 'トラブル対応（原因解析・再発防止）',
+    category: '保全',
+    freq: '突発',
+    time: '2-8h',
+    aiLevel: '△',
+    tools: 'トラブル既知パターンとの照合、類似事例検索は可能。現場対応は人間',
+    reduction: 20,
+    annualSavingH: 6
+  },
+  {
+    id: 'H-04',
+    name: '水平展開の実施',
+    category: '保全',
+    freq: 'トラブル後',
+    time: '2-4h',
+    aiLevel: '◎',
+    tools: '水平展開資料の自動生成（原因→対策→横展開先リスト）',
+    reduction: 60,
+    annualSavingH: 12
+  },
+  {
+    id: 'H-05',
+    name: 'まとめ購買・コスト最適化',
+    category: '保全',
+    freq: '年次',
+    time: '4-8h',
+    aiLevel: '◎',
+    tools: '発注履歴分析、まとめ購買候補の自動抽出、コスト比較レポート生成',
+    reduction: 50,
+    annualSavingH: 4
+  },
+  {
+    id: 'H-06',
+    name: '協定化（繰り返し作業の標準化）',
+    category: '保全',
+    freq: '随時',
+    time: '2-4h',
+    aiLevel: '◎',
+    tools: '過去の作業手順から標準手順書ドラフトを自動生成',
+    reduction: 50,
+    annualSavingH: 8
+  },
+  {
+    id: 'H-07',
+    name: '法定点検管理（受変電・防爆等）',
+    category: '保全',
+    freq: '年次',
+    time: '2-4h',
+    aiLevel: '○',
+    tools: '点検スケジュール自動リマインド、報告書テンプレート生成',
+    reduction: 30,
+    annualSavingH: 1
+  },
+
+  // --- 法規制・変更管理 ---
+  {
+    id: 'L-01',
+    name: '法改正情報の収集・影響評価',
+    category: '法規制・変更管理',
+    freq: '随時',
+    time: '2-4h',
+    aiLevel: '◎',
+    tools: 'AI Web検索で法改正をウォッチ、影響範囲の自動マッピング',
+    reduction: 60,
+    annualSavingH: 12
+  },
+  {
+    id: 'L-02',
+    name: '変更管理での確認',
+    category: '法規制・変更管理',
+    freq: '案件毎',
+    time: '1-2h',
+    aiLevel: '○',
+    tools: '変更内容と法規制・社内基準の突合チェック支援',
+    reduction: 30,
+    annualSavingH: 4
+  },
+  {
+    id: 'L-03',
+    name: '対応案の検討・実施計画立案',
+    category: '法規制・変更管理',
+    freq: '案件毎',
+    time: '2-4h',
+    aiLevel: '○',
+    tools: '過去の対応事例参照、計画書ドラフト生成',
+    reduction: 35,
+    annualSavingH: 4
+  },
+
+  // --- DX推進 ---
+  {
+    id: 'D-01',
+    name: '社内DXプロジェクト推進',
+    category: 'DX推進',
+    freq: '常時',
+    time: '4h/週',
+    aiLevel: '◎',
+    tools: 'AI活用事例の調査（genai-db連携）、導入提案書のドラフト、ROI試算',
+    reduction: 40,
+    annualSavingH: 80
+  },
+  {
+    id: 'D-02',
+    name: '他工場との情報交換・ベストプラクティス共有',
+    category: 'DX推進',
+    freq: '月次',
+    time: '2-4h',
+    aiLevel: '◎',
+    tools: '情報の構造化・ナレッジ記事化、比較レポート自動生成',
+    reduction: 50,
+    annualSavingH: 18
+  },
+  {
+    id: 'D-03',
+    name: 'ICT活用による業務改善検討',
+    category: 'DX推進',
+    freq: '随時',
+    time: '2-4h',
+    aiLevel: '◎',
+    tools: '業務フロー分析→自動化候補の特定、ツール比較',
+    reduction: 50,
+    annualSavingH: 12
+  },
+  {
+    id: 'D-04',
+    name: 'ナレッジ共有の仕組み化',
+    category: 'DX推進',
+    freq: '常時',
+    time: '2h/週',
+    aiLevel: '◎',
+    tools: 'secretary / genai-db で既に実践中。さらに自動化・展開可能',
+    reduction: 60,
+    annualSavingH: 48
+  },
+
+  // --- 事務・管理業務 ---
+  {
+    id: 'A-01',
+    name: '外部支払費の集計',
+    category: '事務・管理',
+    freq: '月次',
+    time: '2-4h',
+    aiLevel: '◎',
+    tools: 'Excel/Copilotで自動集計、異常値検出',
+    reduction: 60,
+    annualSavingH: 18
+  },
+  {
+    id: 'A-02',
+    name: '工数時間集計',
+    category: '事務・管理',
+    freq: '月次',
+    time: '1-2h',
+    aiLevel: '◎',
+    tools: 'M365 Copilotで自動集計・可視化',
+    reduction: 60,
+    annualSavingH: 9
+  },
+  {
+    id: 'A-03',
+    name: '年度予算立案',
+    category: '事務・管理',
+    freq: '年1回',
+    time: '8-16h',
+    aiLevel: '○',
+    tools: '過去実績ベースのドラフト生成、差分分析',
+    reduction: 35,
+    annualSavingH: 4
+  },
+  {
+    id: 'A-04',
+    name: '起業落成処理',
+    category: '事務・管理',
+    freq: '案件完了時',
+    time: '2-4h',
+    aiLevel: '○',
+    tools: '定型書類の自動生成、チェックリスト',
+    reduction: 30,
+    annualSavingH: 3
+  },
+  {
+    id: 'A-05',
+    name: '日報作成',
+    category: '事務・管理',
+    freq: '毎日',
+    time: '15-30min',
+    aiLevel: '◎',
+    tools: 'secretary既存「日報作って」で自動ドラフト',
+    reduction: 70,
+    annualSavingH: 48
+  },
+  {
+    id: 'A-06',
+    name: 'メール作成（社内外）',
+    category: '事務・管理',
+    freq: '毎日',
+    time: '30-60min',
+    aiLevel: '◎',
+    tools: 'BLUF変換、REPORT.md準拠のスタイル自動適用、相手別トーン調整',
+    reduction: 50,
+    annualSavingH: 130
+  },
+  {
+    id: 'A-07',
+    name: '会議資料作成',
+    category: '事務・管理',
+    freq: '週次',
+    time: '1-2h',
+    aiLevel: '◎',
+    tools: 'データ集約→スライド構成案→ドラフト生成',
+    reduction: 50,
+    annualSavingH: 50
+  },
+  {
+    id: 'A-08',
+    name: '議事録作成',
+    category: '事務・管理',
+    freq: '会議毎',
+    time: '30min',
+    aiLevel: '◎',
+    tools: 'M365 Copilot音声書き起こし→要約→アクション抽出',
+    reduction: 70,
+    annualSavingH: 100
+  },
+
+  // --- コミュニケーション業務 ---
+  {
+    id: 'C-01',
+    name: '製造課との打合せ（停止調整等）',
+    category: 'コミュニケーション',
+    freq: '週次',
+    time: '1-2h',
+    aiLevel: '△',
+    tools: '事前準備（影響評価資料）はAI生成可。交渉・調整は人間',
+    reduction: 20,
+    annualSavingH: 10
+  },
+  {
+    id: 'C-02',
+    name: '社内関係部署との調整',
+    category: 'コミュニケーション',
+    freq: '随時',
+    time: '1h',
+    aiLevel: '△',
+    tools: '調整メール・依頼文のドラフト生成',
+    reduction: 25,
+    annualSavingH: 6
+  },
+  {
+    id: 'C-03',
+    name: '協力会社への指示・安全管理',
+    category: 'コミュニケーション',
+    freq: '随時',
+    time: '30min',
+    aiLevel: '○',
+    tools: '指示書テンプレート生成、安全教育資料の自動化（オンデマンド化済）',
+    reduction: 40,
+    annualSavingH: 8
+  }
+];
+
+// ===== WORKSHEET STATE =====
+let wsCurrentCategory = 'all';
+
+// ===== WORKSHEET FUNCTIONS =====
+
+function setWsCategory(cat, btn) {
+  wsCurrentCategory = cat;
+  document.querySelectorAll('#ws-cat-filters .ws-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWorksheet();
+}
+
+function getAiLevelBadge(level) {
+  const map = {
+    '◎': { cls: 'badge-green',  label: '◎ 高' },
+    '○': { cls: 'badge-blue',   label: '○ 中' },
+    '△': { cls: 'badge-yellow', label: '△ 低' },
+    '×': { cls: 'badge-muted',  label: '× なし' }
+  };
+  const m = map[level] || map['×'];
+  return `<span class="badge ${m.cls}">${m.label}</span>`;
+}
+
+function getCategoryBadge(cat) {
+  const map = {
+    'マネジメント':      'badge-purple',
+    '設備投資':          'badge-blue',
+    '保全':              'badge-orange',
+    '法規制・変更管理':  'badge-yellow',
+    'DX推進':            'badge-green',
+    '事務・管理':        'badge-muted',
+    'コミュニケーション':'badge-blue'
+  };
+  return `<span class="badge ${map[cat] || 'badge-muted'}">${cat}</span>`;
+}
+
+function renderWorksheet() {
+  const tbody = document.getElementById('ws-table-body');
+  if (!tbody) return;
+
+  const filtered = wsCurrentCategory === 'all'
+    ? worksheetData
+    : worksheetData.filter(d => d.category === wsCurrentCategory);
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--color-muted);padding:var(--sp-8)">該当する業務がありません</td></tr>`;
+    renderWsSummary(filtered);
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(d => `
+    <tr class="ws-row" data-id="${d.id}">
+      <td class="ws-td ws-td-id">
+        <span style="font-family:monospace;font-size:0.78rem;color:var(--color-accent);font-weight:600">${d.id}</span>
+      </td>
+      <td class="ws-td ws-td-name">
+        <div style="font-weight:500;line-height:1.4">${d.name}</div>
+        <div style="margin-top:3px">${getCategoryBadge(d.category)}</div>
+      </td>
+      <td class="ws-td ws-td-freq" style="color:var(--color-muted);font-size:var(--fs-sm)">${d.freq}</td>
+      <td class="ws-td ws-td-time" style="color:var(--color-muted);font-size:var(--fs-sm)">${d.time}</td>
+      <td class="ws-td ws-td-ailevel">${getAiLevelBadge(d.aiLevel)}</td>
+      <td class="ws-td ws-td-tools" style="font-size:var(--fs-sm);color:var(--color-text);line-height:1.5">${d.tools}</td>
+      <td class="ws-td ws-td-saving" style="text-align:right">
+        <div style="font-size:1.1rem;font-weight:700;color:#4ade80">${d.annualSavingH}h</div>
+        <div style="font-size:0.72rem;color:var(--color-muted)">削減${d.reduction}%</div>
+      </td>
+    </tr>
+  `).join('');
+
+  renderWsSummary(filtered);
+}
+
+function renderWsSummary(filtered) {
+  // 統計計算
+  const excellentCount = filtered.filter(d => d.aiLevel === '◎').length;
+  const totalSavingH   = filtered.reduce((sum, d) => sum + d.annualSavingH, 0);
+
+  // KPIカード更新
+  const kpiEls = [
+    { id: 'ws-kpi-total',    val: filtered.length + '件',    label: '対象業務数' },
+    { id: 'ws-kpi-excellent',val: excellentCount + '件',     label: '◎（即効性高）' },
+    { id: 'ws-kpi-saving',   val: totalSavingH + 'h/年',     label: '年間削減見込み' }
+  ];
+  kpiEls.forEach(k => {
+    const el = document.getElementById(k.id);
+    if (el) {
+      el.querySelector('.ws-kpi-value').textContent = k.val;
+    }
+  });
+
+  // 優先施策TOP5（◎のみ、annualSavingH降順）
+  const top5El = document.getElementById('ws-top5-list');
+  if (top5El) {
+    const top5 = filtered
+      .filter(d => d.aiLevel === '◎')
+      .sort((a, b) => b.annualSavingH - a.annualSavingH)
+      .slice(0, 5);
+
+    if (top5.length === 0) {
+      top5El.innerHTML = `<li style="color:var(--color-muted);font-size:var(--fs-sm)">◎業務が選択されていません</li>`;
+    } else {
+      top5El.innerHTML = top5.map((d, i) => `
+        <li class="ws-top5-item">
+          <span class="ws-top5-rank">${i + 1}</span>
+          <div class="ws-top5-body">
+            <div class="ws-top5-name">${d.name}</div>
+            <div class="ws-top5-meta">
+              <span style="font-size:0.75rem;color:var(--color-muted)">${d.category} / ${d.freq}</span>
+            </div>
+          </div>
+          <div class="ws-top5-saving">
+            <span style="font-size:1rem;font-weight:700;color:#4ade80">${d.annualSavingH}h</span>
+            <span style="font-size:0.72rem;color:var(--color-muted);display:block">年間削減</span>
+          </div>
+        </li>
+      `).join('');
+    }
+  }
+
+  // カテゴリ別集計バー
+  const catBarsEl = document.getElementById('ws-cat-bars');
+  if (catBarsEl) {
+    const catMap = {};
+    filtered.forEach(d => {
+      if (!catMap[d.category]) catMap[d.category] = { count: 0, saving: 0, excellent: 0 };
+      catMap[d.category].count++;
+      catMap[d.category].saving += d.annualSavingH;
+      if (d.aiLevel === '◎') catMap[d.category].excellent++;
+    });
+    const maxSaving = Math.max(...Object.values(catMap).map(v => v.saving), 1);
+    catBarsEl.innerHTML = Object.entries(catMap)
+      .sort((a, b) => b[1].saving - a[1].saving)
+      .map(([cat, stats]) => `
+        <div class="ws-cat-bar-item">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+            <span style="font-size:var(--fs-sm);font-weight:500">${cat}</span>
+            <span style="font-size:var(--fs-sm);color:#4ade80;font-weight:600">${stats.saving}h</span>
+          </div>
+          <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:${Math.round(stats.saving / maxSaving * 100)}%;background:linear-gradient(90deg,var(--color-accent),#a78bfa);border-radius:3px;transition:width 0.4s ease"></div>
+          </div>
+          <div style="display:flex;gap:var(--sp-3);margin-top:3px;font-size:0.72rem;color:var(--color-muted)">
+            <span>${stats.count}業務</span>
+            <span>◎ ${stats.excellent}件</span>
+          </div>
+        </div>
+      `).join('');
+  }
+}
+
+// ===== WORKSHEET CSS (インライン定義 — <style>タグ内に追記すること) =====
+// 以下はHTMLの<style>セクションに追加すべきCSS（参考）:
+/*
+.ws-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--sp-8);
+}
+.ws-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.ws-table thead th {
+  background: rgba(56,189,248,0.07);
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: var(--sp-3) var(--sp-4);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.ws-row {
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition);
+}
+.ws-row:last-child { border-bottom: none; }
+.ws-row:hover { background: rgba(56,189,248,0.04); }
+.ws-td {
+  padding: var(--sp-3) var(--sp-4);
+  vertical-align: middle;
+}
+.ws-td-name { min-width: 180px; max-width: 240px; }
+.ws-td-tools { min-width: 200px; max-width: 320px; }
+.ws-td-saving { min-width: 80px; white-space: nowrap; }
+.ws-cat-btn {
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  font-family: var(--font-base);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.ws-cat-btn:hover { color: var(--color-text); border-color: rgba(255,255,255,0.2); }
+.ws-cat-btn.active {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: rgba(56,189,248,0.1);
+}
+.ws-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+.ws-kpi-card {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4) var(--sp-6);
+  text-align: center;
+  backdrop-filter: blur(12px);
+}
+.ws-kpi-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1.2;
+}
+.ws-kpi-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-top: 4px;
+}
+.ws-top5-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--color-border);
+  list-style: none;
+}
+.ws-top5-item:last-child { border-bottom: none; }
+.ws-top5-rank {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,rgba(56,189,248,0.3),rgba(167,139,250,0.3));
+  border: 1px solid rgba(56,189,248,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; color: var(--color-accent);
+  flex-shrink: 0;
+}
+.ws-top5-body { flex: 1; }
+.ws-top5-name { font-size: var(--fs-sm); font-weight: 500; }
+.ws-top5-saving { text-align: right; flex-shrink: 0; }
+.ws-cat-bar-item { margin-bottom: var(--sp-4); }
+@media (max-width: 768px) {
+  .ws-kpi-grid { grid-template-columns: 1fr 1fr; }
+  .ws-td-tools { display: none; }
+}
+@media (max-width: 480px) {
+  .ws-kpi-grid { grid-template-columns: 1fr; }
+  .ws-td-freq, .ws-td-time { display: none; }
+}
+*/
+
+// ===== WORKSHEET HTML TEMPLATE (TABに追加すべきHTML — 参考) =====
+// index.htmlのタブナビゲーションに以下を追加:
+/*
+  <button class="tab-btn" onclick="switchTab(10)" id="tab-btn-10">
+    <i data-lucide="clipboard-list"></i> 業務棚卸し
+  </button>
+*/
+// index.htmlのタブパネルに以下を追加 (</div><!-- ===== END TABS ===== --> の前):
+/*
+<!-- ===== TAB 10: WORKSHEET ===== -->
+<div class="tab-panel" id="tab-10">
+
+  <!-- ヘッダー -->
+  <div style="margin-bottom:var(--sp-6)">
+    <h2 style="font-size:var(--fs-h2);font-weight:700;margin-bottom:var(--sp-2)">業務棚卸しワークシート</h2>
+    <p style="color:var(--color-muted);font-size:var(--fs-sm)">電計チームリーダー業務37件のAI適用度評価。◎=即効性高・今すぐ導入推奨。</p>
+  </div>
+
+  <!-- KPIカード -->
+  <div class="ws-kpi-grid">
+    <div class="ws-kpi-card" id="ws-kpi-total">
+      <div class="ws-kpi-value">—</div>
+      <div class="ws-kpi-label">対象業務数</div>
+    </div>
+    <div class="ws-kpi-card" id="ws-kpi-excellent">
+      <div class="ws-kpi-value">—</div>
+      <div class="ws-kpi-label">◎（即効性高）</div>
+    </div>
+    <div class="ws-kpi-card" id="ws-kpi-saving">
+      <div class="ws-kpi-value">—</div>
+      <div class="ws-kpi-label">年間削減見込み</div>
+    </div>
+  </div>
+
+  <!-- カテゴリフィルター -->
+  <div class="filter-row" id="ws-cat-filters" style="margin-bottom:var(--sp-4)">
+    <button class="ws-cat-btn active" onclick="setWsCategory('all',this)">すべて</button>
+    <button class="ws-cat-btn" onclick="setWsCategory('マネジメント',this)">マネジメント</button>
+    <button class="ws-cat-btn" onclick="setWsCategory('設備投資',this)">設備投資</button>
+    <button class="ws-cat-btn" onclick="setWsCategory('保全',this)">保全</button>
+    <button class="ws-cat-btn" onclick="setWsCategory('法規制・変更管理',this)">法規制・変更管理</button>
+    <button class="ws-cat-btn" onclick="setWsCategory('DX推進',this)">DX推進</button>
+    <button class="ws-cat-btn" onclick="setWsCategory('事務・管理',this)">事務・管理</button>
+    <button class="ws-cat-btn" onclick="setWsCategory('コミュニケーション',this)">コミュニケーション</button>
+  </div>
+
+  <!-- テーブル -->
+  <div class="ws-table-wrap">
+    <table class="ws-table">
+      <thead>
+        <tr>
+          <th style="width:60px">ID</th>
+          <th>業務名</th>
+          <th style="width:90px">頻度</th>
+          <th style="width:90px">所要時間</th>
+          <th style="width:80px">AI適用度</th>
+          <th>活用手段</th>
+          <th style="width:80px;text-align:right">年間削減</th>
+        </tr>
+      </thead>
+      <tbody id="ws-table-body"></tbody>
+    </table>
+  </div>
+
+  <!-- サマリーセクション -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);margin-top:var(--sp-8)">
+
+    <!-- 優先施策TOP5 -->
+    <div class="card">
+      <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+        <i data-lucide="zap"></i> 優先施策 TOP5（◎業務）
+      </h3>
+      <ul id="ws-top5-list" style="padding:0"></ul>
+    </div>
+
+    <!-- カテゴリ別削減h -->
+    <div class="card">
+      <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+        <i data-lucide="bar-chart-2"></i> カテゴリ別 削減見込み
+      </h3>
+      <div id="ws-cat-bars"></div>
+    </div>
+  </div>
+
+</div>
+*/
 
 // ===== INIT =====
 </script>
