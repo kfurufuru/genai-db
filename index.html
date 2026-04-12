@@ -1063,6 +1063,89 @@ body {
   line-height: 1.65;
 }
 .m365-tip-box::before { content: '💡 '; }
+/* Tips detail accordion */
+.tips-detail {
+  background: rgba(255,255,255,0.03);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  overflow: hidden;
+}
+.tips-detail summary {
+  cursor: pointer;
+  padding: var(--sp-3);
+  color: var(--color-muted);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  user-select: none;
+  transition: color var(--transition);
+}
+.tips-detail summary::-webkit-details-marker { display: none; }
+.tips-detail summary::before {
+  content: chr(9654);
+  font-size: 0.7rem;
+  color: var(--color-accent);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.tips-detail[open] summary::before { transform: rotate(90deg); }
+.tips-detail summary:hover { color: var(--color-text); }
+.tips-body {
+  padding: 0 var(--sp-3) var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.tips-section { display: flex; flex-direction: column; gap: var(--sp-2); }
+.tips-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+.tips-section p { margin: 0; color: var(--color-muted); line-height: 1.65; }
+.tips-prompt-block {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.tips-prompt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
+.tips-prompt-block pre { margin: 0; padding: var(--sp-3); overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+.tips-prompt-block code { font-family: Consolas,Monaco,monospace; font-size: 0.82rem; color: #e2e8f0; line-height: 1.7; }
+.copy-btn {
+  background: rgba(56,189,248,0.12);
+  border: 1px solid rgba(56,189,248,0.35);
+  color: var(--color-accent);
+  font-size: 0.72rem;
+  padding: 2px var(--sp-2);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.copy-btn:hover { background: rgba(56,189,248,0.25); }
+.copy-btn.copied { color: #4ade80; border-color: rgba(74,222,128,0.4); }
+.tips-mistake {
+  background: rgba(251,191,36,0.05);
+  border: 1px solid rgba(251,191,36,0.2);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-3);
+  color: #fbbf24;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
 
 /* License table */
 .m365-license-wrap {
@@ -1659,9 +1742,41 @@ footer span { color: var(--color-accent); }
           <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">PDFを読ませて比較表→修正5分</div>
         </div>
       </div>
-      <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
-        💡 <strong style="color:var(--color-text)">コツ</strong>: 比較軸（定格・保護等級・通信規格・予備品リードタイム）をプロンプトに指定するだけ
-      </div>
+      <details class="tips-detail">
+        <summary>💡 <strong style="color:var(--color-text)">コツ</strong>: 比較軸（定格・保護等級・通信規格・予備品リードタイム）をプロンプトに指定するだけ</summary>
+        <div class="tips-body">
+          <div class="tips-section">
+            <span class="tips-label">📌 ポイント</span>
+            <p>比較軸を自分で先に列挙することで、AIが「重要と判断した項目」だけを選ぶのを防ぎ抗け漏れのない比較表になる。複数メーカーのPDFカタログを同時に渡せるため手動コピペ作業が不要。出力形式を「Markdown表」「CSV」と指定しておくExcel貼り付けや稟議資料への転用が即座にできる。仕様書に記載がない項目は「要確認」とラベルを付けさせると後追い確認漏れも防げる。</p>
+          </div>
+          <div class="tips-section">
+            <span class="tips-label">📝 プロンプト事例</span>
+            <div class="tips-prompt-block">
+              <div class="tips-prompt-header">
+                <span>プロンプト（コピーして使用）</span>
+                <button class="copy-btn" onclick="const c=this.closest('.tips-prompt-block').querySelector('code');navigator.clipboard.writeText(c.innerText);this.textContent='✓ コピー済';this.classList.add('copied');setTimeout(()=>{this.textContent='コピー';this.classList.remove('copied')},2000)">コピー</button>
+              </div>
+              <pre><code>以下の3メーカーのインバータ仕様書（添付PDF）を比較表にまとめてください。
+
+【比較軸】
+1. 定格容量（kW）
+2. 入力電圧・周波数
+3. 保護等級（IP等級）
+4. 通信規格（Modbus / PROFIBUS / CC-Link 等）
+5. 予備品調達リードタイム（週数の目安）
+6. 過負荷耗量（% ・秒）
+7. 価格帯（概算）
+
+【出力形式】Markdown表で出力してください。
+【ルール】仕様書に明記されていない項目は「要確認」と記載してください。
+【用途】設備投資稟議の比較資料として使用します。</code></pre>
+            </div>
+          </div>
+          <div class="tips-mistake">
+            ⚠️ <strong>よくある失敗</strong>: 比較軸を指定しないと、AIが「重要と判断した項目」だけを選ぶため稟議で必要な保護等級や予備品リードタイムが抗け落ちる。
+          </div>
+        </div>
+      </details>
     </div>
 
     <!-- 事例B -->
@@ -1688,9 +1803,41 @@ footer span { color: var(--color-accent); }
           <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">影響・代替案・期間を箇条書き→下書き即生成</div>
         </div>
       </div>
-      <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
-        💡 <strong style="color:var(--color-text)">コツ</strong>: 「製造課の損益で語る文体で」と最初に指示。件名も一緒に出させる
-      </div>
+      <details class="tips-detail">
+        <summary>💡 <strong style="color:var(--color-text)">コツ</strong>: 「製造課の損益で語る文体で」と最初に指示。件名も一緒に出させる</summary>
+        <div class="tips-body">
+          <div class="tips-section">
+            <span class="tips-label">📌 ポイント</span>
+            <p>「製造課の損益で語る」と文体制約を先に指定することで、電計都合の説明ではなく「停止による生産影響が○時間発生する」という製造課目線の文章が生成される。件名も同時に出力させると結論が件名に入り、受信者が即座に優先度を判断できる。代替案の有無まで盛り込むと、製造課が返答不要で即断できるメールになり調整コストが下がる。</p>
+          </div>
+          <div class="tips-section">
+            <span class="tips-label">📝 プロンプト事例</span>
+            <div class="tips-prompt-block">
+              <div class="tips-prompt-header">
+                <span>プロンプト（コピーして使用）</span>
+                <button class="copy-btn" onclick="const c=this.closest('.tips-prompt-block').querySelector('code');navigator.clipboard.writeText(c.innerText);this.textContent='✓ コピー済';this.classList.add('copied');setTimeout(()=>{this.textContent='コピー';this.classList.remove('copied')},2000)">コピー</button>
+              </div>
+              <pre><code>以下の情報をもとに、製造課向けの設備停止依頼メールを作成してください。
+
+【作業情報】
+- 作業内容: インバータ更新（〇〇ライン）
+- 停止時間: 4時間
+- 影響ライン: Aライン全停止、Bライン一部停止
+- 希望日程: 第1希望 2026-05-10（土）、第2希望 2026-05-17（土）
+- 代替案: 夜間２回分割施工も可能（停止2時間×2回）
+
+【文体制約】
+- 製造課の生産損益の視点で語ること（電計都合を前面に出さない）
+- 「調整可能」「検討中」など曘昧な表現は使わない
+- 件名も生成すること（結論を件名に含める）
+- 「させていただきます」は使わないこと</code></pre>
+            </div>
+          </div>
+          <div class="tips-mistake">
+            ⚠️ <strong>よくある失敗</strong>: 「調整可能」「検討中」など曘昧な情報を入力すると、AIも同様に曘昧なメールを生成する。日程・停止時間・代替案は確定値か「なし」で渡すこと。
+          </div>
+        </div>
+      </details>
     </div>
 
     <!-- 事例C -->
@@ -1717,9 +1864,39 @@ footer span { color: var(--color-accent); }
           <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">現象をメモ入力→4M分析構成案→肉付け</div>
         </div>
       </div>
-      <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
-        💡 <strong style="color:var(--color-text)">コツ</strong>: 「断定しすぎず現場確認中の表現で」と付けると事実と推定が自動で分かれる
-      </div>
+      <details class="tips-detail">
+        <summary>💡 <strong style="color:var(--color-text)">コツ</strong>: 「断定しすぎず現場確認中の表現で」と付けると事実と推定が自動で分かれる</summary>
+        <div class="tips-body">
+          <div class="tips-section">
+            <span class="tips-label">📌 ポイント</span>
+            <p>「現場確認中の表現で」と制約を加えると、AIは事実と推定を自動で区別した文体で書く。これにより報告書の信頼性が上がり後からの修正箇所も明確になる。4M分析の観点を指定すると、抗け漏れのない体系的な構成案が生成できる。まずAIに「構成案だけ」を作らせ、内容の肉付けは自分で行う２段階アプローチが品質と効率の両立に有効だ。</p>
+          </div>
+          <div class="tips-section">
+            <span class="tips-label">📝 プロンプト事例</span>
+            <div class="tips-prompt-block">
+              <div class="tips-prompt-header">
+                <span>プロンプト（コピーして使用）</span>
+                <button class="copy-btn" onclick="const c=this.closest('.tips-prompt-block').querySelector('code');navigator.clipboard.writeText(c.innerText);this.textContent='✓ コピー済';this.classList.add('copied');setTimeout(()=>{this.textContent='コピー';this.classList.remove('copied')},2000)">コピー</button>
+              </div>
+              <pre><code>以下の情報をもとに、インバータトリップのトラブル報告書の構成案を生成してください。
+現場確認中の推定事項は「～の可能性が高い」「要確認」と明示してください。
+
+【発生日時】YYYY-MM-DD HH:MM
+【設備種別】〇〇ライン インバータ（動力系）
+【現象】〇〇が〇〇秒後にトリップ。エラーコード：〇〇
+【影響】製造ライン〇〇時間停止。生産量への影響：〇〇
+【判明情報】
+- （現場確認済みの事実を箇条書きで）
+
+構成は4M分析（Man / Machine / Method / Material）の視点で整理し、
+可能性の高い順に原因仮説を並べてください。</code></pre>
+            </div>
+          </div>
+          <div class="tips-mistake">
+            ⚠️ <strong>よくある失敗</strong>: AIが生成した規格番号・技術的根拠をそのまま最終報告書に転記しないこと。ハルシネーションで誤情報が混入する可能性がある。必ず現場確認・規格原文との照合を行ってから使用すること。
+          </div>
+        </div>
+      </details>
     </div>
 
     <!-- 事例D -->
@@ -1746,9 +1923,38 @@ footer span { color: var(--color-accent); }
           <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">現状・担当設備・目標を箇条書き→計画ドラフト生成</div>
         </div>
       </div>
-      <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
-        💡 <strong style="color:var(--color-text)">コツ</strong>: ドラフトをそのまま使わず「自分の言葉に直す」作業が、考えを整理する時間にもなる
-      </div>
+      <details class="tips-detail">
+        <summary>💡 <strong style="color:var(--color-text)">コツ</strong>: ドラフトをそのまま使わず「自分の言葉に直す」作業が、考えを整理する時間にもなる</summary>
+        <div class="tips-body">
+          <div class="tips-section">
+            <span class="tips-label">📌 ポイント</span>
+            <p>AIのドラフトをそのまま渡さず、必ず自分の言葉に書き直す工程を挑むこと。この作業自体が「自分はこのメンバーに何を期待しているか」を言語化する時間になり、マネジメント思考の整理にも直結する。役職・年数・担当設備だけでなく、強み・課題・本人の目標をセットで入れることが精度向上のカギだ。月別スキル目標・OJTテーマ・評価基準まで表形式で出力させると、そのまま面談資料の骨格として使える。</p>
+          </div>
+          <div class="tips-section">
+            <span class="tips-label">📝 プロンプト事例</span>
+            <div class="tips-prompt-block">
+              <div class="tips-prompt-header">
+                <span>プロンプト（コピーして使用）</span>
+                <button class="copy-btn" onclick="const c=this.closest('.tips-prompt-block').querySelector('code');navigator.clipboard.writeText(c.innerText);this.textContent='✓ コピー済';this.classList.add('copied');setTimeout(()=>{this.textContent='コピー';this.classList.remove('copied')},2000)">コピー</button>
+              </div>
+              <pre><code>以下のメンバー情報をもとに、6ヶ月育成計画のドラフトを作成してください。
+
+【メンバー情報】
+- 役職・経験年数: 〇〇（入社〇年目）
+- 担当設備: 〇〇（例: PLCラダー / 計装ループ）
+- 強み: 〇〇（例: 現場作業が丁寧、報告書が正確）
+- 課題: 〇〇（例: 設備投資の仕様検討経験が少ない）
+- 本人の目標: 〇〇（例: 設備投資案件を主担当で持ちたい）
+
+【出力形式】月別（1～6ヶ月）で以下を表形式で出力してください:
+| 月 | スキル目標 | OJTテーマ | 評価基準 | リーダーサポート内容 |</code></pre>
+            </div>
+          </div>
+          <div class="tips-mistake">
+            ⚠️ <strong>よくある失敗</strong>: 「2年目、計装担当」だけの入力では汎用的な計画しか生成されない。強み・課題・具体的な目標を書くほど精度が上がる。
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 
