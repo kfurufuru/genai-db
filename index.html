@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -1082,14 +1082,8 @@ body {
   transition: color var(--transition);
 }
 .tips-detail summary::-webkit-details-marker { display: none; }
-.tips-detail summary::before {
-  content: chr(9654);
-  font-size: 0.7rem;
-  color: var(--color-accent);
-  transition: transform 0.2s;
-  flex-shrink: 0;
-}
-.tips-detail[open] summary::before { transform: rotate(90deg); }
+
+
 .tips-detail summary:hover { color: var(--color-text); }
 .tips-body {
   padding: 0 var(--sp-3) var(--sp-3);
