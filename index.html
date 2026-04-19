@@ -1983,9 +1983,9 @@ body {
     <i data-lucide="clock"></i> Before / After 実践事例
   </h3>
   <!-- Before/After 横棒グラフ -->
-  <div style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-6);margin-bottom:var(--sp-6)">
-    <div style="font-size:0.8rem;color:var(--color-muted);margin-bottom:var(--sp-4);text-align:right">単位: 分</div>
-    <canvas id="chartBeforeAfter" height="180"></canvas>
+  <div style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-3);margin-bottom:var(--sp-4)">
+    <div style="font-size:0.8rem;color:var(--color-muted);margin-bottom:var(--sp-2);text-align:right">単位: 分</div>
+    <canvas id="chartBeforeAfter" height="140"></canvas>
   </div>
   <div style="display:flex;flex-direction:column;gap:var(--sp-4);margin-bottom:var(--sp-8)" id="cases-list">
 
@@ -2188,13 +2188,13 @@ body {
   </div>
 
   <!-- PwC 国際比較グラフ（危機感グラフ） -->
-  <div style="background:var(--color-glass);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-md);padding:var(--sp-6);margin-bottom:var(--sp-8)">
+  <div style="background:var(--color-glass);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-md);padding:var(--sp-3);margin-bottom:var(--sp-6)">
     <div style="display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-2)">
       <i data-lucide="bar-chart-2" style="width:18px;height:18px;color:#f87171"></i>
       <span style="font-weight:700;font-size:1rem">日本は「効果実感」でも「業務組み込み」でも遅れている</span>
     </div>
-    <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-4)">出典: PwC「生成AI活用の実態調査」2024（5カ国比較）</div>
-    <canvas id="chartPwC" height="140"></canvas>
+    <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-2)">出典: PwC「生成AI活用の実態調査」2024（5カ国比較）</div>
+    <canvas id="chartPwC" height="100"></canvas>
   </div>
 
   <!-- 業務インパクトマップ -->
@@ -2202,17 +2202,19 @@ body {
     <i data-lucide="map"></i> 業務インパクトマップ — 何から着手すべきか
   </h3>
   <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-4)">横軸: 削減率(%) ／ 縦軸: 年間削減時間(h) ／ 右上 = 最優先で着手</div>
-  <div style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-6);margin-bottom:var(--sp-8);position:relative">
-    <canvas id="chartImpactMap" height="360"></canvas>
+  <div style="background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-3);margin-bottom:var(--sp-8);position:relative">
+    <canvas id="chartImpactMap" height="240"></canvas>
   </div>
 
   <!-- 効果測定テンプレート -->
-  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
-    <i data-lucide="bar-chart-2"></i> 効果測定テンプレート — チームの実績を記録する
-  </h3>
-  <div style="background:rgba(34,211,238,0.04);border:1px solid rgba(34,211,238,0.18);border-radius:var(--radius-lg);padding:var(--sp-6);margin-bottom:var(--sp-4)">
-    <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-4)">以下のテンプレートをコピーして Teams/OneNote に貼り付け、チーム全員で記録しましょう。10件溜まると管理職が上層部への報告資料を作れます。</div>
-    <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius-sm);padding:var(--sp-4);font-family:'Consolas','Monaco',monospace;font-size:0.85rem;color:#cbd5e1;white-space:pre-wrap;line-height:1.8;margin-bottom:var(--sp-4)">【AI活用記録】
+  <div style="display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-4)">
+    <h4 style="font-size:var(--fs-body);font-weight:700;margin:0;display:flex;align-items:center;gap:var(--sp-2)">
+      <i data-lucide="bar-chart-2"></i> 効果測定テンプレート
+    </h4>
+  </div>
+  <div style="background:rgba(34,211,238,0.04);border:1px solid rgba(34,211,238,0.18);border-radius:var(--radius-lg);padding:var(--sp-4);margin-bottom:var(--sp-4)">
+    <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-4)">以下のテンプレートをコピーして Teams/OneNote に貼り付け、チームで記録。10件で上層部報告が可能になります。</div>
+    <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius-sm);padding:var(--sp-3);font-family:'Consolas','Monaco',monospace;font-size:0.85rem;color:#cbd5e1;white-space:pre-wrap;line-height:1.5;margin-bottom:var(--sp-4)">【AI活用記録】
 業務名      : ___________________
 使ったツール : Claude / ChatGPT / Copilot / その他（　　）
 Before 時間  : _____ 分
