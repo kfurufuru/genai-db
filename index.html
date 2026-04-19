@@ -1247,6 +1247,345 @@ footer span { color: var(--color-accent); }
   border-color: rgba(129,140,248,0.6);
   box-shadow: 0 0 12px rgba(129,140,248,0.2);
 }
+
+/* ===== WORKFLOW TAB (Tab 8) ===== */
+#wf-app {
+  margin: calc(-1 * var(--sp-8)) calc(-1 * var(--sp-6));
+}
+
+:root {
+  --font-base: 'Inter', 'Noto Sans JP', sans-serif;
+  --fs-h1: 1.9rem;
+  --fs-h2: 1.4rem;
+  --fs-h3: 1.1rem;
+  --fs-body: 0.88rem;
+  --fs-sm: 0.78rem;
+  --fs-xs: 0.7rem;
+  --lh-body: 1.6;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-6: 24px; --sp-8: 32px; --sp-12: 48px;
+
+  --transition: 0.25s ease;
+  --hover-lift: translateY(-2px);
+  --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px;
+
+  --color-bg: #080b14;
+  --color-bg2: #0f1422;
+  --color-bg3: #161c2e;
+  --color-surface: #1a2137;
+  --color-surface-hover: #212b45;
+  --color-text: #e2e8f0;
+  --color-muted: #64748b;
+  --color-border: rgba(255,255,255,0.06);
+
+  --color-chatgpt: #10b981;
+  --color-gemini: #818cf8;
+  --color-copilot: #22d3ee;
+
+  --color-ok: #10b981;
+  --color-ok-bg: rgba(16,185,129,0.1);
+  --color-ok-border: rgba(16,185,129,0.3);
+  --color-caution: #f59e0b;
+  --color-caution-bg: rgba(245,158,11,0.1);
+  --color-caution-border: rgba(245,158,11,0.3);
+  --color-manual: #64748b;
+  --color-manual-bg: rgba(100,116,139,0.1);
+  --color-manual-border: rgba(100,116,139,0.3);
+
+  --color-design: #f59e0b;
+  --color-maintenance: #34d399;
+  --color-manager: #818cf8;
+  --color-admin: #f472b6;
+}
+
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-base);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  padding: var(--sp-8) var(--sp-6) var(--sp-6);
+  background: linear-gradient(180deg, rgba(34,211,238,0.06) 0%, transparent 100%);
+  border-bottom: 1px solid var(--color-border);
+}
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  margin-bottom: var(--sp-3);
+}
+.header h1 {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  background: linear-gradient(135deg, #22d3ee, #818cf8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--sp-2);
+}
+.header .subtitle {
+  color: var(--color-muted); font-size: var(--fs-body); max-width: 700px; margin: 0 auto;
+}
+
+/* ── Legend bar ── */
+.legend-bar {
+  display: flex; justify-content: center; gap: var(--sp-6); flex-wrap: wrap;
+  padding: var(--sp-3) var(--sp-6);
+  background: var(--color-bg2); border-bottom: 1px solid var(--color-border);
+  position: sticky; top: 0; z-index: 100;
+}
+.legend-item {
+  display: flex; align-items: center; gap: var(--sp-2);
+  font-size: var(--fs-sm); color: var(--color-muted);
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0;
+}
+
+/* ── KPI cards ── */
+.kpi-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4);
+  max-width: 960px; margin: var(--sp-6) auto; padding: 0 var(--sp-6);
+}
+.kpi-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); padding: var(--sp-4) var(--sp-6); text-align: center;
+  transition: var(--transition);
+}
+.kpi-card:hover { transform: var(--hover-lift); border-color: rgba(255,255,255,0.12); }
+.kpi-label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--sp-1); }
+.kpi-value { font-size: 2rem; font-weight: var(--fw-bold); line-height: 1.1; }
+.kpi-desc { font-size: var(--fs-xs); color: var(--color-muted); margin-top: var(--sp-1); }
+.kpi-bar { height: 4px; border-radius: 2px; background: var(--color-bg3); margin-top: var(--sp-2); overflow: hidden; }
+.kpi-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+
+/* ── Container ── */
+.container { max-width: 1340px; margin: 0 auto; padding: var(--sp-6); }
+
+/* ── View & role toggle ── */
+.toggle-row {
+  display: flex; justify-content: center; gap: var(--sp-2); margin-bottom: var(--sp-4); flex-wrap: wrap;
+}
+.toggle-btn {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  color: var(--color-muted); padding: var(--sp-2) var(--sp-4); border-radius: 999px;
+  cursor: pointer; font-size: var(--fs-sm); font-family: var(--font-base); transition: var(--transition);
+}
+.toggle-btn:hover { border-color: rgba(255,255,255,0.15); color: var(--color-text); }
+.toggle-btn.active { background: rgba(34,211,238,0.1); border-color: var(--color-copilot); color: var(--color-copilot); }
+
+/* ── Main layout ── */
+.main-layout {
+  display: grid; grid-template-columns: 1fr 320px; gap: var(--sp-6);
+}
+
+/* ── Timeline (single role) ── */
+.timeline-single { display: flex; flex-direction: column; gap: var(--sp-3); }
+.task-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); padding: var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-6);
+  position: relative; transition: var(--transition);
+}
+.task-card:hover { border-color: rgba(255,255,255,0.12); transform: var(--hover-lift); }
+.task-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+.task-card.level-ok::before { background: var(--color-ok); }
+.task-card.level-caution::before { background: var(--color-caution); }
+.task-card.level-manual::before { background: var(--color-manual); }
+
+.task-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--sp-3); flex-wrap: wrap; }
+.task-time { font-size: var(--fs-xs); color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.task-name { font-size: var(--fs-body); font-weight: var(--fw-bold); margin: var(--sp-1) 0; }
+.task-detail { font-size: var(--fs-sm); color: var(--color-muted); margin-bottom: var(--sp-2); }
+
+.level-badge {
+  display: inline-flex; align-items: center; gap: var(--sp-1);
+  font-size: var(--fs-xs); padding: 2px 10px; border-radius: 999px;
+  white-space: nowrap; flex-shrink: 0; font-weight: var(--fw-medium);
+}
+.level-badge.ok { background: var(--color-ok-bg); color: var(--color-ok); border: 1px solid var(--color-ok-border); }
+.level-badge.caution { background: var(--color-caution-bg); color: var(--color-caution); border: 1px solid var(--color-caution-border); }
+.level-badge.manual { background: var(--color-manual-bg); color: var(--color-manual); border: 1px solid var(--color-manual-border); }
+
+.tool-badges { display: flex; gap: var(--sp-1); flex-wrap: wrap; margin-bottom: var(--sp-2); }
+.tool-badge {
+  font-size: var(--fs-xs); padding: 1px 8px; border-radius: 999px;
+  font-weight: var(--fw-medium); white-space: nowrap;
+}
+.tool-badge.chatgpt { background: rgba(16,185,129,0.12); color: var(--color-chatgpt); border: 1px solid rgba(16,185,129,0.25); }
+.tool-badge.gemini { background: rgba(129,140,248,0.12); color: var(--color-gemini); border: 1px solid rgba(129,140,248,0.25); }
+.tool-badge.copilot { background: rgba(34,211,238,0.12); color: var(--color-copilot); border: 1px solid rgba(34,211,238,0.25); }
+.tool-badge.none { background: var(--color-manual-bg); color: var(--color-manual); border: 1px dashed var(--color-manual-border); }
+
+.reason-box {
+  font-size: var(--fs-xs); color: var(--color-muted);
+  background: var(--color-bg3); border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm); padding: var(--sp-2) var(--sp-3); line-height: 1.5;
+}
+.reason-box strong { color: var(--color-text); font-weight: var(--fw-medium); }
+
+/* ── Compare grid (3-col) ── */
+.compare-grid {
+  display: grid; grid-template-columns: 56px repeat(4, 1fr); gap: 0;
+  border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  overflow: hidden; background: var(--color-bg2);
+}
+.cg-header {
+  padding: var(--sp-3) var(--sp-2); font-size: var(--fs-xs); font-weight: var(--fw-bold);
+  text-align: center; background: var(--color-bg3); border-bottom: 1px solid var(--color-border);
+}
+.cg-time {
+  padding: var(--sp-2); font-size: var(--fs-xs); color: var(--color-muted);
+  text-align: center; border-bottom: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border); background: var(--color-bg3);
+  display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums;
+}
+.cg-cell {
+  padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border); min-height: 64px;
+  display: flex; flex-direction: column; justify-content: center; gap: 3px;
+  transition: var(--transition); position: relative;
+}
+.cg-cell:hover { background: var(--color-surface-hover); }
+.cg-cell:nth-child(4n) { border-right: none; }
+.cg-cell .task-name { font-size: var(--fs-xs); font-weight: var(--fw-medium); line-height: 1.3; }
+.cg-cell .tool-badges { margin-bottom: 0; }
+.cg-cell .cg-reason {
+  font-size: 10px; color: var(--color-muted); line-height: 1.3;
+  max-height: 0; overflow: hidden; opacity: 0; transition: all 0.3s;
+}
+.cg-cell:hover .cg-reason { max-height: 60px; opacity: 1; margin-top: 3px; }
+
+/* ── Sidebar ── */
+.sidebar { display: flex; flex-direction: column; gap: var(--sp-4); }
+.side-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); padding: var(--sp-4);
+}
+.side-card h3 {
+  font-size: var(--fs-sm); font-weight: var(--fw-bold); margin-bottom: var(--sp-3);
+  padding-bottom: var(--sp-2); border-bottom: 1px solid var(--color-border);
+}
+.tool-role-item {
+  background: var(--color-bg3); border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-2);
+}
+.tool-role-item .name { font-size: var(--fs-sm); font-weight: var(--fw-bold); }
+.tool-role-item .desc { font-size: var(--fs-xs); color: var(--color-muted); margin-top: 2px; }
+
+.deploy-list { list-style: none; counter-reset: deploy; }
+.deploy-list li {
+  counter-increment: deploy;
+  font-size: var(--fs-sm); color: var(--color-muted); padding: var(--sp-2) var(--sp-3);
+  background: var(--color-bg3); border-radius: var(--radius-sm); margin-bottom: var(--sp-2);
+}
+.deploy-list li::before {
+  content: counter(deploy) '.'; font-weight: var(--fw-bold); color: var(--color-copilot); margin-right: var(--sp-2);
+}
+.deploy-list li.warn { background: var(--color-caution-bg); border: 1px solid var(--color-caution-border); }
+.deploy-list li.warn::before { color: var(--color-caution); }
+
+/* ── Bottom tabs ── */
+.bottom-tabs { margin-top: var(--sp-8); }
+.wf-tab-triggers {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  background: var(--color-bg3); border-radius: var(--radius-md) var(--radius-md) 0 0; overflow: hidden;
+}
+.wf-tab-trigger {
+  padding: var(--sp-3); text-align: center; font-size: var(--fs-sm); font-weight: var(--fw-medium);
+  color: var(--color-muted); background: transparent; border: none; cursor: pointer;
+  font-family: var(--font-base); transition: var(--transition);
+}
+.wf-tab-trigger:hover { color: var(--color-text); }
+.wf-tab-trigger.active { background: var(--color-surface); color: var(--color-copilot); }
+.wf-tab-panel {
+  display: none; background: var(--color-surface); border: 1px solid var(--color-border);
+  border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md);
+  padding: var(--sp-6); font-size: var(--fs-sm); color: var(--color-muted); line-height: 1.8;
+}
+.wf-tab-panel.active { display: block; }
+
+/* ── Footer ── */
+.footer {
+  text-align: center; padding: var(--sp-8) var(--sp-6); color: var(--color-muted);
+  font-size: var(--fs-xs); border-top: 1px solid var(--color-border); margin-top: var(--sp-12);
+}
+.footer a { color: var(--color-copilot); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ── First Step Banner ── */
+.first-step-banner {
+  background: linear-gradient(135deg, rgba(34,211,238,0.08), rgba(129,140,248,0.06));
+  border: 1px solid rgba(34,211,238,0.25);
+  border-radius: var(--radius-md); padding: var(--sp-4) var(--sp-5);
+  margin-bottom: var(--sp-4); display: flex; align-items: flex-start; gap: var(--sp-3);
+}
+.first-step-icon {
+  font-size: 1.4rem; line-height: 1; flex-shrink: 0; margin-top: 2px;
+}
+.first-step-label {
+  font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--color-copilot); font-weight: var(--fw-bold); margin-bottom: 4px;
+}
+.first-step-task { font-size: var(--fs-body); font-weight: var(--fw-bold); margin-bottom: 4px; }
+.first-step-tip { font-size: var(--fs-sm); color: var(--color-muted); line-height: 1.5; }
+
+/* ── Filter row ── */
+.filter-row {
+  display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-3);
+}
+.filter-label { font-size: var(--fs-xs); color: var(--color-muted); }
+.filter-btn {
+  background: var(--color-surface); border: 1px solid var(--color-caution-border);
+  color: var(--color-caution); padding: 3px 10px; border-radius: 999px;
+  cursor: pointer; font-size: var(--fs-xs); font-family: var(--font-base);
+  transition: var(--transition); font-weight: var(--fw-medium);
+}
+.filter-btn:hover { background: var(--color-caution-bg); }
+.filter-btn.active { background: var(--color-caution-bg); border-color: var(--color-caution); }
+.filter-btn.reset {
+  border-color: var(--color-border); color: var(--color-muted); display: none;
+}
+.filter-btn.reset.visible { display: inline-flex; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .main-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .header h1 { font-size: 1.3rem; }
+  .kpi-row { grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); }
+  .kpi-value { font-size: 1.5rem; }
+  .compare-grid { grid-template-columns: 44px repeat(4, 1fr); }
+  .cg-cell .task-name { font-size: 9px; }
+  .legend-bar { gap: var(--sp-3); }
+  .wf-tab-triggers { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .header { padding: var(--sp-6) var(--sp-3); }
+  .container { padding: var(--sp-3); }
+}
+
+
 </style>
 </head>
 <body>
@@ -1294,7 +1633,7 @@ footer span { color: var(--color-accent); }
     <i data-lucide="zap"></i> 推進のコツ
   </button>
   <button class="tab-btn" onclick="switchTab(8)" id="tab-btn-8">
-    <i data-lucide="lightbulb"></i> アイデア候補
+    <i data-lucide="calendar-clock"></i> 業務シナリオ
   </button>
 </nav>
 
@@ -1662,18 +2001,11 @@ footer span { color: var(--color-accent); }
           <div style="font-size:1.6rem;font-weight:700;color:#4ade80;line-height:1">▼100分</div>
         </div>
       </div>
-      <!-- Before/After バー -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
-        <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
-          <div style="font-size:0.75rem;color:#f87171;font-weight:600;letter-spacing:0.05em;margin-bottom:4px">BEFORE</div>
-          <div style="font-size:1.8rem;font-weight:700;color:#f87171;line-height:1">2時間</div>
-          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">仕様書を読みながら手動でExcel作成</div>
-        </div>
-        <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
-          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;margin-bottom:4px">AFTER</div>
-          <div style="font-size:1.8rem;font-weight:700;color:var(--color-accent);line-height:1">20分</div>
-          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">PDFを読ませて比較表→修正5分</div>
-        </div>
+      <div style="display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-3);font-size:var(--fs-sm)">
+        <span style="color:#f87171;font-weight:600">BEFORE: 2時間</span>
+        <span style="color:var(--color-muted)">→</span>
+        <span style="color:var(--color-accent);font-weight:600">AFTER: 20分</span>
+        <span style="color:var(--color-muted)">｜PDFを読ませて比較表→修正5分</span>
       </div>
       <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
         💡 <strong style="color:var(--color-text)">コツ</strong>: 比較軸（定格・保護等級・通信規格・予備品リードタイム）をプロンプトに指定するだけ
@@ -1692,17 +2024,11 @@ footer span { color: var(--color-accent); }
           <div style="font-size:1.6rem;font-weight:700;color:#4ade80;line-height:1">▼26分</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
-        <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
-          <div style="font-size:0.75rem;color:#f87171;font-weight:600;letter-spacing:0.05em;margin-bottom:4px">BEFORE</div>
-          <div style="font-size:1.8rem;font-weight:700;color:#f87171;line-height:1">30分</div>
-          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">言い回しに気を使いながらゼロから作成</div>
-        </div>
-        <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
-          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;margin-bottom:4px">AFTER</div>
-          <div style="font-size:1.8rem;font-weight:700;color:var(--color-accent);line-height:1">4分</div>
-          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">影響・代替案・期間を箇条書き→下書き即生成</div>
-        </div>
+      <div style="display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-3);font-size:var(--fs-sm)">
+        <span style="color:#f87171;font-weight:600">BEFORE: 30分</span>
+        <span style="color:var(--color-muted)">→</span>
+        <span style="color:var(--color-accent);font-weight:600">AFTER: 4分</span>
+        <span style="color:var(--color-muted)">｜影響・代替案・期間を箇条書き→下書き即生成</span>
       </div>
       <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
         💡 <strong style="color:var(--color-text)">コツ</strong>: 「製造課の損益で語る文体で」と最初に指示。件名も一緒に出させる
@@ -1721,17 +2047,11 @@ footer span { color: var(--color-accent); }
           <div style="font-size:1.6rem;font-weight:700;color:#4ade80;line-height:1">▼25分</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
-        <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
-          <div style="font-size:0.75rem;color:#f87171;font-weight:600;letter-spacing:0.05em;margin-bottom:4px">BEFORE</div>
-          <div style="font-size:1.8rem;font-weight:700;color:#f87171;line-height:1">45分</div>
-          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">構成を考えながらゼロから記述</div>
-        </div>
-        <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
-          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;margin-bottom:4px">AFTER</div>
-          <div style="font-size:1.8rem;font-weight:700;color:var(--color-accent);line-height:1">20分</div>
-          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">現象をメモ入力→4M分析構成案→肉付け</div>
-        </div>
+      <div style="display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-3);font-size:var(--fs-sm)">
+        <span style="color:#f87171;font-weight:600">BEFORE: 45分</span>
+        <span style="color:var(--color-muted)">→</span>
+        <span style="color:var(--color-accent);font-weight:600">AFTER: 20分</span>
+        <span style="color:var(--color-muted)">｜現象をメモ入力→4M分析構成案→肉付け</span>
       </div>
       <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
         💡 <strong style="color:var(--color-text)">コツ</strong>: 「断定しすぎず現場確認中の表現で」と付けると事実と推定が自動で分かれる
@@ -1750,17 +2070,11 @@ footer span { color: var(--color-accent); }
           <div style="font-size:1.6rem;font-weight:700;color:#4ade80;line-height:1">▼150分</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
-        <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
-          <div style="font-size:0.75rem;color:#f87171;font-weight:600;letter-spacing:0.05em;margin-bottom:4px">BEFORE</div>
-          <div style="font-size:1.8rem;font-weight:700;color:#f87171;line-height:1">3時間</div>
-          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">現状・目標・計画を一から考えて記述</div>
-        </div>
-        <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);border-radius:var(--radius-sm);padding:var(--sp-3)">
-          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;margin-bottom:4px">AFTER</div>
-          <div style="font-size:1.8rem;font-weight:700;color:var(--color-accent);line-height:1">30分</div>
-          <div style="font-size:0.78rem;color:var(--color-muted);margin-top:4px">現状・担当設備・目標を箇条書き→計画ドラフト生成</div>
-        </div>
+      <div style="display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-3);font-size:var(--fs-sm)">
+        <span style="color:#f87171;font-weight:600">BEFORE: 3時間</span>
+        <span style="color:var(--color-muted)">→</span>
+        <span style="color:var(--color-accent);font-weight:600">AFTER: 30分</span>
+        <span style="color:var(--color-muted)">｜現状・担当設備・目標を箇条書き→計画ドラフト生成</span>
       </div>
       <div style="background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm);color:var(--color-muted)">
         💡 <strong style="color:var(--color-text)">コツ</strong>: ドラフトをそのまま使わず「自分の言葉に直す」作業が、考えを整理する時間にもなる
@@ -1768,17 +2082,19 @@ footer span { color: var(--color-accent); }
     </div>
   </div>
 
-  <!-- やらかし事例集 -->
+  <!-- 注意と突破法（統合セクション） -->
   <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
-    <i data-lucide="x-circle"></i> やらかし事例集 — 失敗から学ぶ
+    <i data-lucide="alert-triangle"></i> 注意と突破法 — 失敗・壁・対策
   </h3>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--sp-4);margin-bottom:var(--sp-8)">
+
+  <!-- やらかし事例4枚（グリッド） -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp-4);margin-bottom:var(--sp-4)">
     <div class="card" style="border-top-color:var(--color-danger)">
       <div style="display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-2)">
         <span style="font-size:1.4rem">❌</span>
         <span style="font-weight:700;color:var(--color-danger)">数値をそのまま稟議に使った</span>
       </div>
-      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">AIが出した「コスト削減200万円」をそのまま提案書に記載。根拠を聞かれて答えられなかった。</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">AIの「コスト削減200万円」をそのまま提案書に記載→根拠を聞かれて答えられなかった。</div>
       <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
         <strong style="color:#34d399">✅ 対策</strong>: AIは「構成案・叩き台」として使う。数値は必ず元データで自分が計算して確認する。
       </div>
@@ -1788,7 +2104,7 @@ footer span { color: var(--color-accent); }
         <span style="font-size:1.4rem">❌</span>
         <span style="font-weight:700;color:var(--color-danger)">社外秘情報をそのまま入力した</span>
       </div>
-      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">取引先名・設備ID・生産量データを含むメールをそのままChatGPTに貼り付けた。後で情報管理部門から指摘を受けた。</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">取引先名・設備IDを含むメールをChatGPTに貼り付け→後で情報管理部門から指摘を受けた。</div>
       <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
         <strong style="color:#34d399">✅ 対策</strong>: セキュリティタブの「NG入力」を事前確認。固有名詞は「設備A」「取引先X」に置換してから入力する。
       </div>
@@ -1798,7 +2114,7 @@ footer span { color: var(--color-accent); }
         <span style="font-size:1.4rem">❌</span>
         <span style="font-weight:700;color:var(--color-danger)">プロンプトが長すぎて逆に遅くなった</span>
       </div>
-      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">「完璧なプロンプトを書こう」と30分かけて作成。AIへの入力準備だけで従来の作業時間を超えた。</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">完璧なプロンプト作成に30分→AI入力準備だけで従来の作業時間を超えた。</div>
       <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
         <strong style="color:#34d399">✅ 対策</strong>: まず3行で試す。足りなければ追加指示。完璧なプロンプトより「試して修正」のサイクルが速い。
       </div>
@@ -1808,40 +2124,37 @@ footer span { color: var(--color-accent); }
         <span style="font-size:1.4rem">❌</span>
         <span style="font-weight:700;color:var(--color-danger)">「AIが言ったから正しい」で提出</span>
       </div>
-      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">報告書の技術的根拠をAIが生成した文章をそのまま使用。上司から「この規格番号は存在しない」と指摘された（ハルシネーション）。</div>
+      <div style="font-size:var(--fs-sm);color:var(--color-muted);margin-bottom:var(--sp-3)">AIが生成した規格番号をそのまま報告書に使用→「この規格番号は存在しない」と指摘された（ハルシネーション）。</div>
       <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
         <strong style="color:#34d399">✅ 対策</strong>: 規格番号・法令条文・型番はAIを信じない。AIは「構成の骨格」、専門知識は自分が入れる。
       </div>
     </div>
   </div>
 
-  <!-- 壁と突破法 -->
-  <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
-    <i data-lucide="alert-triangle"></i> よくある壁と突破法
-  </h3>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--sp-4);margin-bottom:var(--sp-8)">
-    <div class="card">
-      <div style="font-size:1.5rem;margin-bottom:var(--sp-2)">😰</div>
-      <div style="font-weight:700;margin-bottom:var(--sp-2)">「難しそう・失敗したら怖い」</div>
-      <div style="color:var(--color-muted);font-size:var(--fs-sm);margin-bottom:var(--sp-3)">ベテランほど強い。変化への抵抗。</div>
-      <div style="background:rgba(56,189,248,0.06);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
-        <strong style="color:var(--color-accent)">突破法</strong>: まず上司（自分）が使って見せる。失敗も笑い話で共有する。
+  <!-- 壁3枚（横長リスト） -->
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:var(--sp-8)">
+    <div style="display:flex;align-items:center;gap:var(--sp-3);background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-sm);padding:var(--sp-3) var(--sp-4)">
+      <span style="font-size:1.2rem;flex-shrink:0">😰</span>
+      <div style="flex:1;min-width:0">
+        <span style="font-weight:700;font-size:var(--fs-sm)">「難しそう・失敗したら怖い」</span>
+        <span style="color:var(--color-muted);font-size:var(--fs-sm)"> → </span>
+        <span style="color:var(--color-accent);font-size:var(--fs-sm)">まず上司（自分）が使って見せる。失敗も笑い話で共有する。</span>
       </div>
     </div>
-    <div class="card">
-      <div style="font-size:1.5rem;margin-bottom:var(--sp-2)">🤷</div>
-      <div style="font-weight:700;margin-bottom:var(--sp-2)">「何ができるか分からない」</div>
-      <div style="color:var(--color-muted);font-size:var(--fs-sm);margin-bottom:var(--sp-3)">抽象的な「AI活用」では動けない。</div>
-      <div style="background:rgba(56,189,248,0.06);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
-        <strong style="color:var(--color-accent)">突破法</strong>: 上の事例のように「業務×時間削減」の具体例を先に見せる。
+    <div style="display:flex;align-items:center;gap:var(--sp-3);background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-sm);padding:var(--sp-3) var(--sp-4)">
+      <span style="font-size:1.2rem;flex-shrink:0">🤷</span>
+      <div style="flex:1;min-width:0">
+        <span style="font-weight:700;font-size:var(--fs-sm)">「何ができるか分からない」</span>
+        <span style="color:var(--color-muted);font-size:var(--fs-sm)"> → </span>
+        <span style="color:var(--color-accent);font-size:var(--fs-sm)">「業務×時間削減」の具体例を先に見せる。</span>
       </div>
     </div>
-    <div class="card">
-      <div style="font-size:1.5rem;margin-bottom:var(--sp-2)">🏢</div>
-      <div style="font-weight:700;margin-bottom:var(--sp-2)">「会社が許可してるの？」</div>
-      <div style="color:var(--color-muted);font-size:var(--fs-sm);margin-bottom:var(--sp-3)">曖昧な制約が行動を止める。</div>
-      <div style="background:rgba(56,189,248,0.06);border-radius:var(--radius-sm);padding:var(--sp-3);font-size:var(--fs-sm)">
-        <strong style="color:var(--color-accent)">突破法</strong>: セキュリティタブで確認。M365 Copilotは社内情報をAIに送らない設計。
+    <div style="display:flex;align-items:center;gap:var(--sp-3);background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-sm);padding:var(--sp-3) var(--sp-4)">
+      <span style="font-size:1.2rem;flex-shrink:0">🏢</span>
+      <div style="flex:1;min-width:0">
+        <span style="font-weight:700;font-size:var(--fs-sm)">「会社が許可してるの？」</span>
+        <span style="color:var(--color-muted);font-size:var(--fs-sm)"> → </span>
+        <span style="color:var(--color-accent);font-size:var(--fs-sm)">セキュリティタブで確認。M365 Copilotは社内情報をAIに送らない設計。</span>
       </div>
     </div>
   </div>
@@ -1850,23 +2163,23 @@ footer span { color: var(--color-accent); }
   <h3 style="font-size:var(--fs-h3);font-weight:700;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
     <i data-lucide="trending-up"></i> チームへの広げ方 3ステップ
   </h3>
-  <div style="display:flex;flex-direction:column;gap:var(--sp-3);margin-bottom:var(--sp-8)">
-    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
-      <div style="width:40px;height:40px;border-radius:50%;background:rgba(56,189,248,0.15);border:2px solid var(--color-accent);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--color-accent);flex-shrink:0">1</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--sp-4);margin-bottom:var(--sp-8)">
+    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:40px;height:40px;border-radius:50%;background:rgba(56,189,248,0.15);border:2px solid var(--color-accent);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--color-accent);margin-bottom:var(--sp-3)">1</div>
       <div>
         <div style="font-weight:700;margin-bottom:4px">自分が使い倒す（今すぐ）</div>
         <div style="color:var(--color-muted);font-size:var(--fs-sm)">部下の前でCopilotを使う姿を見せる。「自分でも使えそう」という安心感が先。上司が使えば部下は許可されたと感じる。</div>
       </div>
     </div>
-    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
-      <div style="width:40px;height:40px;border-radius:50%;background:rgba(167,139,250,0.15);border:2px solid #a78bfa;display:flex;align-items:center;justify-content:center;font-weight:700;color:#a78bfa;flex-shrink:0">2</div>
+    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:40px;height:40px;border-radius:50%;background:rgba(167,139,250,0.15);border:2px solid #a78bfa;display:flex;align-items:center;justify-content:center;font-weight:700;color:#a78bfa;margin-bottom:var(--sp-3)">2</div>
       <div>
         <div style="font-weight:700;margin-bottom:4px">1人1体験を作る（1ヶ月以内）</div>
         <div style="color:var(--color-muted);font-size:var(--fs-sm)">最初の体験は「手書きメモをAIに清書させる」だけでいい。「便利だった」体験を1回作ることが最重要。</div>
       </div>
     </div>
-    <div style="display:flex;gap:var(--sp-4);align-items:flex-start;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
-      <div style="width:40px;height:40px;border-radius:50%;background:rgba(74,222,128,0.15);border:2px solid #4ade80;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4ade80;flex-shrink:0">3</div>
+    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--color-glass);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp-4)">
+      <div style="width:40px;height:40px;border-radius:50%;background:rgba(74,222,128,0.15);border:2px solid #4ade80;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4ade80;margin-bottom:var(--sp-3)">3</div>
       <div>
         <div style="font-weight:700;margin-bottom:4px">成功事例を朝礼で共有する（3ヶ月以内）</div>
         <div style="color:var(--color-muted);font-size:var(--fs-sm)">「AIで〇〇が△△分で終わった」を朝礼で話す。失敗談も笑い話として共有。事例が集まったら推進役メンバーを育てる。</div>
@@ -2961,6 +3274,1031 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ===== INIT =====
+</script>
+
+<!-- ===== TAB 8: WORKFLOW SCENARIO ===== -->
+<div class="tab-panel" id="tab-8">
+<div id="wf-app">
+<nav class="legend-bar">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--color-ok)"></div>そのまま使いやすい</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--color-caution)"></div>匿名化・確認前提</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--color-manual)"></div>AIより現場優先</div>
+  <div class="legend-item" style="margin-left:var(--sp-4)"><div class="legend-dot" style="background:var(--color-chatgpt)"></div>ChatGPT</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--color-gemini)"></div>Gemini</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--color-copilot)"></div>Copilot</div>
+</nav>
+
+<div class="kpi-row" id="wf-kpiRow"></div>
+
+<div class="container">
+  <!-- View toggle -->
+  <div class="toggle-row">
+    <button class="toggle-btn active" data-view="single">タイムライン</button>
+    <button class="toggle-btn" data-view="compare">3役割 比較</button>
+  </div>
+
+  <!-- Role toggle -->
+  <div class="toggle-row" id="wf-roleToggle">
+    <button class="toggle-btn active" data-role="design">設計担当</button>
+    <button class="toggle-btn" data-role="maintenance">保全担当</button>
+    <button class="toggle-btn" data-role="manager">マネージャー</button>
+    <button class="toggle-btn" data-role="admin">事務担当</button>
+  </div>
+  <!-- Day toggle -->
+  <div class="toggle-row" id="wf-dayToggle">
+    <button class="toggle-btn active" data-day="0">1日目</button>
+    <button class="toggle-btn" data-day="1">2日目</button>
+    <button class="toggle-btn" data-day="2">3日目</button>
+  </div>
+
+  <!-- Single role view -->
+  <div id="wf-singleView">
+    <div style="text-align:center;margin-bottom:var(--sp-3);color:var(--color-muted);font-size:var(--fs-sm)" id="wf-dayLabel"></div>
+    <div class="filter-row">
+      <span class="filter-label">フィルター:</span>
+      <button class="filter-btn" id="wf-filterCautionBtn">⚠ 要注意のみ（<span id="wf-filterCount">0</span>件）</button>
+      <button class="filter-btn reset" id="wf-filterResetBtn">✕ 全表示に戻す</button>
+    </div>
+    <div class="main-layout">
+      <div class="timeline-single" id="wf-timelineSingle"></div>
+      <aside class="sidebar" id="wf-sidebar"></aside>
+    </div>
+  </div>
+
+  <!-- Compare view -->
+  <div id="wf-compareView" style="display:none">
+    <div class="compare-grid" id="wf-compareGrid"></div>
+  </div>
+
+  <!-- Bottom tabs -->
+  <div class="bottom-tabs">
+    <div class="wf-tab-triggers">
+      <button class="wf-tab-trigger active" data-tab="purpose">この画面の狙い</button>
+      <button class="wf-tab-trigger" data-tab="rules">利用ルール</button>
+      <button class="wf-tab-trigger" data-tab="next">次に足すべきもの</button>
+    </div>
+    <div class="wf-tab-panel active" data-tab="purpose">
+      役職別に「AIが使える作業」「まだ人が強い作業」「匿名化が必要な作業」を分けて見せることで、抽象的なAI活用ではなく、<strong style="color:var(--color-text)">自分の仕事に引きつけて理解できる構成</strong>にしています。<br><br>
+      3役割を並べて比較することで「マネージャーのほうがAI適合率が高い」「保全は現場作業が多くAI適用外の時間帯がある」といった<strong style="color:var(--color-text)">構造的な差</strong>が一目で分かります。
+    </div>
+    <div class="wf-tab-panel" data-tab="rules">
+      <strong style="color:var(--color-text)">原則:</strong> 社内秘・設備固有情報・価格・型番・法令番号はそのまま入れない。<br>
+      AIは構成案や比較観点、文面整形に使い、<strong style="color:var(--color-caution)">数値・安全・仕様の最終判断は人が行う</strong>設計です。<br><br>
+      <strong style="color:var(--color-text)">🟡（匿名化・確認前提）の作業では:</strong><br>
+      ・設備ID・型番・価格・取引先名を除去してからAIに入力<br>
+      ・AIの出力は「たたき台」として扱い、必ず人が検証<br>
+      ・安全回路・保護協調・防爆に関する最終判断はAIに委ねない
+    </div>
+    <div class="wf-tab-panel" data-tab="next">
+      次のステップとして以下を紐づけると、そのまま<strong style="color:var(--color-text)">現場教育に使えるページ</strong>になります。<br><br>
+      ・各業務カードに「実際のプロンプト例」を紐づけ<br>
+      ・Before/After の所要時間比較<br>
+      ・ツール別の「入力OK / NG境界」の具体例<br>
+      ・<a href="https://kfurufuru.github.io/genai-db/" style="color:var(--color-copilot)">生成AIデータベース</a>のプロンプト集・セキュリティ・実践事例へのリンク
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+// ================================================================
+// DATA — 4役割 × 3日分 + 3色判定 + 理由文
+// ================================================================
+const roles = {
+  design: {
+    label: '設計担当', color: 'var(--color-design)',
+    summary: '仕様検討・図面/制御・ベンダー比較・導入調整が中心',
+    firstStep: { task: 'ベンダー提案の比較表作成', tip: '比較軸（定格・保護等級・納期・予備品）をChatGPTに出させる。叩き台が10分→2分に。まずここから試す。' },
+    days: [
+      {
+        label: '1日目：通常設計業務',
+        timeline: [
+          { time:'08:30', task:'メール確認・本日の優先順位整理', detail:'工事案件、ベンダー返信、製造課依頼、未回答事項を整理', tools:['Copilot','Gemini'], level:'ok', reason:'Outlook/Teamsとの連携、メール要約、ToDo整理に向く' },
+          { time:'09:00', task:'設備投資案件の仕様確認', detail:'既設仕様・要求仕様・制約条件を読み比べる', tools:['ChatGPT','Gemini'], level:'caution', reason:'仕様比較表・論点整理に強い。固有名詞や数値は匿名化・再確認が前提' },
+          { time:'10:30', task:'ベンダー提案の比較表作成', detail:'定格、保護等級、通信、納期、予備品を比較', tools:['ChatGPT','Gemini','Copilot'], level:'ok', reason:'比較軸の整理・表の叩き台生成に最適' },
+          { time:'11:30', task:'関係部署向け説明資料の骨子作成', detail:'停止影響、代替運転、メリット、懸念点を整理', tools:['Copilot','ChatGPT'], level:'ok', reason:'Word/PowerPointの下書きと論点整理が速い' },
+          { time:'13:00', task:'打合せ・仕様すり合わせ', detail:'製造課・工務・ベンダーと条件調整', tools:['Copilot'], level:'ok', reason:'会議メモ要約、論点抽出、宿題整理に向く' },
+          { time:'14:30', task:'図面/PLC/DCS修正の検討', detail:'I/O、インターロック、画面構成、改造方針の検討', tools:['ChatGPT'], level:'caution', reason:'レビュー観点やロジック説明には有効。実装値・番地・安全回路は人が最終判断' },
+          { time:'16:00', task:'停止依頼メール・議事録の作成', detail:'影響、工事日、依頼事項、確認事項を明文化', tools:['Copilot','Gemini'], level:'ok', reason:'社内文面生成、要約、トーン調整が得意' },
+          { time:'17:00', task:'進捗報告・翌日準備', detail:'案件ごとの進捗、課題、宿題を整理', tools:['Copilot','ChatGPT'], level:'ok', reason:'報告書・進捗更新の時短に有効' },
+        ]
+      },
+      {
+        label: '2日目：打合せ・調整集中日',
+        timeline: [
+          { time:'08:30', task:'メール確認・打合せアジェンダ準備', detail:'当日3件の打合せ資料を事前確認・論点整理', tools:['Copilot','ChatGPT'], level:'ok', reason:'アジェンダ整理・想定質問の洗い出しに向く' },
+          { time:'09:00', task:'社内キックオフMTG（製造課・工務・安全）', detail:'設備投資案件の目的・スケジュール・役割分担の合意', tools:['Copilot'], level:'ok', reason:'Teams議事録・アクション自動抽出に向く' },
+          { time:'10:30', task:'ベンダーとのテクニカルMTG', detail:'仕様確認・納期・技術的懸念点の質疑応答', tools:['Copilot'], level:'ok', reason:'外部との会議でも議事録まとめに活用可' },
+          { time:'11:30', task:'仕様変更事項・宿題の整理', detail:'打合せで出た仕様変更・確認事項をまとめる', tools:['ChatGPT','Copilot'], level:'ok', reason:'変更点の構造化・影響範囲の整理に向く' },
+          { time:'13:00', task:'仕様書・提出書類の更新', detail:'確定した内容を仕様書・設計図書へ反映', tools:['Copilot'], level:'caution', reason:'Word/Excelとの連携で効率化。技術的確認は人が行う' },
+          { time:'14:30', task:'関係部署への調整メール・資料送付', detail:'変更内容・影響・確認依頼を各部署に送付', tools:['Copilot','ChatGPT'], level:'ok', reason:'メール文章・添付資料の準備が速い' },
+          { time:'16:00', task:'議事録・宿題リストの整理・共有', detail:'3件の打合せ結果を一括整理してTeamsに投稿', tools:['Copilot','Gemini'], level:'ok', reason:'複数会議の要点を横断まとめするのに強い' },
+          { time:'17:00', task:'翌日準備・課題確認', detail:'未解決の仕様課題・ベンダー回答待ち案件を整理', tools:['ChatGPT','Copilot'], level:'ok', reason:'課題リスト整理・優先順位付けに向く' },
+        ]
+      },
+      {
+        label: '3日目：現場立会い・施工管理日',
+        timeline: [
+          { time:'08:30', task:'作業前安全確認・当日手順の確認', detail:'TBM・KYT・作業手順書の最終読み合わせ', tools:['ChatGPT'], level:'caution', reason:'手順書の表現改善には有効。安全確認は人が主体' },
+          { time:'09:00', task:'現場立会い（電気盤据付・配線）', detail:'ケーブルルート・盤据付位置・施工品質の確認', tools:[], level:'manual', reason:'現場目視・現物確認が必須。AI代替不可' },
+          { time:'10:30', task:'施工品質確認・チェックシート記入', detail:'接続確認・絶縁測定・トルク管理の記録', tools:[], level:'manual', reason:'実機計測・記録作業。AI代替不可' },
+          { time:'11:30', task:'職人への指示・変更点対応', detail:'現場で生じた変更・追加作業の指示と記録', tools:['ChatGPT'], level:'caution', reason:'変更記録の文章化・影響確認の壁打ちに使用可' },
+          { time:'13:00', task:'試運転前確認・絶縁測定記録確認', detail:'試運転前チェックリストの最終確認', tools:['Copilot'], level:'ok', reason:'チェックリスト整理・漏れ確認に向く' },
+          { time:'14:30', task:'試運転立会い・動作確認', detail:'シーケンス動作・インターロック・警報確認', tools:[], level:'manual', reason:'実機動作確認。安全上AI代替不可' },
+          { time:'16:00', task:'施工記録・完成図書の整理', detail:'写真・測定値・変更点を記録に残す', tools:['Copilot','ChatGPT'], level:'ok', reason:'文書整形・記録の構造化が速い' },
+          { time:'17:00', task:'当日作業完了報告・翌日段取り', detail:'作業完了状況・残課題・翌日の準備事項を報告', tools:['Copilot','ChatGPT'], level:'ok', reason:'完了報告メール・日報の時短に有効' },
+        ]
+      },
+    ],
+  },
+  maintenance: {
+    label: '保全担当', color: 'var(--color-maintenance)',
+    summary: 'トラブル初動・現場確認・原因解析・再発防止が中心',
+    firstStep: { task: '報告書の構成案作成', tip: '「事実/推定/未確認」の3分割をChatGPTに構成させる。白紙から書く時間がゼロになる。まずここから試す。' },
+    days: [
+      {
+        label: '1日目：通常保全業務',
+        timeline: [
+          { time:'08:30', task:'夜間異常・申し送り確認', detail:'停止履歴、警報、運転員コメントを把握', tools:['Copilot'], level:'ok', reason:'Teams/メール/日報の横断要約に向く' },
+          { time:'09:00', task:'現場ヒアリング・一次切り分け', detail:'いつ・どこで・何が・どの頻度で起きたか確認', tools:[], level:'manual', reason:'現物・現場・現象の一次確認は人が行うべき' },
+          { time:'10:00', task:'原因候補の洗い出し', detail:'4M、なぜなぜ、時系列で仮説を広げる', tools:['ChatGPT','Gemini'], level:'caution', reason:'仮説出し・抜け漏れ防止に有効。断定は禁止' },
+          { time:'11:00', task:'報告書の構成案作成', detail:'事実／推定／未確認事項を分けて整理', tools:['ChatGPT','Copilot'], level:'ok', reason:'構成作成と文章整形が速い' },
+          { time:'13:00', task:'部品手配・関係者調整', detail:'工事日調整、必要部材、停止条件を確認', tools:['Copilot','Gemini'], level:'ok', reason:'メール、依頼文、日程候補作成に向く' },
+          { time:'14:30', task:'再発防止策のたたき台作成', detail:'点検、教育、設定見直し、部品交換方針を整理', tools:['ChatGPT','Gemini'], level:'caution', reason:'対策案の網羅化に有効。安全性・実現性の最終判断は人' },
+          { time:'16:00', task:'水平展開用の共有文作成', detail:'他設備・他ラインへの注意喚起を文章化', tools:['Copilot'], level:'ok', reason:'社内共有文・朝礼資料の整形に向く' },
+          { time:'17:00', task:'日報・残課題整理', detail:'未解決項目、次回確認点、関係者ToDoを整理', tools:['Copilot','ChatGPT'], level:'ok', reason:'日報の清書・ToDo抽出に有効' },
+        ]
+      },
+      {
+        label: '2日目：緊急トラブル対応日',
+        timeline: [
+          { time:'08:30', task:'緊急呼び出し対応（ライン停止）', detail:'停止警報の内容・ライン状況・影響範囲を把握', tools:['Copilot'], level:'ok', reason:'引き継ぎ・警報ログの横断要約で状況把握が速い' },
+          { time:'09:00', task:'現場急行・状況確認', detail:'現地で停止原因の初期調査・目視確認', tools:[], level:'manual', reason:'現物確認が最優先。AI介入は状況確認後' },
+          { time:'10:00', task:'原因特定・仮復旧作業', detail:'推定原因に基づく仮復旧処置の実施', tools:['ChatGPT'], level:'caution', reason:'類似事例・対処法のヒント出しに使用可。実作業は人が判断' },
+          { time:'11:30', task:'部品手配・修理調整', detail:'必要部品の特定・手配・工事日調整', tools:['Copilot','Gemini'], level:'ok', reason:'手配メール・納期確認依頼の文面作成が速い' },
+          { time:'13:00', task:'本修理・動作確認', detail:'部品交換・本修理・ライン再起動確認', tools:[], level:'manual', reason:'実機修理・安全確認はAI代替不可' },
+          { time:'14:30', task:'製造課への状況報告・再発防止説明', detail:'復旧状況・原因・今後の対策を製造課に報告', tools:['ChatGPT','Copilot'], level:'ok', reason:'口頭説明の骨子作成・報告資料の時短に有効' },
+          { time:'16:00', task:'トラブル報告書作成', detail:'発生経緯・原因・処置・再発防止を記録', tools:['ChatGPT','Copilot'], level:'ok', reason:'構成作成と文章整形が速い' },
+          { time:'17:00', task:'残課題整理・予防保全計画見直し', detail:'今回の教訓を点検計画・保全基準に反映', tools:['ChatGPT','Gemini'], level:'caution', reason:'保全基準の改訂案作成に有効。最終判断は人' },
+        ]
+      },
+      {
+        label: '3日目：定修準備・SOP整備日',
+        timeline: [
+          { time:'08:30', task:'定修計画の確認・最終チェック', detail:'工程表・作業分担・停止範囲の最終確認', tools:['Copilot','ChatGPT'], level:'ok', reason:'工程表の整合確認・漏れチェックに向く' },
+          { time:'09:00', task:'停止工程・作業分担の最終調整', detail:'複数工事の時間的重複・作業者配置を見直す', tools:['ChatGPT'], level:'caution', reason:'工程調整案の壁打ちに有効。最終調整は現場責任者が行う' },
+          { time:'10:00', task:'部品・工具・材料の準備確認', detail:'必要品リストと現物の照合・不足品の手配', tools:[], level:'manual', reason:'現物照合が必須。AI代替不可' },
+          { time:'11:00', task:'作業手順書の読み合わせ・更新', detail:'前回定修の反省を踏まえた手順書の改訂', tools:['ChatGPT','Copilot'], level:'ok', reason:'手順書の文章整形・改訂箇所の表現改善に向く' },
+          { time:'13:00', task:'施工業者との打合せ・安全説明', detail:'外部業者への作業範囲・安全ルールの説明', tools:['Copilot'], level:'ok', reason:'説明資料・安全書類の整形に向く' },
+          { time:'14:30', task:'KYT（危険予知訓練）実施', detail:'定修作業の危険ポイントを全員で洗い出す', tools:['ChatGPT'], level:'caution', reason:'危険シナリオの網羅的洗い出しに有効。最終判断は現場リーダー' },
+          { time:'16:00', task:'当日準備状況の記録・最終確認リスト', detail:'明日の定修に向けた準備完了チェックリスト作成', tools:['Copilot'], level:'ok', reason:'チェックリスト整形・関係者への連絡文に向く' },
+          { time:'17:00', task:'関係部署への最終連絡', detail:'明日の停止範囲・時間・注意事項を各部署に通知', tools:['Copilot','ChatGPT'], level:'ok', reason:'通知メール・周知文の作成が速い' },
+        ]
+      },
+    ],
+  },
+  manager: {
+    label: 'マネージャー', color: 'var(--color-manager)',
+    summary: '案件優先順位・人員配分・調整・育成・報告が中心',
+    firstStep: { task: '上層部向け進捗報告資料の下書き', tip: '案件状況・リスク・支援要請の3点をCopilotに構成させる。報告書の骨子づくりが最も即効性が高い。まずここから試す。' },
+    days: [
+      {
+        label: '1日目：通常マネジメント業務',
+        timeline: [
+          { time:'08:30', task:'全案件の優先順位確認', detail:'停止案件、納期、予算、承認滞留を把握', tools:['Copilot','Gemini'], level:'ok', reason:'メール・会議・メモの横断整理に有効' },
+          { time:'09:30', task:'メンバーへの指示・負荷平準化', detail:'誰に何を持たせるかを見直す', tools:['ChatGPT','Copilot'], level:'ok', reason:'優先順位整理、説明文、指示の骨子作成に向く' },
+          { time:'10:30', task:'上層部向け進捗報告資料の下書き', detail:'案件状況、リスク、支援要請をまとめる', tools:['Copilot','ChatGPT'], level:'ok', reason:'Word/PowerPointとの親和性が高い' },
+          { time:'11:30', task:'関係部署との調整', detail:'製造課、工務、安全、購買との合意形成', tools:['Copilot'], level:'ok', reason:'会議要約、宿題管理、依頼メールの時短に向く' },
+          { time:'13:30', task:'部下育成計画・面談メモ作成', detail:'6ヶ月計画、弱点、次の課題を整理', tools:['ChatGPT','Copilot','Gemini'], level:'ok', reason:'育成計画ドラフト化に強い' },
+          { time:'15:00', task:'予算・投資案件の整理', detail:'優先順位、リスク、費用対効果を比較', tools:['ChatGPT','Gemini'], level:'caution', reason:'論点整理は得意。金額・根拠は必ず人が検算' },
+          { time:'16:00', task:'ルール整備・標準化文書の叩き台', detail:'属人化排除、報告様式、手順統一', tools:['Copilot','ChatGPT'], level:'ok', reason:'標準文書の初稿づくりが速い' },
+          { time:'17:00', task:'翌日の重点課題整理', detail:'未完了案件、支援が必要な人、会議準備を整理', tools:['Copilot','Gemini'], level:'ok', reason:'週次レビューや次アクション抽出に向く' },
+        ]
+      },
+      {
+        label: '2日目：会議・報告集中日',
+        timeline: [
+          { time:'08:30', task:'週次MTG準備・資料確認', detail:'KPI・進捗・課題・来週計画の資料を最終確認', tools:['Copilot','ChatGPT'], level:'ok', reason:'資料の最終チェック・論点整理に向く' },
+          { time:'09:00', task:'部内週次MTG（進捗・課題・KPI）', detail:'各担当の進捗報告・課題共有・チーム方針確認', tools:['Copilot'], level:'ok', reason:'Teams議事録・アクション自動抽出に向く' },
+          { time:'10:30', task:'上層部への月次報告会', detail:'案件状況・コスト・リスク・支援要請の報告', tools:['Copilot','ChatGPT'], level:'ok', reason:'報告資料の骨子・数値整理のサポートに向く' },
+          { time:'11:30', task:'設備投資案件の承認会議', detail:'稟議・投資判断に必要な情報の最終整理', tools:['ChatGPT','Gemini'], level:'caution', reason:'論点整理・比較観点は有効。投資判断は人が行う' },
+          { time:'13:30', task:'他部門マネージャーとの情報共有', detail:'横断課題・協力依頼・情報共有のための1on1', tools:['Copilot'], level:'ok', reason:'会議メモ・フォローアップメールの時短に向く' },
+          { time:'14:30', task:'関東電計会議（テレカン）', detail:'他工場との情報交換・横展開・優良事例の共有', tools:['Copilot','Gemini'], level:'ok', reason:'議事録・共有資料の作成・横展開文書に向く' },
+          { time:'16:00', task:'会議フォローアップ・宿題処理', detail:'各会議で発生した宿題を担当者へ振り分け', tools:['Copilot','ChatGPT'], level:'ok', reason:'宿題一覧の整理・依頼メールの時短に向く' },
+          { time:'17:00', task:'週次振り返り・次週計画', detail:'今週の成果・課題・来週の優先事項を整理', tools:['ChatGPT','Copilot'], level:'ok', reason:'週次レポート・振り返りドラフトに有効' },
+        ]
+      },
+      {
+        label: '3日目：育成・チーム活動日',
+        timeline: [
+          { time:'08:30', task:'1on1面談の準備（2名分）', detail:'各メンバーの状況・課題・育成テーマの事前整理', tools:['ChatGPT','Copilot'], level:'ok', reason:'育成観点の整理・質問リスト作成に向く' },
+          { time:'09:00', task:'1on1面談 × 2名実施', detail:'成長確認・悩み傾聴・次のチャレンジ設定', tools:[], level:'manual', reason:'人との対話・信頼構築はAI代替不可' },
+          { time:'10:30', task:'OJT立会い（設計担当の仕様検討支援）', detail:'部下の仕様検討に同席し、考え方を引き出すOJT', tools:['ChatGPT'], level:'caution', reason:'フィードバックの骨子作成には有効。指導そのものは人が行う' },
+          { time:'11:30', task:'チームの強み・弱みの棚卸し', detail:'スキルマップを見直し、育成優先テーマを更新', tools:['ChatGPT','Gemini'], level:'ok', reason:'スキルギャップの分析・育成計画のドラフト化に向く' },
+          { time:'13:30', task:'育成計画の更新・記録', detail:'6ヶ月育成計画を最新化し、メンバーと合意', tools:['ChatGPT','Copilot'], level:'ok', reason:'育成計画ドラフト化・文書整形に強い' },
+          { time:'14:30', task:'チームナレッジ整備（SOP確認）', detail:'手順書・SOP・マニュアルの最新化確認', tools:['Copilot','ChatGPT'], level:'ok', reason:'文書整形・改訂箇所の洗い出しに向く' },
+          { time:'16:00', task:'来月の業務計画・人員配置案作成', detail:'案件スケジュール・要員・リスクを来月分で整理', tools:['ChatGPT','Copilot','Gemini'], level:'ok', reason:'計画ドラフト・工数見積もりのたたき台に有効' },
+          { time:'17:00', task:'週次日報・チーム活動記録', detail:'育成・チーム改善活動の記録を残す', tools:['Copilot','ChatGPT'], level:'ok', reason:'日報・活動記録の文章化が速い' },
+        ]
+      },
+    ],
+  },
+  admin: {
+    label: '事務担当', color: 'var(--color-admin)',
+    summary: '調達補助・文書管理・会議サポート・データ集計が中心',
+    firstStep: { task: 'メール対応・依頼文の作成', tip: 'Copilotでメール下書き・返信案を出させる。社内依頼・外部連絡の文面作成が最も即効性が高い。まずここから試す。' },
+    days: [
+      {
+        label: '1日目：通常事務業務',
+        timeline: [
+          { time:'08:30', task:'メール確認・当日対応事項の整理', detail:'社内依頼、外部業者連絡、締切確認を優先度付け', tools:['Copilot','Gemini'], level:'ok', reason:'メール要約・ToDo整理・返信下書きに向く' },
+          { time:'09:00', task:'発注処理（設備部品・消耗品）', detail:'発注書の作成・承認フロー・ベンダーへの送付', tools:['Copilot'], level:'ok', reason:'Excelの発注書整形・メール添付文の作成に向く' },
+          { time:'10:00', task:'請求書確認・経費精算処理', detail:'受領請求書の内容確認・システム入力・経路回覧', tools:['Copilot'], level:'caution', reason:'金額・先方情報の確認は人が行う。記録整理にはCopilot使用可' },
+          { time:'11:00', task:'設備台帳・管理書類の更新入力', detail:'点検記録・更新情報を台帳に反映', tools:[], level:'manual', reason:'専用システムへの入力作業。AI連携未対応' },
+          { time:'13:00', task:'会議室予約・スケジュール管理補助', detail:'複数MTGの調整・会議室確保・出席者調整', tools:['Copilot'], level:'ok', reason:'Outlook予定管理・調整メールの時短に向く' },
+          { time:'14:00', task:'書類整理・ファイリング（電子・紙）', detail:'設備投資・保全記録・法定書類の整理', tools:[], level:'manual', reason:'物理的な整理・保管作業。AI代替不可' },
+          { time:'15:00', task:'安全書類・法定書類の更新対応', detail:'有資格者台帳・点検記録・消防書類の期限確認', tools:['Copilot','ChatGPT'], level:'caution', reason:'期限管理リスト化に有効。法的内容の確認は担当者が行う' },
+          { time:'16:30', task:'翌日準備・未処理案件の整理', detail:'翌日対応が必要な案件・承認待ち・回答待ちを整理', tools:['Copilot'], level:'ok', reason:'ToDo整理・翌日のメール下書き準備に向く' },
+        ]
+      },
+      {
+        label: '2日目：月次締め・集計日',
+        timeline: [
+          { time:'08:30', task:'月次締め準備・データ収集', detail:'各担当者から実績数値・資料の収集を開始', tools:['Copilot'], level:'ok', reason:'収集依頼メール・催促文面の作成が速い' },
+          { time:'09:00', task:'設備投資案件の集計・予算対比表作成', detail:'承認済み案件の実績コストと予算を比較', tools:['Copilot','Gemini'], level:'caution', reason:'Excel集計・グラフ整形に向く。数値の正確性は人が確認' },
+          { time:'10:30', task:'各担当者からの実績入力確認・催促', detail:'未提出・不備がある担当者へ個別にフォロー', tools:['Copilot'], level:'ok', reason:'催促メール・リマインダー文面の作成が速い' },
+          { time:'11:30', task:'Excel集計・グラフ・ピボットテーブル更新', detail:'月次実績データを集計して見える化', tools:['Copilot','Gemini'], level:'ok', reason:'Excel Copilotで集計・グラフ自動生成が使える' },
+          { time:'13:00', task:'月次報告資料の仕上げ', detail:'集計結果を月次報告書のフォーマットに整形', tools:['Copilot','ChatGPT'], level:'ok', reason:'Word/PPTの整形・図表の配置整理に向く' },
+          { time:'14:30', task:'上長への提出・差戻し対応', detail:'提出後に差戻しがあれば修正・再提出', tools:['Copilot'], level:'ok', reason:'差戻し対応の修正作業にCopilotが使える' },
+          { time:'16:00', task:'発注実績・納品確認のまとめ', detail:'当月の発注・納品・未着案件の一覧化', tools:['Copilot'], level:'ok', reason:'Excelリスト整形・メールでの確認依頼に向く' },
+          { time:'17:00', task:'翌月分の準備・カレンダー確認', detail:'来月の締切・定期業務・会議日程を事前整理', tools:['Copilot','Gemini'], level:'ok', reason:'スケジュール整理・事前準備リスト作成に向く' },
+        ]
+      },
+      {
+        label: '3日目：会議サポート・資料整備日',
+        timeline: [
+          { time:'08:30', task:'会議資料の印刷・配布準備', detail:'当日3件の会議資料を印刷・製本・配布先確認', tools:[], level:'manual', reason:'印刷・物理準備作業。AI代替不可' },
+          { time:'09:00', task:'部門会議のファシリ補助・議事録作成', detail:'タイムキーパー・板書・議事録のリアルタイム記録', tools:['Copilot'], level:'ok', reason:'Teams議事録・アクション抽出に向く' },
+          { time:'10:30', task:'設備投資資料の体裁整形・提出準備', detail:'稟議書・仕様書・見積書の体裁確認と提出代行', tools:['Copilot','ChatGPT'], level:'ok', reason:'文書整形・表紙作成・提出チェックリスト作成に向く' },
+          { time:'11:30', task:'外部向け書類（申請補助）の確認', detail:'官公庁提出書類・法定届出書類のフォーマット確認', tools:['ChatGPT'], level:'caution', reason:'書類構成の確認に有効。法的内容の最終確認は担当者が行う' },
+          { time:'13:00', task:'社内周知資料・連絡文書の作成', detail:'安全ルール変更・設備停止予告などの周知文作成', tools:['Copilot','ChatGPT'], level:'ok', reason:'周知文・お知らせ文の下書きが速い' },
+          { time:'14:30', task:'外部業者向け案内文書の整備', detail:'入構証・安全教育資料・施設案内の更新', tools:['Copilot','ChatGPT'], level:'ok', reason:'文章の整形・更新箇所の表現改善に向く' },
+          { time:'16:00', task:'書類棚卸し・廃棄・スキャン保存', detail:'保存期限切れ書類の廃棄・重要書類の電子化', tools:[], level:'manual', reason:'現物確認・物理作業。AI代替不可' },
+          { time:'17:00', task:'翌週の準備・予定確認', detail:'来週の会議・締切・依頼対応を事前整理', tools:['Copilot','Gemini'], level:'ok', reason:'週次スケジュール整理・事前準備に向く' },
+        ]
+      },
+    ],
+  },
+};
+
+const toolMeta = {
+  'ChatGPT': { css:'chatgpt', role:'思考整理の主力', desc:'構造化・比較・報告書骨子・仮説出し' },
+  'Gemini':  { css:'gemini',  role:'資料理解の補助', desc:'長文整理・Web検索統合・マルチモーダル' },
+  'Copilot': { css:'copilot', role:'社内日常の主力', desc:'Outlook・Teams・Word・Excel・PowerPoint連携' },
+};
+
+const levelLabels = {
+  ok:      { label:'そのまま使いやすい', icon:'✓' },
+  caution: { label:'匿名化・確認前提',  icon:'⚠' },
+  manual:  { label:'AIより現場優先',     icon:'⛑' },
+};
+
+const deployOrder = [
+  { text:'メール要約・議事録・報告書骨子', warn:false },
+  { text:'比較表作成・抜け漏れチェック', warn:false },
+  { text:'育成計画・標準文書の下書き', warn:false },
+  { text:'技術判断・安全判断はAI補助まで', warn:true },
+];
+
+// ================================================================
+// STATE
+// ================================================================
+let currentRole = 'design';
+let currentView = 'single';
+let currentDay  = 0;
+let filterCaution = false;
+
+// Helper: get current timeline
+function getTimeline(roleKey, dayIdx) {
+  return roles[roleKey].days[dayIdx].timeline;
+}
+
+// ================================================================
+// RENDER: KPI — average across all days
+// ================================================================
+function renderKPI() {
+  const el = document.getElementById('kpiRow');
+  el.innerHTML = Object.entries(roles).map(([key, r]) => {
+    // average AI rate across 3 days
+    const allTasks = r.days.flatMap(d => d.timeline);
+    const total = allTasks.length;
+    const ai = allTasks.filter(t => t.tools.length > 0).length;
+    const caution = allTasks.filter(t => t.level === 'caution').length;
+    const pct = Math.round((ai / total) * 100);
+    return `
+      <div class="kpi-card">
+        <div class="kpi-label" style="color:${r.color}">${r.label}</div>
+        <div class="kpi-value" style="color:${r.color}">${pct}%</div>
+        <div class="kpi-desc">AI活用率（全3日平均）・要注意 ${caution}件</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${pct}%;background:${r.color}"></div></div>
+      </div>`;
+  }).join('');
+}
+
+// ================================================================
+// RENDER: Day label
+// ================================================================
+function renderDayLabel() {
+  const r = roles[currentRole];
+  const dayInfo = r.days[currentDay];
+  const el = document.getElementById('dayLabel');
+  if (el) el.textContent = dayInfo.label;
+}
+
+// ================================================================
+// RENDER: Single timeline
+// ================================================================
+function renderSingle() {
+  const r = roles[currentRole];
+  const dayData = r.days[currentDay];
+  const el = document.getElementById('timelineSingle');
+  const filterBtn = document.getElementById('filterCautionBtn');
+  const resetBtn  = document.getElementById('filterResetBtn');
+  const filterCount = document.getElementById('filterCount');
+
+  renderDayLabel();
+
+  // Sync filter button state
+  if (filterBtn) {
+    filterBtn.classList.toggle('active', filterCaution);
+    resetBtn.classList.toggle('visible', filterCaution);
+    const cautionTotal = dayData.timeline.filter(t => t.level === 'caution').length;
+    if (filterCount) filterCount.textContent = cautionTotal;
+  }
+
+  // おすすめ初手 banner (1日目のみ表示)
+  const fs = r.firstStep;
+  const banner = currentDay === 0 ? `
+    <div class="first-step-banner">
+      <div class="first-step-icon">🚀</div>
+      <div>
+        <div class="first-step-label">この役割のおすすめ初手</div>
+        <div class="first-step-task">${fs.task}</div>
+        <div class="first-step-tip">${fs.tip}</div>
+      </div>
+    </div>` : '';
+
+  const items = filterCaution
+    ? dayData.timeline.filter(t => t.level === 'caution')
+    : dayData.timeline;
+
+  const cards = items.map(item => {
+    const lv = levelLabels[item.level];
+    return `
+      <div class="task-card level-${item.level}">
+        <div class="task-top">
+          <div>
+            <div class="task-time">${item.time}</div>
+            <div class="task-name">${item.task}</div>
+            <div class="task-detail">${item.detail}</div>
+          </div>
+          <span class="level-badge ${item.level}">${lv.icon} ${lv.label}</span>
+        </div>
+        <div class="tool-badges">
+          ${item.tools.length > 0
+            ? item.tools.map(t => `<span class="tool-badge ${toolMeta[t].css}">${t}</span>`).join('')
+            : '<span class="tool-badge none">推奨なし</span>'}
+        </div>
+        <div class="reason-box"><strong>使いどころ:</strong> ${item.reason}</div>
+      </div>`;
+  }).join('');
+
+  const emptyMsg = filterCaution && items.length === 0
+    ? '<div style="color:var(--color-muted);text-align:center;padding:var(--sp-8)">要注意業務はありません</div>'
+    : '';
+
+  el.innerHTML = banner + cards + emptyMsg;
+}
+
+// ================================================================
+// RENDER: Sidebar
+// ================================================================
+function renderSidebar() {
+  const el = document.getElementById('sidebar');
+  let html = '';
+
+  // Tool roles
+  html += '<div class="side-card"><h3>ツールの役割分担</h3>';
+  Object.entries(toolMeta).forEach(([name, m]) => {
+    html += `<div class="tool-role-item">
+      <div class="name" style="color:var(--color-${m.css})">${name}</div>
+      <div class="desc">${m.role} — ${m.desc}</div>
+    </div>`;
+  });
+  html += '</div>';
+
+  // Deploy order
+  html += '<div class="side-card"><h3>社内展開しやすい順番</h3><ol class="deploy-list">';
+  deployOrder.forEach(d => {
+    html += `<li${d.warn ? ' class="warn"' : ''}>${d.text}</li>`;
+  });
+  html += '</ol></div>';
+
+  // Legend
+  html += '<div class="side-card"><h3>判定凡例</h3>';
+  Object.entries(levelLabels).forEach(([key, lv]) => {
+    html += `<div style="margin-bottom:var(--sp-2)"><span class="level-badge ${key}">${lv.icon} ${lv.label}</span></div>`;
+  });
+  html += '</div>';
+
+  el.innerHTML = html;
+}
+
+// ================================================================
+// RENDER: Compare grid (4 roles × current day)
+// ================================================================
+function renderCompare() {
+  const el = document.getElementById('compareGrid');
+  const keys = ['design','maintenance','manager','admin'];
+  const timelines = keys.map(k => roles[k].days[currentDay].timeline);
+  const maxLen = Math.max(...timelines.map(t => t.length));
+
+  let html = '';
+  // headers
+  html += '<div class="cg-header" style="color:var(--color-muted);font-size:var(--fs-xs)">時刻</div>';
+  keys.forEach(k => {
+    html += `<div class="cg-header" style="color:${roles[k].color};border-top:3px solid ${roles[k].color}">${roles[k].label}</div>`;
+  });
+
+  for (let i = 0; i < maxLen; i++) {
+    const time = timelines.map(tl => tl[i]?.time || '').find(t => t) || '';
+    html += `<div class="cg-time">${time}</div>`;
+    timelines.forEach((tl, ki) => {
+      const item = tl[i];
+      if (!item) { html += '<div class="cg-cell"></div>'; return; }
+      const lv = levelLabels[item.level];
+      html += `<div class="cg-cell" style="border-left:3px solid var(--color-${item.level})">
+        <div class="task-name">${item.task}</div>
+        <div class="tool-badges">
+          ${item.tools.length > 0
+            ? item.tools.map(t => `<span class="tool-badge ${toolMeta[t].css}" style="font-size:9px;padding:0 5px" title="${t}">${t}</span>`).join('')
+            : `<span class="level-badge ${item.level}" style="font-size:9px;padding:0 5px">${lv.icon}</span>`}
+        </div>
+        <div class="cg-reason">${item.reason}</div>
+      </div>`;
+    });
+  }
+  el.innerHTML = html;
+}
+
+// ================================================================
+// TOGGLE LOGIC
+// ================================================================
+function setView(view) {
+  currentView = view;
+  document.getElementById('singleView').style.display = view === 'single' ? '' : 'none';
+  document.getElementById('compareView').style.display = view === 'compare' ? '' : 'none';
+  document.getElementById('roleToggle').style.display = view === 'single' ? '' : 'none';
+  document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+}
+
+function setRole(role) {
+  currentRole = role;
+  filterCaution = false;
+  document.querySelectorAll('[data-role]').forEach(b => {
+    const isActive = b.dataset.role === role;
+    b.classList.toggle('active', isActive);
+    if (isActive) { b.style.borderColor = roles[role].color; b.style.color = roles[role].color; b.style.background = `color-mix(in srgb, ${roles[role].color} 10%, transparent)`; }
+    else { b.style.borderColor = ''; b.style.color = ''; b.style.background = ''; }
+  });
+  renderSingle();
+  renderSidebar();
+  if (currentView === 'compare') renderCompare();
+}
+
+function setDay(day) {
+  currentDay = day;
+  filterCaution = false;
+  document.querySelectorAll('[data-day]').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.day) === day);
+  });
+  renderSingle();
+  if (currentView === 'compare') renderCompare();
+}
+
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+document.querySelectorAll('[data-role]').forEach(b => b.addEventListener('click', () => setRole(b.dataset.role)));
+document.querySelectorAll('[data-day]').forEach(b => b.addEventListener('click', () => setDay(parseInt(b.dataset.day))));
+
+document.getElementById('filterCautionBtn').addEventListener('click', () => {
+  filterCaution = !filterCaution;
+  renderSingle();
+});
+document.getElementById('filterResetBtn').addEventListener('click', () => {
+  filterCaution = false;
+  renderSingle();
+});
+
+// Bottom tabs
+document.querySelectorAll('.tab-trigger').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-trigger').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelector(`.tab-panel[data-tab="${btn.dataset.tab}"]`).classList.add('active');
+  });
+});
+
+// ================================================================
+// INIT
+// ================================================================
+renderKPI();
+renderSingle();
+renderSidebar();
+renderCompare();
+setView('single');
+setRole('design');
+lucide.createIcons();
+</script>
+</div>
+</div>
+
+<script>
+
+// ================================================================
+// WORKFLOW TAB (Tab 8) — scoped to avoid conflicts with main page
+// ================================================================
+(function() {
+
+// ================================================================
+// DATA — 4役割 × 3日分 + 3色判定 + 理由文
+// ================================================================
+const wf_roles = {
+  design: {
+    label: '設計担当', color: 'var(--color-design)',
+    summary: '仕様検討・図面/制御・ベンダー比較・導入調整が中心',
+    firstStep: { task: 'ベンダー提案の比較表作成', tip: '比較軸（定格・保護等級・納期・予備品）をChatGPTに出させる。叩き台が10分→2分に。まずここから試す。' },
+    days: [
+      {
+        label: '1日目：通常設計業務',
+        timeline: [
+          { time:'08:30', task:'メール確認・本日の優先順位整理', detail:'工事案件、ベンダー返信、製造課依頼、未回答事項を整理', tools:['Copilot','Gemini'], level:'ok', reason:'Outlook/Teamsとの連携、メール要約、ToDo整理に向く' },
+          { time:'09:00', task:'設備投資案件の仕様確認', detail:'既設仕様・要求仕様・制約条件を読み比べる', tools:['ChatGPT','Gemini'], level:'caution', reason:'仕様比較表・論点整理に強い。固有名詞や数値は匿名化・再確認が前提' },
+          { time:'10:30', task:'ベンダー提案の比較表作成', detail:'定格、保護等級、通信、納期、予備品を比較', tools:['ChatGPT','Gemini','Copilot'], level:'ok', reason:'比較軸の整理・表の叩き台生成に最適' },
+          { time:'11:30', task:'関係部署向け説明資料の骨子作成', detail:'停止影響、代替運転、メリット、懸念点を整理', tools:['Copilot','ChatGPT'], level:'ok', reason:'Word/PowerPointの下書きと論点整理が速い' },
+          { time:'13:00', task:'打合せ・仕様すり合わせ', detail:'製造課・工務・ベンダーと条件調整', tools:['Copilot'], level:'ok', reason:'会議メモ要約、論点抽出、宿題整理に向く' },
+          { time:'14:30', task:'図面/PLC/DCS修正の検討', detail:'I/O、インターロック、画面構成、改造方針の検討', tools:['ChatGPT'], level:'caution', reason:'レビュー観点やロジック説明には有効。実装値・番地・安全回路は人が最終判断' },
+          { time:'16:00', task:'停止依頼メール・議事録の作成', detail:'影響、工事日、依頼事項、確認事項を明文化', tools:['Copilot','Gemini'], level:'ok', reason:'社内文面生成、要約、トーン調整が得意' },
+          { time:'17:00', task:'進捗報告・翌日準備', detail:'案件ごとの進捗、課題、宿題を整理', tools:['Copilot','ChatGPT'], level:'ok', reason:'報告書・進捗更新の時短に有効' },
+        ]
+      },
+      {
+        label: '2日目：打合せ・調整集中日',
+        timeline: [
+          { time:'08:30', task:'メール確認・打合せアジェンダ準備', detail:'当日3件の打合せ資料を事前確認・論点整理', tools:['Copilot','ChatGPT'], level:'ok', reason:'アジェンダ整理・想定質問の洗い出しに向く' },
+          { time:'09:00', task:'社内キックオフMTG（製造課・工務・安全）', detail:'設備投資案件の目的・スケジュール・役割分担の合意', tools:['Copilot'], level:'ok', reason:'Teams議事録・アクション自動抽出に向く' },
+          { time:'10:30', task:'ベンダーとのテクニカルMTG', detail:'仕様確認・納期・技術的懸念点の質疑応答', tools:['Copilot'], level:'ok', reason:'外部との会議でも議事録まとめに活用可' },
+          { time:'11:30', task:'仕様変更事項・宿題の整理', detail:'打合せで出た仕様変更・確認事項をまとめる', tools:['ChatGPT','Copilot'], level:'ok', reason:'変更点の構造化・影響範囲の整理に向く' },
+          { time:'13:00', task:'仕様書・提出書類の更新', detail:'確定した内容を仕様書・設計図書へ反映', tools:['Copilot'], level:'caution', reason:'Word/Excelとの連携で効率化。技術的確認は人が行う' },
+          { time:'14:30', task:'関係部署への調整メール・資料送付', detail:'変更内容・影響・確認依頼を各部署に送付', tools:['Copilot','ChatGPT'], level:'ok', reason:'メール文章・添付資料の準備が速い' },
+          { time:'16:00', task:'議事録・宿題リストの整理・共有', detail:'3件の打合せ結果を一括整理してTeamsに投稿', tools:['Copilot','Gemini'], level:'ok', reason:'複数会議の要点を横断まとめするのに強い' },
+          { time:'17:00', task:'翌日準備・課題確認', detail:'未解決の仕様課題・ベンダー回答待ち案件を整理', tools:['ChatGPT','Copilot'], level:'ok', reason:'課題リスト整理・優先順位付けに向く' },
+        ]
+      },
+      {
+        label: '3日目：現場立会い・施工管理日',
+        timeline: [
+          { time:'08:30', task:'作業前安全確認・当日手順の確認', detail:'TBM・KYT・作業手順書の最終読み合わせ', tools:['ChatGPT'], level:'caution', reason:'手順書の表現改善には有効。安全確認は人が主体' },
+          { time:'09:00', task:'現場立会い（電気盤据付・配線）', detail:'ケーブルルート・盤据付位置・施工品質の確認', tools:[], level:'manual', reason:'現場目視・現物確認が必須。AI代替不可' },
+          { time:'10:30', task:'施工品質確認・チェックシート記入', detail:'接続確認・絶縁測定・トルク管理の記録', tools:[], level:'manual', reason:'実機計測・記録作業。AI代替不可' },
+          { time:'11:30', task:'職人への指示・変更点対応', detail:'現場で生じた変更・追加作業の指示と記録', tools:['ChatGPT'], level:'caution', reason:'変更記録の文章化・影響確認の壁打ちに使用可' },
+          { time:'13:00', task:'試運転前確認・絶縁測定記録確認', detail:'試運転前チェックリストの最終確認', tools:['Copilot'], level:'ok', reason:'チェックリスト整理・漏れ確認に向く' },
+          { time:'14:30', task:'試運転立会い・動作確認', detail:'シーケンス動作・インターロック・警報確認', tools:[], level:'manual', reason:'実機動作確認。安全上AI代替不可' },
+          { time:'16:00', task:'施工記録・完成図書の整理', detail:'写真・測定値・変更点を記録に残す', tools:['Copilot','ChatGPT'], level:'ok', reason:'文書整形・記録の構造化が速い' },
+          { time:'17:00', task:'当日作業完了報告・翌日段取り', detail:'作業完了状況・残課題・翌日の準備事項を報告', tools:['Copilot','ChatGPT'], level:'ok', reason:'完了報告メール・日報の時短に有効' },
+        ]
+      },
+    ],
+  },
+  maintenance: {
+    label: '保全担当', color: 'var(--color-maintenance)',
+    summary: 'トラブル初動・現場確認・原因解析・再発防止が中心',
+    firstStep: { task: '報告書の構成案作成', tip: '「事実/推定/未確認」の3分割をChatGPTに構成させる。白紙から書く時間がゼロになる。まずここから試す。' },
+    days: [
+      {
+        label: '1日目：通常保全業務',
+        timeline: [
+          { time:'08:30', task:'夜間異常・申し送り確認', detail:'停止履歴、警報、運転員コメントを把握', tools:['Copilot'], level:'ok', reason:'Teams/メール/日報の横断要約に向く' },
+          { time:'09:00', task:'現場ヒアリング・一次切り分け', detail:'いつ・どこで・何が・どの頻度で起きたか確認', tools:[], level:'manual', reason:'現物・現場・現象の一次確認は人が行うべき' },
+          { time:'10:00', task:'原因候補の洗い出し', detail:'4M、なぜなぜ、時系列で仮説を広げる', tools:['ChatGPT','Gemini'], level:'caution', reason:'仮説出し・抜け漏れ防止に有効。断定は禁止' },
+          { time:'11:00', task:'報告書の構成案作成', detail:'事実／推定／未確認事項を分けて整理', tools:['ChatGPT','Copilot'], level:'ok', reason:'構成作成と文章整形が速い' },
+          { time:'13:00', task:'部品手配・関係者調整', detail:'工事日調整、必要部材、停止条件を確認', tools:['Copilot','Gemini'], level:'ok', reason:'メール、依頼文、日程候補作成に向く' },
+          { time:'14:30', task:'再発防止策のたたき台作成', detail:'点検、教育、設定見直し、部品交換方針を整理', tools:['ChatGPT','Gemini'], level:'caution', reason:'対策案の網羅化に有効。安全性・実現性の最終判断は人' },
+          { time:'16:00', task:'水平展開用の共有文作成', detail:'他設備・他ラインへの注意喚起を文章化', tools:['Copilot'], level:'ok', reason:'社内共有文・朝礼資料の整形に向く' },
+          { time:'17:00', task:'日報・残課題整理', detail:'未解決項目、次回確認点、関係者ToDoを整理', tools:['Copilot','ChatGPT'], level:'ok', reason:'日報の清書・ToDo抽出に有効' },
+        ]
+      },
+      {
+        label: '2日目：緊急トラブル対応日',
+        timeline: [
+          { time:'08:30', task:'緊急呼び出し対応（ライン停止）', detail:'停止警報の内容・ライン状況・影響範囲を把握', tools:['Copilot'], level:'ok', reason:'引き継ぎ・警報ログの横断要約で状況把握が速い' },
+          { time:'09:00', task:'現場急行・状況確認', detail:'現地で停止原因の初期調査・目視確認', tools:[], level:'manual', reason:'現物確認が最優先。AI介入は状況確認後' },
+          { time:'10:00', task:'原因特定・仮復旧作業', detail:'推定原因に基づく仮復旧処置の実施', tools:['ChatGPT'], level:'caution', reason:'類似事例・対処法のヒント出しに使用可。実作業は人が判断' },
+          { time:'11:30', task:'部品手配・修理調整', detail:'必要部品の特定・手配・工事日調整', tools:['Copilot','Gemini'], level:'ok', reason:'手配メール・納期確認依頼の文面作成が速い' },
+          { time:'13:00', task:'本修理・動作確認', detail:'部品交換・本修理・ライン再起動確認', tools:[], level:'manual', reason:'実機修理・安全確認はAI代替不可' },
+          { time:'14:30', task:'製造課への状況報告・再発防止説明', detail:'復旧状況・原因・今後の対策を製造課に報告', tools:['ChatGPT','Copilot'], level:'ok', reason:'口頭説明の骨子作成・報告資料の時短に有効' },
+          { time:'16:00', task:'トラブル報告書作成', detail:'発生経緯・原因・処置・再発防止を記録', tools:['ChatGPT','Copilot'], level:'ok', reason:'構成作成と文章整形が速い' },
+          { time:'17:00', task:'残課題整理・予防保全計画見直し', detail:'今回の教訓を点検計画・保全基準に反映', tools:['ChatGPT','Gemini'], level:'caution', reason:'保全基準の改訂案作成に有効。最終判断は人' },
+        ]
+      },
+      {
+        label: '3日目：定修準備・SOP整備日',
+        timeline: [
+          { time:'08:30', task:'定修計画の確認・最終チェック', detail:'工程表・作業分担・停止範囲の最終確認', tools:['Copilot','ChatGPT'], level:'ok', reason:'工程表の整合確認・漏れチェックに向く' },
+          { time:'09:00', task:'停止工程・作業分担の最終調整', detail:'複数工事の時間的重複・作業者配置を見直す', tools:['ChatGPT'], level:'caution', reason:'工程調整案の壁打ちに有効。最終調整は現場責任者が行う' },
+          { time:'10:00', task:'部品・工具・材料の準備確認', detail:'必要品リストと現物の照合・不足品の手配', tools:[], level:'manual', reason:'現物照合が必須。AI代替不可' },
+          { time:'11:00', task:'作業手順書の読み合わせ・更新', detail:'前回定修の反省を踏まえた手順書の改訂', tools:['ChatGPT','Copilot'], level:'ok', reason:'手順書の文章整形・改訂箇所の表現改善に向く' },
+          { time:'13:00', task:'施工業者との打合せ・安全説明', detail:'外部業者への作業範囲・安全ルールの説明', tools:['Copilot'], level:'ok', reason:'説明資料・安全書類の整形に向く' },
+          { time:'14:30', task:'KYT（危険予知訓練）実施', detail:'定修作業の危険ポイントを全員で洗い出す', tools:['ChatGPT'], level:'caution', reason:'危険シナリオの網羅的洗い出しに有効。最終判断は現場リーダー' },
+          { time:'16:00', task:'当日準備状況の記録・最終確認リスト', detail:'明日の定修に向けた準備完了チェックリスト作成', tools:['Copilot'], level:'ok', reason:'チェックリスト整形・関係者への連絡文に向く' },
+          { time:'17:00', task:'関係部署への最終連絡', detail:'明日の停止範囲・時間・注意事項を各部署に通知', tools:['Copilot','ChatGPT'], level:'ok', reason:'通知メール・周知文の作成が速い' },
+        ]
+      },
+    ],
+  },
+  manager: {
+    label: 'マネージャー', color: 'var(--color-manager)',
+    summary: '案件優先順位・人員配分・調整・育成・報告が中心',
+    firstStep: { task: '上層部向け進捗報告資料の下書き', tip: '案件状況・リスク・支援要請の3点をCopilotに構成させる。報告書の骨子づくりが最も即効性が高い。まずここから試す。' },
+    days: [
+      {
+        label: '1日目：通常マネジメント業務',
+        timeline: [
+          { time:'08:30', task:'全案件の優先順位確認', detail:'停止案件、納期、予算、承認滞留を把握', tools:['Copilot','Gemini'], level:'ok', reason:'メール・会議・メモの横断整理に有効' },
+          { time:'09:30', task:'メンバーへの指示・負荷平準化', detail:'誰に何を持たせるかを見直す', tools:['ChatGPT','Copilot'], level:'ok', reason:'優先順位整理、説明文、指示の骨子作成に向く' },
+          { time:'10:30', task:'上層部向け進捗報告資料の下書き', detail:'案件状況、リスク、支援要請をまとめる', tools:['Copilot','ChatGPT'], level:'ok', reason:'Word/PowerPointとの親和性が高い' },
+          { time:'11:30', task:'関係部署との調整', detail:'製造課、工務、安全、購買との合意形成', tools:['Copilot'], level:'ok', reason:'会議要約、宿題管理、依頼メールの時短に向く' },
+          { time:'13:30', task:'部下育成計画・面談メモ作成', detail:'6ヶ月計画、弱点、次の課題を整理', tools:['ChatGPT','Copilot','Gemini'], level:'ok', reason:'育成計画ドラフト化に強い' },
+          { time:'15:00', task:'予算・投資案件の整理', detail:'優先順位、リスク、費用対効果を比較', tools:['ChatGPT','Gemini'], level:'caution', reason:'論点整理は得意。金額・根拠は必ず人が検算' },
+          { time:'16:00', task:'ルール整備・標準化文書の叩き台', detail:'属人化排除、報告様式、手順統一', tools:['Copilot','ChatGPT'], level:'ok', reason:'標準文書の初稿づくりが速い' },
+          { time:'17:00', task:'翌日の重点課題整理', detail:'未完了案件、支援が必要な人、会議準備を整理', tools:['Copilot','Gemini'], level:'ok', reason:'週次レビューや次アクション抽出に向く' },
+        ]
+      },
+      {
+        label: '2日目：会議・報告集中日',
+        timeline: [
+          { time:'08:30', task:'週次MTG準備・資料確認', detail:'KPI・進捗・課題・来週計画の資料を最終確認', tools:['Copilot','ChatGPT'], level:'ok', reason:'資料の最終チェック・論点整理に向く' },
+          { time:'09:00', task:'部内週次MTG（進捗・課題・KPI）', detail:'各担当の進捗報告・課題共有・チーム方針確認', tools:['Copilot'], level:'ok', reason:'Teams議事録・アクション自動抽出に向く' },
+          { time:'10:30', task:'上層部への月次報告会', detail:'案件状況・コスト・リスク・支援要請の報告', tools:['Copilot','ChatGPT'], level:'ok', reason:'報告資料の骨子・数値整理のサポートに向く' },
+          { time:'11:30', task:'設備投資案件の承認会議', detail:'稟議・投資判断に必要な情報の最終整理', tools:['ChatGPT','Gemini'], level:'caution', reason:'論点整理・比較観点は有効。投資判断は人が行う' },
+          { time:'13:30', task:'他部門マネージャーとの情報共有', detail:'横断課題・協力依頼・情報共有のための1on1', tools:['Copilot'], level:'ok', reason:'会議メモ・フォローアップメールの時短に向く' },
+          { time:'14:30', task:'関東電計会議（テレカン）', detail:'他工場との情報交換・横展開・優良事例の共有', tools:['Copilot','Gemini'], level:'ok', reason:'議事録・共有資料の作成・横展開文書に向く' },
+          { time:'16:00', task:'会議フォローアップ・宿題処理', detail:'各会議で発生した宿題を担当者へ振り分け', tools:['Copilot','ChatGPT'], level:'ok', reason:'宿題一覧の整理・依頼メールの時短に向く' },
+          { time:'17:00', task:'週次振り返り・次週計画', detail:'今週の成果・課題・来週の優先事項を整理', tools:['ChatGPT','Copilot'], level:'ok', reason:'週次レポート・振り返りドラフトに有効' },
+        ]
+      },
+      {
+        label: '3日目：育成・チーム活動日',
+        timeline: [
+          { time:'08:30', task:'1on1面談の準備（2名分）', detail:'各メンバーの状況・課題・育成テーマの事前整理', tools:['ChatGPT','Copilot'], level:'ok', reason:'育成観点の整理・質問リスト作成に向く' },
+          { time:'09:00', task:'1on1面談 × 2名実施', detail:'成長確認・悩み傾聴・次のチャレンジ設定', tools:[], level:'manual', reason:'人との対話・信頼構築はAI代替不可' },
+          { time:'10:30', task:'OJT立会い（設計担当の仕様検討支援）', detail:'部下の仕様検討に同席し、考え方を引き出すOJT', tools:['ChatGPT'], level:'caution', reason:'フィードバックの骨子作成には有効。指導そのものは人が行う' },
+          { time:'11:30', task:'チームの強み・弱みの棚卸し', detail:'スキルマップを見直し、育成優先テーマを更新', tools:['ChatGPT','Gemini'], level:'ok', reason:'スキルギャップの分析・育成計画のドラフト化に向く' },
+          { time:'13:30', task:'育成計画の更新・記録', detail:'6ヶ月育成計画を最新化し、メンバーと合意', tools:['ChatGPT','Copilot'], level:'ok', reason:'育成計画ドラフト化・文書整形に強い' },
+          { time:'14:30', task:'チームナレッジ整備（SOP確認）', detail:'手順書・SOP・マニュアルの最新化確認', tools:['Copilot','ChatGPT'], level:'ok', reason:'文書整形・改訂箇所の洗い出しに向く' },
+          { time:'16:00', task:'来月の業務計画・人員配置案作成', detail:'案件スケジュール・要員・リスクを来月分で整理', tools:['ChatGPT','Copilot','Gemini'], level:'ok', reason:'計画ドラフト・工数見積もりのたたき台に有効' },
+          { time:'17:00', task:'週次日報・チーム活動記録', detail:'育成・チーム改善活動の記録を残す', tools:['Copilot','ChatGPT'], level:'ok', reason:'日報・活動記録の文章化が速い' },
+        ]
+      },
+    ],
+  },
+  admin: {
+    label: '事務担当', color: 'var(--color-admin)',
+    summary: '調達補助・文書管理・会議サポート・データ集計が中心',
+    firstStep: { task: 'メール対応・依頼文の作成', tip: 'Copilotでメール下書き・返信案を出させる。社内依頼・外部連絡の文面作成が最も即効性が高い。まずここから試す。' },
+    days: [
+      {
+        label: '1日目：通常事務業務',
+        timeline: [
+          { time:'08:30', task:'メール確認・当日対応事項の整理', detail:'社内依頼、外部業者連絡、締切確認を優先度付け', tools:['Copilot','Gemini'], level:'ok', reason:'メール要約・ToDo整理・返信下書きに向く' },
+          { time:'09:00', task:'発注処理（設備部品・消耗品）', detail:'発注書の作成・承認フロー・ベンダーへの送付', tools:['Copilot'], level:'ok', reason:'Excelの発注書整形・メール添付文の作成に向く' },
+          { time:'10:00', task:'請求書確認・経費精算処理', detail:'受領請求書の内容確認・システム入力・経路回覧', tools:['Copilot'], level:'caution', reason:'金額・先方情報の確認は人が行う。記録整理にはCopilot使用可' },
+          { time:'11:00', task:'設備台帳・管理書類の更新入力', detail:'点検記録・更新情報を台帳に反映', tools:[], level:'manual', reason:'専用システムへの入力作業。AI連携未対応' },
+          { time:'13:00', task:'会議室予約・スケジュール管理補助', detail:'複数MTGの調整・会議室確保・出席者調整', tools:['Copilot'], level:'ok', reason:'Outlook予定管理・調整メールの時短に向く' },
+          { time:'14:00', task:'書類整理・ファイリング（電子・紙）', detail:'設備投資・保全記録・法定書類の整理', tools:[], level:'manual', reason:'物理的な整理・保管作業。AI代替不可' },
+          { time:'15:00', task:'安全書類・法定書類の更新対応', detail:'有資格者台帳・点検記録・消防書類の期限確認', tools:['Copilot','ChatGPT'], level:'caution', reason:'期限管理リスト化に有効。法的内容の確認は担当者が行う' },
+          { time:'16:30', task:'翌日準備・未処理案件の整理', detail:'翌日対応が必要な案件・承認待ち・回答待ちを整理', tools:['Copilot'], level:'ok', reason:'ToDo整理・翌日のメール下書き準備に向く' },
+        ]
+      },
+      {
+        label: '2日目：月次締め・集計日',
+        timeline: [
+          { time:'08:30', task:'月次締め準備・データ収集', detail:'各担当者から実績数値・資料の収集を開始', tools:['Copilot'], level:'ok', reason:'収集依頼メール・催促文面の作成が速い' },
+          { time:'09:00', task:'設備投資案件の集計・予算対比表作成', detail:'承認済み案件の実績コストと予算を比較', tools:['Copilot','Gemini'], level:'caution', reason:'Excel集計・グラフ整形に向く。数値の正確性は人が確認' },
+          { time:'10:30', task:'各担当者からの実績入力確認・催促', detail:'未提出・不備がある担当者へ個別にフォロー', tools:['Copilot'], level:'ok', reason:'催促メール・リマインダー文面の作成が速い' },
+          { time:'11:30', task:'Excel集計・グラフ・ピボットテーブル更新', detail:'月次実績データを集計して見える化', tools:['Copilot','Gemini'], level:'ok', reason:'Excel Copilotで集計・グラフ自動生成が使える' },
+          { time:'13:00', task:'月次報告資料の仕上げ', detail:'集計結果を月次報告書のフォーマットに整形', tools:['Copilot','ChatGPT'], level:'ok', reason:'Word/PPTの整形・図表の配置整理に向く' },
+          { time:'14:30', task:'上長への提出・差戻し対応', detail:'提出後に差戻しがあれば修正・再提出', tools:['Copilot'], level:'ok', reason:'差戻し対応の修正作業にCopilotが使える' },
+          { time:'16:00', task:'発注実績・納品確認のまとめ', detail:'当月の発注・納品・未着案件の一覧化', tools:['Copilot'], level:'ok', reason:'Excelリスト整形・メールでの確認依頼に向く' },
+          { time:'17:00', task:'翌月分の準備・カレンダー確認', detail:'来月の締切・定期業務・会議日程を事前整理', tools:['Copilot','Gemini'], level:'ok', reason:'スケジュール整理・事前準備リスト作成に向く' },
+        ]
+      },
+      {
+        label: '3日目：会議サポート・資料整備日',
+        timeline: [
+          { time:'08:30', task:'会議資料の印刷・配布準備', detail:'当日3件の会議資料を印刷・製本・配布先確認', tools:[], level:'manual', reason:'印刷・物理準備作業。AI代替不可' },
+          { time:'09:00', task:'部門会議のファシリ補助・議事録作成', detail:'タイムキーパー・板書・議事録のリアルタイム記録', tools:['Copilot'], level:'ok', reason:'Teams議事録・アクション抽出に向く' },
+          { time:'10:30', task:'設備投資資料の体裁整形・提出準備', detail:'稟議書・仕様書・見積書の体裁確認と提出代行', tools:['Copilot','ChatGPT'], level:'ok', reason:'文書整形・表紙作成・提出チェックリスト作成に向く' },
+          { time:'11:30', task:'外部向け書類（申請補助）の確認', detail:'官公庁提出書類・法定届出書類のフォーマット確認', tools:['ChatGPT'], level:'caution', reason:'書類構成の確認に有効。法的内容の最終確認は担当者が行う' },
+          { time:'13:00', task:'社内周知資料・連絡文書の作成', detail:'安全ルール変更・設備停止予告などの周知文作成', tools:['Copilot','ChatGPT'], level:'ok', reason:'周知文・お知らせ文の下書きが速い' },
+          { time:'14:30', task:'外部業者向け案内文書の整備', detail:'入構証・安全教育資料・施設案内の更新', tools:['Copilot','ChatGPT'], level:'ok', reason:'文章の整形・更新箇所の表現改善に向く' },
+          { time:'16:00', task:'書類棚卸し・廃棄・スキャン保存', detail:'保存期限切れ書類の廃棄・重要書類の電子化', tools:[], level:'manual', reason:'現物確認・物理作業。AI代替不可' },
+          { time:'17:00', task:'翌週の準備・予定確認', detail:'来週の会議・締切・依頼対応を事前整理', tools:['Copilot','Gemini'], level:'ok', reason:'週次スケジュール整理・事前準備に向く' },
+        ]
+      },
+    ],
+  },
+};
+
+const wf_toolMeta = {
+  'ChatGPT': { css:'chatgpt', role:'思考整理の主力', desc:'構造化・比較・報告書骨子・仮説出し' },
+  'Gemini':  { css:'gemini',  role:'資料理解の補助', desc:'長文整理・Web検索統合・マルチモーダル' },
+  'Copilot': { css:'copilot', role:'社内日常の主力', desc:'Outlook・Teams・Word・Excel・PowerPoint連携' },
+};
+
+const wf_levelLabels = {
+  ok:      { label:'そのまま使いやすい', icon:'✓' },
+  caution: { label:'匿名化・確認前提',  icon:'⚠' },
+  manual:  { label:'AIより現場優先',     icon:'⛑' },
+};
+
+const wf_deployOrder = [
+  { text:'メール要約・議事録・報告書骨子', warn:false },
+  { text:'比較表作成・抜け漏れチェック', warn:false },
+  { text:'育成計画・標準文書の下書き', warn:false },
+  { text:'技術判断・安全判断はAI補助まで', warn:true },
+];
+
+// ================================================================
+// STATE
+// ================================================================
+let wf_currentRole = 'design';
+let wf_currentView = 'single';
+let wf_currentDay  = 0;
+let wf_filterCaution = false;
+
+// Helper: get current timeline
+function wf_getTimeline(roleKey, dayIdx) {
+  return wf_roles[roleKey].days[dayIdx].timeline;
+}
+
+// ================================================================
+// RENDER: KPI — average across all days
+// ================================================================
+function wf_renderKPI() {
+  const el = document.getElementById('wf-kpiRow');
+  el.innerHTML = Object.entries(wf_roles).map(([key, r]) => {
+    // average AI rate across 3 days
+    const allTasks = r.days.flatMap(d => d.timeline);
+    const total = allTasks.length;
+    const ai = allTasks.filter(t => t.tools.length > 0).length;
+    const caution = allTasks.filter(t => t.level === 'caution').length;
+    const pct = Math.round((ai / total) * 100);
+    return `
+      <div class="kpi-card">
+        <div class="kpi-label" style="color:${r.color}">${r.label}</div>
+        <div class="kpi-value" style="color:${r.color}">${pct}%</div>
+        <div class="kpi-desc">AI活用率（全3日平均）・要注意 ${caution}件</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${pct}%;background:${r.color}"></div></div>
+      </div>`;
+  }).join('');
+}
+
+// ================================================================
+// RENDER: Day label
+// ================================================================
+function wf_renderDayLabel() {
+  const r = wf_roles[wf_currentRole];
+  const dayInfo = r.days[wf_currentDay];
+  const el = document.getElementById('wf-dayLabel');
+  if (el) el.textContent = dayInfo.label;
+}
+
+// ================================================================
+// RENDER: Single timeline
+// ================================================================
+function wf_renderSingle() {
+  const r = wf_roles[wf_currentRole];
+  const dayData = r.days[wf_currentDay];
+  const el = document.getElementById('wf-timelineSingle');
+  const filterBtn = document.getElementById('wf-wf_filterCautionBtn');
+  const resetBtn  = document.getElementById('wf-filterResetBtn');
+  const filterCount = document.getElementById('wf-filterCount');
+
+  wf_renderDayLabel();
+
+  // Sync filter button state
+  if (filterBtn) {
+    filterBtn.classList.toggle('active', wf_filterCaution);
+    resetBtn.classList.toggle('visible', wf_filterCaution);
+    const cautionTotal = dayData.timeline.filter(t => t.level === 'caution').length;
+    if (filterCount) filterCount.textContent = cautionTotal;
+  }
+
+  // おすすめ初手 banner (1日目のみ表示)
+  const fs = r.firstStep;
+  const banner = wf_currentDay === 0 ? `
+    <div class="first-step-banner">
+      <div class="first-step-icon">🚀</div>
+      <div>
+        <div class="first-step-label">この役割のおすすめ初手</div>
+        <div class="first-step-task">${fs.task}</div>
+        <div class="first-step-tip">${fs.tip}</div>
+      </div>
+    </div>` : '';
+
+  const items = wf_filterCaution
+    ? dayData.timeline.filter(t => t.level === 'caution')
+    : dayData.timeline;
+
+  const cards = items.map(item => {
+    const lv = wf_levelLabels[item.level];
+    return `
+      <div class="task-card level-${item.level}">
+        <div class="task-top">
+          <div>
+            <div class="task-time">${item.time}</div>
+            <div class="task-name">${item.task}</div>
+            <div class="task-detail">${item.detail}</div>
+          </div>
+          <span class="level-badge ${item.level}">${lv.icon} ${lv.label}</span>
+        </div>
+        <div class="tool-badges">
+          ${item.tools.length > 0
+            ? item.tools.map(t => `<span class="tool-badge ${wf_toolMeta[t].css}">${t}</span>`).join('')
+            : '<span class="tool-badge none">推奨なし</span>'}
+        </div>
+        <div class="reason-box"><strong>使いどころ:</strong> ${item.reason}</div>
+      </div>`;
+  }).join('');
+
+  const emptyMsg = wf_filterCaution && items.length === 0
+    ? '<div style="color:var(--color-muted);text-align:center;padding:var(--sp-8)">要注意業務はありません</div>'
+    : '';
+
+  el.innerHTML = banner + cards + emptyMsg;
+}
+
+// ================================================================
+// RENDER: Sidebar
+// ================================================================
+function wf_renderSidebar() {
+  const el = document.getElementById('wf-sidebar');
+  let html = '';
+
+  // Tool wf_roles
+  html += '<div class="side-card"><h3>ツールの役割分担</h3>';
+  Object.entries(wf_toolMeta).forEach(([name, m]) => {
+    html += `<div class="tool-role-item">
+      <div class="name" style="color:var(--color-${m.css})">${name}</div>
+      <div class="desc">${m.role} — ${m.desc}</div>
+    </div>`;
+  });
+  html += '</div>';
+
+  // Deploy order
+  html += '<div class="side-card"><h3>社内展開しやすい順番</h3><ol class="deploy-list">';
+  wf_deployOrder.forEach(d => {
+    html += `<li${d.warn ? ' class="warn"' : ''}>${d.text}</li>`;
+  });
+  html += '</ol></div>';
+
+  // Legend
+  html += '<div class="side-card"><h3>判定凡例</h3>';
+  Object.entries(wf_levelLabels).forEach(([key, lv]) => {
+    html += `<div style="margin-bottom:var(--sp-2)"><span class="level-badge ${key}">${lv.icon} ${lv.label}</span></div>`;
+  });
+  html += '</div>';
+
+  el.innerHTML = html;
+}
+
+// ================================================================
+// RENDER: Compare grid (4 wf_roles × current day)
+// ================================================================
+function wf_renderCompare() {
+  const el = document.getElementById('wf-compareGrid');
+  const keys = ['design','maintenance','manager','admin'];
+  const timelines = keys.map(k => wf_roles[k].days[wf_currentDay].timeline);
+  const maxLen = Math.max(...timelines.map(t => t.length));
+
+  let html = '';
+  // headers
+  html += '<div class="cg-header" style="color:var(--color-muted);font-size:var(--fs-xs)">時刻</div>';
+  keys.forEach(k => {
+    html += `<div class="cg-header" style="color:${wf_roles[k].color};border-top:3px solid ${wf_roles[k].color}">${wf_roles[k].label}</div>`;
+  });
+
+  for (let i = 0; i < maxLen; i++) {
+    const time = timelines.map(tl => tl[i]?.time || '').find(t => t) || '';
+    html += `<div class="cg-time">${time}</div>`;
+    timelines.forEach((tl, ki) => {
+      const item = tl[i];
+      if (!item) { html += '<div class="cg-cell"></div>'; return; }
+      const lv = wf_levelLabels[item.level];
+      html += `<div class="cg-cell" style="border-left:3px solid var(--color-${item.level})">
+        <div class="task-name">${item.task}</div>
+        <div class="tool-badges">
+          ${item.tools.length > 0
+            ? item.tools.map(t => `<span class="tool-badge ${wf_toolMeta[t].css}" style="font-size:9px;padding:0 5px" title="${t}">${t}</span>`).join('')
+            : `<span class="level-badge ${item.level}" style="font-size:9px;padding:0 5px">${lv.icon}</span>`}
+        </div>
+        <div class="cg-reason">${item.reason}</div>
+      </div>`;
+    });
+  }
+  el.innerHTML = html;
+}
+
+// ================================================================
+// TOGGLE LOGIC
+// ================================================================
+function wf_setView(view) {
+  wf_currentView = view;
+  document.getElementById('wf-singleView').style.display = view === 'single' ? '' : 'none';
+  document.getElementById('wf-compareView').style.display = view === 'compare' ? '' : 'none';
+  document.getElementById('wf-roleToggle').style.display = view === 'single' ? '' : 'none';
+  document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+}
+
+function wf_setRole(role) {
+  wf_currentRole = role;
+  wf_filterCaution = false;
+  document.querySelectorAll('[data-role]').forEach(b => {
+    const isActive = b.dataset.role === role;
+    b.classList.toggle('active', isActive);
+    if (isActive) { b.style.borderColor = wf_roles[role].color; b.style.color = wf_roles[role].color; b.style.background = `color-mix(in srgb, ${wf_roles[role].color} 10%, transparent)`; }
+    else { b.style.borderColor = ''; b.style.color = ''; b.style.background = ''; }
+  });
+  wf_renderSingle();
+  wf_renderSidebar();
+  if (wf_currentView === 'compare') wf_renderCompare();
+}
+
+function wf_setDay(day) {
+  wf_currentDay = day;
+  wf_filterCaution = false;
+  document.querySelectorAll('[data-day]').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.day) === day);
+  });
+  wf_renderSingle();
+  if (wf_currentView === 'compare') wf_renderCompare();
+}
+
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => wf_setView(b.dataset.view)));
+document.querySelectorAll('[data-role]').forEach(b => b.addEventListener('click', () => wf_setRole(b.dataset.role)));
+document.querySelectorAll('[data-day]').forEach(b => b.addEventListener('click', () => wf_setDay(parseInt(b.dataset.day))));
+
+document.getElementById('wf-wf_filterCautionBtn').addEventListener('click', () => {
+  wf_filterCaution = !wf_filterCaution;
+  wf_renderSingle();
+});
+document.getElementById('wf-filterResetBtn').addEventListener('click', () => {
+  wf_filterCaution = false;
+  wf_renderSingle();
+});
+
+// Bottom tabs
+document.querySelectorAll('.wf-tab-trigger').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.wf-tab-trigger').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelector(`.wf-tab-panel[data-tab="${btn.dataset.tab}"]`).classList.add('active');
+  });
+});
+
+// ================================================================
+// INIT
+// ================================================================
+wf_renderKPI();
+wf_renderSingle();
+wf_renderSidebar();
+wf_renderCompare();
+wf_setView('single');
+wf_setRole('design');
+lucide.createIcons();
+
+// Init
+wf_renderKPI();
+wf_renderSingle();
+wf_renderSidebar();
+wf_renderCompare();
+wf_setView('single');
+wf_setRole('design');
+})();
+
 </script>
 </body>
 </html>
