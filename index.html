@@ -481,6 +481,8 @@ body {
 .plus-minus-list li > span:last-child { min-width: 0; word-break: break-word; }
 .plus { color: var(--color-success); flex-shrink: 0; }
 .minus { color: var(--color-danger); flex-shrink: 0; }
+.tool-sources { margin-top: var(--sp-3); font-size: var(--fs-xs, 0.75rem); color: var(--color-muted); overflow-wrap: anywhere; }
+.tool-sources a { color: inherit; text-decoration: underline; }
 .best-for-box {
   background: rgba(34,211,238,0.05);
   border: 1px solid rgba(34,211,238,0.15);
@@ -2117,7 +2119,11 @@ function renderIdeas() {
 }
 
 function toggleAccordion(el) {
-  const content = el.nextElementSibling;
+  // 呼び出し元は見出し要素を渡す型（用語・概念）と、カード全体を渡す型（ツール・FAQ）が混在する。
+  // 兄弟が .accordion-content でなければ、自分直下→親直下の .accordion-content を開く。
+  const next = el.nextElementSibling;
+  const content = (next && next.classList.contains('accordion-content')) ? next
+    : (el.querySelector(':scope > .accordion-content') || el.parentElement?.querySelector(':scope > .accordion-content'));
   if (!content) return;
   const isOpen = content.classList.contains('open');
   content.classList.toggle('open', !isOpen);
@@ -2280,7 +2286,7 @@ function renderTools() {
       </div>
       <div class="tool-meta">
         ${jpBadge(t.japanese_quality)}
-        <span class="badge badge-muted">$${t.paid_plan}/月（約¥${Math.round(t.paid_plan * 150)}）</span>
+        <span class="badge badge-muted">${t.paid_plan > 0 ? `$${t.paid_plan}/月（約¥${Math.round(t.paid_plan * 150).toLocaleString()}）` : '無料'}</span>
         ${t.main_models.map(m => `<span class="badge badge-muted">${m}</span>`).join('')}
       </div>
       <div class="tool-spec-row">
@@ -2316,6 +2322,7 @@ function renderTools() {
           <div style="margin-top:var(--sp-3)"><button onclick="event.stopPropagation();switchTab(5)" style="background:rgba(0,120,212,0.15);color:#0078d4;border:1px solid rgba(0,120,212,0.3);border-radius:var(--radius-sm);padding:4px 12px;font-size:var(--fs-sm);cursor:pointer;font-family:var(--font-base)">📋 M365 詳細タブへ →</button></div>
         `:''}
         </div>
+        ${(t.sources || []).length ? `<div class="tool-sources">確認日 ${t.checked_at} ・ 出典: ${t.sources.map(u => `<a href="${u}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${new URL(u).hostname.replace(/^www\./, '')}</a>`).join(' / ')}</div>` : ''}
       </div>
     </div>
   `).join('');
