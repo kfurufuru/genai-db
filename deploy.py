@@ -52,6 +52,11 @@ def validate(var, items):
                 sys.exit(f"ERROR: tools.json {t['name']!r} paid_plan は数値（無料は 0）")
             if not t["sources"]:
                 sys.exit(f"ERROR: tools.json {t['name']!r} sources が空（出典なしの記述は載せない）")
+            bad = [u for u in t["sources"] if not re.fullmatch(r"https://[^\s（）()]+", u)]
+            if bad:
+                sys.exit(f"ERROR: tools.json {t['name']!r} sources に URL 以外が混入: {bad}")
+            if t.get("evidence", "page") not in ("page", "search_excerpt"):
+                sys.exit(f"ERROR: tools.json {t['name']!r} evidence は page / search_excerpt のみ")
 
 
 def render(html):
