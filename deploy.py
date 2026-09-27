@@ -7,8 +7,17 @@
     python deploy.py --export  # index.html の埋め込みデータ → data/*.json（移行・復旧用）
 
 公開は main へのマージで GitHub Pages が行う。このスクリプトは git 操作をしない。
+
+公開前の禁止語チェック（実名・勤務先等）:
+  生成結果を secretary-portal（非公開）の scripts/sanitize_public_html.py で検査し、
+  1件でも残れば index.html を書かずに止める。禁止語リストはこのリポジトリに書かない
+  （公開リポジトリに書けば、リスト自体が漏洩になる。短い語はハッシュ化しても総当たりで戻る）。
+  サニタイザの場所: 環境変数 GENAI_DB_SANITIZER、無ければ ../secretary-portal/scripts/。
+  見つからなければ検査不能として停止する（黙って素通りさせない）。
 """
+import importlib.util
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -59,6 +68,29 @@ def validate(var, items):
                 sys.exit(f"ERROR: tools.json {t['name']!r} evidence は page / search_excerpt のみ")
 
 
+SANITIZER = Path(os.environ.get(
+    "GENAI_DB_SANITIZER",
+    ROOT.parent / "secretary-portal" / "scripts" / "sanitize_public_html.py"))
+
+
+def pii_check(text):
+    """禁止語が残っていれば停止する。検査器が無い・壊れている場合も停止（fail-closed）。"""
+    if not SANITIZER.is_file():
+        sys.exit(f"ERROR: 禁止語チェッカーが見つからない: {SANITIZER}\n"
+                 "  secretary-portal を隣に clone するか、GENAI_DB_SANITIZER にパスを指定すること")
+    spec = importlib.util.spec_from_file_location("sanitize_public_html", SANITIZER)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    # 正対照: 検出器が生きていなければ「0件」は信用できない
+    if mod.self_test() != 0:
+        sys.exit("ERROR: 禁止語チェッカーの self-test 失敗（検出器故障）")
+    hits = mod.scan_with_shadow(text)
+    if hits:
+        for pat, label, ln, ctx in hits:
+            print(f"[FAIL] {label}: L{ln} …{ctx}…")
+        sys.exit(f"ERROR: 公開前の禁止語チェックで {len(hits)} 件検出。index.html は書き込んでいない")
+
+
 def render(html):
     for var, fname in TARGETS:
         path = DATA / fname
@@ -92,6 +124,7 @@ def main():
         export(html)
         return
     out = render(html)
+    pii_check(out)
     if args == ["--check"]:
         if out != html:
             print("DRIFT: data/*.json と index.html が一致しない。python deploy.py を実行して commit すること")
