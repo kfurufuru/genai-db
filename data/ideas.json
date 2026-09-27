@@ -1,0 +1,140 @@
+[
+  {
+    "id": "idea_001",
+    "title": "現場巡回メモを音声→報告書に自動変換",
+    "category": "日常応用",
+    "tool": "Claude",
+    "industry": "製造業",
+    "summary": "Dairy Queenの雑音環境音声認識を応用し、工場巡回中のスマホ音声メモをそのままAI処理で点検報告書に変換する仕組みを個人ワークフローに即投入できる。",
+    "hypothesis": "複数マイクで環境雑音を処理する設計思想は、ポンプ室や配電盤室レベルの騒音下でも機能する。現状の巡回後テキスト入力に要する平均30分/回を、Claude APIへの音声テキスト投入＋テンプレ出力で5分に圧縮できる見込み。",
+    "action": "明日の巡回でiPhoneボイスメモを使い、確認事項を口頭記録→帰着後にWhisper APIかClaude.aiに貼り付けて点検報告書フォーマット変換を1回実験する。",
+    "source_news": [
+      {
+        "title": "Dairy Queen is putting an AI chatbot in its drive-thrus",
+        "url": "https://www.theverge.com/ai-artificial-intelligence/913928/dairy-queen-ai-drive-thru-presto"
+      },
+      {
+        "title": "Adding a new content type to my blog-to-newsletter tool",
+        "url": "https://simonwillison.net/guides/agentic-engineering-patterns/adding-a-new-content-type/#atom-everything"
+      }
+    ],
+    "persona_tag": "ホリエモン視点",
+    "status": "案",
+    "added_date": "2026-04-19"
+  },
+  {
+    "id": "idea_002",
+    "title": "電気設計書の自動ドキュメント化で工数60%削減",
+    "category": "仕事好転",
+    "tool": "Claude",
+    "industry": "製造業",
+    "summary": "OpenAI CodexとClaude Codeを組み合わせ、CADデータ・仕様書・点検記録から設備台帳・変更履歴ドキュメントを自動生成するパイプラインを電計チーム内に構築できる。",
+    "hypothesis": "Codexのコンピュータ操作機能とGit風変更追跡を組み合わせると、電気図面の改訂履歴・計装ループ仕様の変更差分をAIが自動記述できる。設備変更時の書類作成に要する平均工数（推定4h/件）を1.5hに圧縮できる構成が今日から試作可能。",
+    "action": "今週中にClaude.aiで「既存の設備仕様書テキスト」を貼り付け、「変更前後の差分を設備台帳フォーマットで出力せよ」プロンプトを試作し、精度を5段階評価してチームに共有する。",
+    "source_news": [
+      {
+        "title": "OpenAI's big Codex update is a direct shot at Claude Code",
+        "url": "https://www.theverge.com/ai-artificial-intelligence/913034/openai-codex-updates-use-macos"
+      },
+      {
+        "title": "Claude system prompts as a git timeline",
+        "url": "https://simonwillison.net/2026/Apr/18/extract-system-prompts/#atom-everything"
+      }
+    ],
+    "persona_tag": "落合陽一視点",
+    "status": "案",
+    "added_date": "2026-04-19"
+  },
+  {
+    "id": "idea_003",
+    "title": "AIは「雑音」と「差分」で精度が決まる",
+    "category": "驚き発見",
+    "tool": "Claude",
+    "industry": "横断",
+    "summary": "ドライブスルーの雑音処理とClaudeのプロンプト差分追跡は、本質的に同じ問題——ノイズから意味を抽出する精度戦——だった。",
+    "hypothesis": "Dairy Queenの複数マイク雑音処理とClaude 4.6→4.7のプロンプト差分管理は、一見無関係だが「不要情報を除去して意図を確定させる」という同一構造を持つ。製造現場の音声コマンド精度とAIモデル仕様変更リスクは、同じ「差分管理フレームワーク」で統一評価できる。",
+    "action": "今日15分でClaude 4.6→4.7の公開差分を読み、自社で使っているプロンプトの影響箇所を3点リストアップしてSlackに投稿する。",
+    "source_news": [
+      {
+        "title": "Dairy Queen is putting an AI chatbot in its drive-thrus",
+        "url": "https://www.theverge.com/ai-artificial-intelligence/913928/dairy-queen-ai-drive-thru-presto"
+      },
+      {
+        "title": "Changes in the system prompt between Claude Opus 4.6 and 4.7",
+        "url": "https://simonwillison.net/2026/Apr/18/opus-system-prompt/#atom-everything"
+      }
+    ],
+    "persona_tag": "マンガー視点",
+    "status": "案",
+    "added_date": "2026-04-19"
+  },
+  {
+    "id": "idea_004",
+    "title": "学習ログをGit差分で可視化して定着率3倍",
+    "category": "個人成長",
+    "tool": "Claude",
+    "industry": "横断",
+    "summary": "Claudeのプロンプト変更をGitタイムライン化する手法を自分の学習ノートに適用すると、「何をいつ理解したか」の差分が可視化され、脳の記憶定着メカニズムと直結する。",
+    "hypothesis": "脳科学的に記憶は「差分情報」に強く反応する（予測誤差学習）。Gitのdiff表示は「以前の自分との差分」を構造化するため、間隔反復より高密度に記憶回路を刺激できる。週次でObsidianノートをGit管理すれば、自分の思考進化を定量追跡できる。",
+    "action": "今夜ObsidianフォルダをGit initし、今週学んだ技術メモを初回コミット。来週同じファイルを更新してgit diffで自分の理解進化を確認するルーティンを設定する。",
+    "source_news": [
+      {
+        "title": "Claude system prompts as a git timeline",
+        "url": "https://simonwillison.net/2026/Apr/18/extract-system-prompts/#atom-everything"
+      },
+      {
+        "title": "Changes in the system prompt between Claude Opus 4.6 and 4.7",
+        "url": "https://simonwillison.net/2026/Apr/18/opus-system-prompt/#atom-everything"
+      }
+    ],
+    "persona_tag": "池谷裕二視点",
+    "status": "案",
+    "added_date": "2026-04-19"
+  },
+  {
+    "id": "idea_005",
+    "title": "プロンプト変更をCIテストで自動検証する",
+    "category": "Claude Code改善",
+    "tool": "Claude",
+    "industry": "横断",
+    "summary": "Claude 4.6→4.7差分をGit管理し、モデル更新のたびに既存業務プロンプトの出力品質を自動テストするCIパイプラインを構築すれば、AIツール信頼性評価が属人化から脱却できる。",
+    "hypothesis": "システムプロンプト変更追跡をGitで行う手法と、Agentic Engineeringのプロンプト最適化パターンを組み合わせると、「モデル更新→業務影響評価→プロンプト修正」のサイクルを48時間以内で回せる自動化基盤になる。手動確認では見落とす微細な挙動変化を数値で捕捉できる。",
+    "action": "今日GitHub Actionsの無料枠でリポジトリを作成し、現在使用中のClaudeプロンプト3本を登録、期待出力サンプルとのコサイン類似度チェックスクリプトを30行以内で実装する。",
+    "source_news": [
+      {
+        "title": "Adding a new content type to my blog-to-newsletter tool",
+        "url": "https://simonwillison.net/guides/agentic-engineering-patterns/adding-a-new-content-type/#atom-everything"
+      },
+      {
+        "title": "Claude system prompts as a git timeline",
+        "url": "https://simonwillison.net/2026/Apr/18/extract-system-prompts/#atom-everything"
+      }
+    ],
+    "persona_tag": "落合陽一視点",
+    "status": "案",
+    "added_date": "2026-04-19"
+  },
+  {
+    "id": "idea_006",
+    "title": "ファストフードのアップセルAIが化学プラント保全を革新",
+    "category": "クロスドメイン",
+    "tool": "Claude",
+    "industry": "製造業",
+    "summary": "Dairy Queenが実装するAI推奨アップセル機能と、Google PhotosのコンテキストAI生成を掛け合わせると、設備点検時に「次に確認すべき箇所」を過去データから自動推奨する保全AIが設計できる。",
+    "hypothesis": "ドライブスルーの「注文文脈から次の商品を推奨」するロジックは、「今回の点検異常値から次に劣化する可能性の高い設備を推奨」する保全ロジックと完全に同型。さらにGoogle PhotosのビジュアルコンテキストAIは、設備写真から劣化パターンを視覚的に提案する機能に転用可能。両者を組み合わせると保全業務に「レコメンドエンジン」が誕生する。",
+    "action": "今日30分で、過去2年の点検記録から「異常検出→次に異常が出た設備」の連鎖パターンを10件手作業で抽出し、Claudeに「このパターンからレコメンドロジックを設計せよ」と投げてプロトタイプ仕様を得る。",
+    "source_news": [
+      {
+        "title": "Dairy Queen is putting an AI chatbot in its drive-thrus",
+        "url": "https://www.theverge.com/ai-artificial-intelligence/913928/dairy-queen-ai-drive-thru-presto"
+      },
+      {
+        "title": "Gemini can now pull from Google Photos to generate personalized images",
+        "url": "https://www.theverge.com/tech/913202/gemini-personal-intelligence-images-nano-banana"
+      }
+    ],
+    "persona_tag": "マンガー視点",
+    "status": "案",
+    "added_date": "2026-04-19"
+  }
+]
