@@ -61,7 +61,9 @@ def validate(var, items):
                 sys.exit(f"ERROR: tools.json {t['name']!r} paid_plan は数値（無料は 0）")
             if not t["sources"]:
                 sys.exit(f"ERROR: tools.json {t['name']!r} sources が空（出典なしの記述は載せない）")
-            bad = [u for u in t["sources"] if not re.fullmatch(r"https://[^\s（）()]+", u)]
+            # href 属性に入るため、HTML で意味を持つ文字（" ' < > ` と空白・括弧）は URL として認めない
+            bad = [u for u in t["sources"]
+                   if not re.fullmatch(r"https://[A-Za-z0-9._~:/?#\[\]@!$&*+,;=%-]+", u)]
             if bad:
                 sys.exit(f"ERROR: tools.json {t['name']!r} sources に URL 以外が混入: {bad}")
             if t.get("evidence", "page") not in ("page", "search_excerpt"):
@@ -99,7 +101,9 @@ def render(html):
         pat = line_pattern(var)
         if len(pat.findall(html)) != 1:
             sys.exit(f"ERROR: index.html に const {var} の1行宣言がちょうど1つ見つからない")
-        payload = json.dumps(items, ensure_ascii=False)
+        # インライン <script> 内に置くため、</script> による脱出と JS の行終端文字を無害化する（JSON の値は不変）
+        payload = (json.dumps(items, ensure_ascii=False)
+                   .replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029"))
         html = pat.sub(lambda m: m.group(1) + payload + ";" + m.group(3), html)
     return html
 
