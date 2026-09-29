@@ -6,240 +6,483 @@
     "icon_label": "GPT",
     "japanese_quality": "◎",
     "paid_plan": 20,
-    "main_models": ["GPT-4o", "GPT-4o mini", "o1", "o3-mini"],
-    "context_window": "128,000トークン（GPT-4o）",
-    "free_tier": "GPT-4o mini無制限・GPT-4o制限付き・画像生成DALL·E制限付き",
+    "main_models": [
+      "GPT-5.6 Sol",
+      "GPT-5.6 Luna",
+      "GPT-6 Sol（Work/Codex）",
+      "GPT-6 Pro（Pro以上）"
+    ],
+    "context_window": "公式値の記載なし（Chatタブ）。長文はWork/Codexで対応",
+    "free_tier": "GPT-5.6 Luna を利用上限付きで無料。画像生成・Codexも上限付きで利用可。最安の有料はGo（月$8）",
     "strengths": [
-      "最大のユーザー数・事例数で情報が豊富",
-      "日本語品質が非常に高い（◎）",
-      "DALL·E画像生成・音声入出力・Python実行（Code Interpreter）を1サービスで提供",
-      "GPTs（カスタムAI）でチーム用AIを作成・共有可能",
-      "o1・o3など推論特化モデルで複雑な計算・論理問題に強い"
+      "汎用性の高さ・幅広いタスク対応",
+      "ChatGPT Work：調査から文書・表・スライド作成まで多段タスクを代行",
+      "Codex：コーディングエージェント（全プランで利用可・上限はプラン別）",
+      "画像生成（ChatGPT Images・全プラン）",
+      "Thinkingスライダーで推論量を調整（Instant〜Extra High）"
     ],
     "weaknesses": [
-      "有料プラン（$20/月）が必要な機能が多い",
-      "API利用は別途APIキー課金が必要",
-      "商用データ保護はEnterprise/Teamプランのみ",
-      "最新情報の更新頻度に遅延あり（カットオフあり）"
+      "無料・Goは軽量モデル（GPT-5.6 Luna）中心。上位モデルとWorkはPlus以上",
+      "長文コンテキストはWork/Codexタブのみ（Chatタブは非対応）",
+      "カスタムGPTsは2026年12月11日に廃止予定（個人は新規作成不可）"
     ],
-    "best_for": "汎用的な業務支援・文書作成・データ分析・コード生成・画像生成まで幅広くカバー。製造業での日常的なAI活用の入門として最適。"
+    "best_for": "汎用アシスタントとして最多ユーザー実績。Plus（月$20）でGPT-5.6 SolとChatGPT Workが使え、報告書・表・スライドまで一気通貫で作れる。GPTsで作った社内ツールは12月の廃止前に移行計画が必要。",
+    "checked_at": "2026-09-27",
+    "evidence": "search_excerpt",
+    "sources": [
+      "https://help.openai.com/en/articles/20001354-gpt-56-and-gpt-6-pro-in-chatgpt",
+      "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+      "https://help.openai.com/en/articles/11989085-what-is-chatgpt-go",
+      "https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus",
+      "https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex",
+      "https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan",
+      "https://help.openai.com/en/articles/11084440-images-in-chatgpt",
+      "https://help.openai.com/en/articles/20001519-custom-gpt-retirement-and-migration-faq"
+    ]
   },
   {
     "name": "Claude",
     "provider": "Anthropic",
     "color": "#d97706",
-    "icon_label": "Cld",
+    "icon_label": "CLN",
     "japanese_quality": "◎",
     "paid_plan": 20,
-    "main_models": ["Claude 3.5 Sonnet", "Claude 3.5 Haiku", "Claude 3 Opus"],
-    "context_window": "200,000トークン（最大）",
-    "free_tier": "Claude 3.5 Haiku（軽量モデル）制限付き無料",
+    "main_models": [
+      "Claude Opus 5.5",
+      "Claude Sonnet 5",
+      "Claude Fable 5.1",
+      "Claude Haiku 4.5"
+    ],
+    "context_window": "1M tokens（有料プランのOpus 5.5／Sonnet 5／Fable 5.1。その他は200K）",
+    "free_tier": "Sonnet・Haikuを利用上限付きで使用可。Web検索・ファイル作成も可",
     "strengths": [
-      "200,000トークンの超大コンテキストウィンドウ（A4で約150ページ）",
-      "長文文書の読み込み・要約・分析に最強クラス",
-      "文章生成の自然さ・論理構造が競合比で高品質",
-      "安全性重視設計（Constitutional AI）",
-      "Claude Code（コーディングエージェント）が業界評価高"
+      "超長文ドキュメントの読解・要約（有料プランのOpus 5.5／Sonnet 5／Fable 5.1は1M tokens）",
+      "Adaptive Thinking（思考量をモデルが自動調整）による推論",
+      "論理的な長文生成・技術レポート作成",
+      "Claude Cowork：ファイル操作・ブラウザ操作・Excel/PowerPoint作成・定期実行を行うエージェント",
+      "Claude Code：全有料プランに付属のコーディングエージェント"
     ],
     "weaknesses": [
-      "画像生成機能なし",
-      "ウェブ検索機能は限定的（2025年時点）",
-      "GPTsのような第三者製カスタムAIエコシステムが小さい",
-      "日本国内での認知度がChatGPT比で低い"
+      "画像生成機能なし（図表・SVGの作成は可）",
+      "無料枠ではClaude Code・Cowork・Research・Chrome拡張が使えない"
     ],
-    "best_for": "長大な技術文書・仕様書・報告書の読み込み・要約・分析。設備仕様検討資料や保全マニュアル全体を一度に参照させたい場面で圧倒的強み。"
+    "best_for": "仕様書・規格書・保全マニュアルなど超長文の読み込みと分析に強い。Coworkでローカルファイルを使った多段の事務作業（Excel・PowerPoint作成含む）を任せられ、Claude Codeでデータ処理の自動化もできる。",
+    "checked_at": "2026-09-27",
+    "evidence": "page",
+    "sources": [
+      "https://claude.com/pricing",
+      "https://platform.claude.com/docs/en/about-claude/models/overview",
+      "https://support.claude.com/en/articles/8606394-how-large-is-the-context-window-on-paid-claude-plans",
+      "https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork",
+      "https://support.claude.com/en/articles/9002504-can-claude-produce-images"
+    ]
   },
   {
     "name": "Gemini",
-    "provider": "Google DeepMind",
+    "provider": "Google",
     "color": "#4285f4",
-    "icon_label": "Gem",
-    "japanese_quality": "◎",
-    "paid_plan": 20,
-    "main_models": ["Gemini 1.5 Pro", "Gemini 2.0 Flash", "Gemini Ultra"],
-    "context_window": "1,000,000トークン（Gemini 1.5 Pro）",
-    "free_tier": "Gemini 1.5 Flash制限付き・Google Workspace統合（制限あり）",
+    "icon_label": "GMN",
+    "japanese_quality": "○",
+    "paid_plan": 19.99,
+    "main_models": [
+      "Gemini 3.1 Pro",
+      "Gemini 3.8 Flash",
+      "Gemini 3.5 Flash"
+    ],
+    "context_window": "1M tokens（Google AI Pro以上）",
+    "free_tier": "Flash系モデルを計算量ベースの上限付きで無料（5時間ごとに回復・週上限あり）。最安の有料はAI Plus（月$7.99）",
     "strengths": [
-      "100万トークンのコンテキストウィンドウ（業界最大水準）",
-      "Google検索との深い統合でリアルタイム情報を参照可能",
-      "Google Workspace（Gmail・Drive・Docs・Sheets）との統合",
-      "NotebookLMと組み合わせた社内文書活用が強力",
-      "動画・音声・画像のマルチモーダル処理能力が高い"
+      "Google Workspace との深い統合",
+      "マルチモーダル処理（画像・動画・音声）",
+      "1Mトークンのコンテキスト（Google AI Pro以上）",
+      "Deep Research（多数のソースを横断調査してレポート化）",
+      "Gemini Agent／Gemini Spark による多段タスクの代行"
     ],
     "weaknesses": [
-      "Google Workspaceを使っていない場合の恩恵が限定的",
-      "API品質・安定性はOpenAI比でやや劣るとの評価あり",
-      "企業向けデータ保護ポリシーの透明性が競合比で劣るとの指摘"
+      "長文生成の一貫性がClaudeより劣る場面あり",
+      "日本語での細かいニュアンス表現がやや不安定",
+      "Chromeの自動ブラウズは米国限定のプレビュー"
     ],
-    "best_for": "Google Workspaceユーザー・長大な動画や文書（100万トークン級）の処理・リアルタイム情報検索が必要な調査業務。NotebookLMとの組み合わせが特に優秀。"
+    "best_for": "Google WorkspaceユーザーはGmailやDocsと直結。Google AI Pro（月$19.99）で3.1 Pro・Deep Research・1Mコンテキストが使える。動画・音声を含むマルチモーダル情報整理にも強み。",
+    "checked_at": "2026-09-27",
+    "evidence": "search_excerpt",
+    "sources": [
+      "https://gemini.google/subscriptions/",
+      "https://blog.google/products-and-platforms/products/google-one/google-ai-subscriptions/",
+      "https://support.google.com/gemini/answer/16275805?hl=en",
+      "https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/",
+      "https://blog.google/innovation-and-ai/products/gemini-app/next-evolution-gemini-app/"
+    ]
   },
   {
     "name": "Copilot",
     "provider": "Microsoft",
     "color": "#0078d4",
-    "icon_label": "Co.",
-    "japanese_quality": "◎",
+    "icon_label": "COP",
+    "japanese_quality": "○",
     "paid_plan": 30,
-    "main_models": ["GPT-4o", "o1"],
-    "context_window": "128,000トークン",
-    "free_tier": "copilot.microsoft.com で無料利用可（機能制限あり）",
+    "main_models": [
+      "GPT-5.X（Microsoft経由）",
+      "Anthropic Claude（一部機能でモデル選択可）"
+    ],
+    "context_window": "非公開",
+    "free_tier": "Microsoft Copilot（無料版）を利用可（制限あり）。個人向けはMicrosoft 365 Personal等に付属",
     "strengths": [
-      "Microsoft 365（Word・Excel・Teams・Outlook）に直接統合",
-      "SharePoint・OneDriveの社内データを参照して回答",
-      "商用データ保護（M365有償プランでは学習に使用されない）",
-      "Azure OpenAI Serviceベースで企業グレードの信頼性",
-      "Teams会議の自動文字起こし・要約・アクションアイテム抽出"
+      "Microsoft 365 との完全統合（Word/Excel/PowerPointのAgent Mode）",
+      "企業向けセキュリティ・コンプライアンス対応",
+      "Web検索によるリアルタイム情報取得",
+      "社内データ連携（SharePoint・OneDrive）＋Researcher/Analystエージェント"
     ],
     "weaknesses": [
-      "Microsoft 365ライセンスが必須（追加費用あり）",
-      "Microsoft 365外での用途は他ツール比で弱い",
-      "カスタマイズ性・プロンプト自由度がChatGPT比で低い",
-      "追加コスト（+¥4,500/月/人）がある程度の規模になると大きな予算"
+      "業務データ連携はM365 Copilotライセンス（有償アドオン）が前提",
+      "プログラミング特化タスクは他に劣る"
     ],
-    "best_for": "すでにMicrosoft 365を使っている製造業組織での業務効率化。Word稟議書・Excel集計・Teams議事録・Outlookメール返信を一気通貫でAI支援できる。"
+    "best_for": "Microsoft 365環境が整っている企業では最も導入摩擦が少ない。Outlookでのメール下書き・ExcelのAgent Modeでのデータ分析に即戦力。",
+    "checked_at": "2026-09-27",
+    "evidence": "page",
+    "sources": [
+      "https://www.microsoft.com/en-us/microsoft-365-copilot/pricing",
+      "https://www.microsoft.com/ja-jp/microsoft-365-copilot/pricing/enterprise",
+      "https://www.microsoft.com/ja-jp/microsoft-365-copilot/pricing/individuals"
+    ]
+  },
+  {
+    "name": "Microsoft Copilot Studio",
+    "provider": "Microsoft",
+    "color": "#742774",
+    "icon_label": "CPS",
+    "japanese_quality": "○",
+    "paid_plan": 30,
+    "main_models": [
+      "GPT-5（Microsoft経由）",
+      "Anthropic Claude（選択可）"
+    ],
+    "context_window": "非公開",
+    "free_tier": "M365 Copilotライセンス保有者は社内向けエージェントを追加費用なしで作成可",
+    "strengths": [
+      "ノーコード・自然言語でエージェントを作成（プログラミング不要）",
+      "1,400以上のコネクタで社内システム・SharePoint・Teamsと連携",
+      "業務プロセスを自律実行するエージェント",
+      "Power Platform管理センターで作成・共有権限とデータ保護を統制"
+    ],
+    "weaknesses": [
+      "外部公開や大量利用はCopilot Credit課金（容量パック$200/月等）で費用が読みにくい",
+      "Microsoft 365／Power Platform環境が前提"
+    ],
+    "best_for": "設備保全の社内ヘルプデスク化。SharePointの点検手順書・過去の故障報告書を読ませたエージェントをTeamsに置き、「3号ポンプの異音、過去の対処は？」に即答させる。M365 Copilot導入済みなら追加費用なしで試せる。",
+    "checked_at": "2026-09-27",
+    "evidence": "page",
+    "sources": [
+      "https://www.microsoft.com/en-us/microsoft-365-copilot/pricing/copilot-studio",
+      "https://www.microsoft.com/en-us/microsoft-365-copilot/microsoft-copilot-studio"
+    ]
   },
   {
     "name": "Perplexity",
     "provider": "Perplexity AI",
     "color": "#20b2aa",
-    "icon_label": "Prx",
-    "japanese_quality": "○",
+    "icon_label": "PPX",
+    "japanese_quality": "△",
     "paid_plan": 20,
-    "main_models": ["Sonar Large（Llama 3.1ベース）", "Claude 3.5 Sonnet", "GPT-4o"],
-    "context_window": "128,000トークン",
-    "free_tier": "無料枠あり（回数制限・Pro機能制限）",
+    "main_models": [
+      "Sonar（自社モデル）",
+      "GPT・Claude・Gemini等の他社モデル（Proで選択可）"
+    ],
+    "context_window": "非公開",
+    "free_tier": "主要モデルを週単位の利用上限つきで無料利用可",
     "strengths": [
-      "リアルタイムWeb検索統合が強力で最新情報に強い",
-      "情報源（URL）を必ず明示するため信頼性確認が容易",
-      "技術調査・競合調査・市場調査に最適",
-      "複数モデルを切り替えて使えるPro機能",
-      "「Spaces」機能で社内文書アップロードしてRAG的活用可能"
+      "リアルタイムWeb検索＋回答の出典明示",
+      "情報の信頼性確認が容易",
+      "最新ニュース・技術動向の把握に最速",
+      "複数モデル選択＋Model Councilで回答比較",
+      "Perplexity Computer：アプリ連携で多段タスクを実行するエージェント（Pro）"
     ],
     "weaknesses": [
-      "長文生成・文書作成は他ツール比でやや弱い",
-      "日本語品質は◎に近いが若干の差あり",
-      "チャット会話の継続性が他ツール比で弱い"
+      "長文生成・文書作成は専用LLMに劣る",
+      "日本語コンテンツのソース品質にばらつきあり"
     ],
-    "best_for": "技術情報・業界動向・最新規格の調査。「この技術の最新動向は？」「この設備の市場トレンドは？」など情報収集・リサーチ用途に特化して使うのが最効率。"
+    "best_for": "技術情報・規格・市場動向の最新情報収集に特化。調査業務の起点として使い、深掘りは他のLLMに渡すフローが最適。",
+    "checked_at": "2026-09-27",
+    "evidence": "search_excerpt",
+    "sources": [
+      "https://www.perplexity.ai/hub/pricing",
+      "https://www.perplexity.ai/help-center/en/articles/10354919-what-advanced-ai-models-are-included-in-my-subscription",
+      "https://www.perplexity.ai/help-center/en/articles/11680686-perplexity-max"
+    ]
   },
   {
     "name": "Grok",
-    "provider": "xAI（Elon Musk）",
-    "color": "#1da1f2",
-    "icon_label": "Grk",
-    "japanese_quality": "○",
-    "paid_plan": 16,
-    "main_models": ["Grok 2", "Grok 3（2025年）"],
-    "context_window": "131,072トークン",
-    "free_tier": "X（旧Twitter）アカウントで基本利用可（制限あり）",
-    "strengths": [
-      "X（Twitter）のリアルタイムデータにアクセスできる唯一のモデル",
-      "最新ニュース・SNSトレンドの取得が得意",
-      "率直・ユーモアのある回答スタイル（ハルシネーションには注意）",
-      "Grok 3でコーディング能力が大幅向上"
-    ],
-    "weaknesses": [
-      "X（Twitter）プレミアム契約が必要なケースあり",
-      "ハルシネーション率が競合比でやや高いとの報告",
-      "日本語精度はChatGPT・Claude比でやや劣る",
-      "企業・商用利用のデータ保護ポリシーが不透明"
-    ],
-    "best_for": "SNS・X上の業界動向・競合情報のリアルタイムモニタリング。製造業での主用途というよりは、X活用者の補助ツールとして位置付けるのが現実的。"
-  },
-  {
-    "name": "Llama",
-    "provider": "Meta（オープンソース）",
-    "color": "#1877f2",
-    "icon_label": "Lla",
+    "provider": "SpaceXAI（旧xAI・2026年2月にSpaceXが買収）",
+    "color": "#1a1a1a",
+    "icon_label": "GRK",
     "japanese_quality": "△",
-    "paid_plan": 0,
-    "main_models": ["Llama 3.3 70B", "Llama 3.1 405B", "Llama 3.2（マルチモーダル）"],
-    "context_window": "128,000トークン（Llama 3.1）",
-    "free_tier": "オープンソース・完全無料（自社サーバー/クラウドでホスティング）",
+    "paid_plan": 30,
+    "main_models": [
+      "Grok 4.7",
+      "Grok 4.6",
+      "Grok 4.5"
+    ],
+    "context_window": "500K tokens（Grok 4.7・API）",
+    "free_tier": "grok.com・アプリで無料利用可（利用上限あり）",
     "strengths": [
-      "完全オープンソース・商用利用可能（Meta Llama Licenseに準拠）",
-      "社内サーバーに完全ローカルデプロイ可能（データが外部に出ない）",
-      "APIコスト無し（自社インフラのみのコスト）",
-      "カスタマイズ・ファインチューニングが自由にできる",
-      "機密性が高い化学・製造業データを扱う際の選択肢"
+      "X（旧Twitter）リアルタイムデータと統合",
+      "長時間のエージェント作業・コーディングに強化（Grok 4.5〜4.7）",
+      "APIは500Kトークンの長文コンテキスト（Grok 4.7）",
+      "リアルタイムWeb検索統合"
     ],
     "weaknesses": [
-      "自社でのインフラ構築・運用コスト（GPU・エンジニア工数）が必要",
-      "英語中心モデルのため日本語品質はGPT-4o比で劣る",
-      "最先端モデルとの性能差は縮まっているが依然存在"
+      "無料版は利用上限が厳しく本格利用はSuperGrok加入が前提",
+      "SuperGrokの価格は公式情報の要約間で食い違いあり（契約前に公式で要確認）",
+      "英語コンテンツが主体"
     ],
-    "best_for": "機密情報を含む社内データをクラウドに出せない企業。化学・製造業の機密保全情報・営業秘密を扱うAI活用を自社インフラ内で完結させたい場合の選択肢。"
+    "best_for": "SNS・リアルタイムニュースの動向把握に特化。Xの最新議論をリアルタイムで参照しながら回答できる点が他LLMにない強み。英語コンテンツが主体。",
+    "checked_at": "2026-09-27",
+    "evidence": "search_excerpt",
+    "sources": [
+      "https://x.ai/news/xai-joins-spacex",
+      "https://x.ai/news/grok-4-7",
+      "https://docs.x.ai/developers/models/grok-4.7",
+      "https://x.ai/pricing",
+      "https://grok.com/plans"
+    ]
   },
   {
-    "name": "NotebookLM",
-    "provider": "Google",
-    "color": "#fbbc04",
-    "icon_label": "NLM",
-    "japanese_quality": "◎",
+    "name": "Llama（Meta）",
+    "provider": "Meta（オープンウェイト）",
+    "color": "#0668e1",
+    "icon_label": "LMA",
+    "japanese_quality": "○",
     "paid_plan": 0,
-    "main_models": ["Gemini 1.5 Pro"],
-    "context_window": "1,500,000トークン相当（ソース格納量）",
-    "free_tier": "完全無料（Google アカウントのみ必要）",
+    "main_models": [
+      "Llama 4 Scout",
+      "Llama 4 Maverick",
+      "Llama 3.3 70B"
+    ],
+    "context_window": "10M tokens（Scout）/ 1M tokens（Maverick）",
+    "free_tier": "モデルウェイト無料公開。API経由ではGroq/Together AI等で低コスト利用可",
     "strengths": [
-      "PDFや文書を最大50件アップロードして横断検索・Q&Aが可能",
-      "アップロード文書のみを根拠として回答（ハルシネーション大幅低減）",
-      "音声ポッドキャスト機能：文書内容をAIが対話形式で解説する音声を自動生成",
-      "引用元（ページ番号付き）を必ず提示するため根拠追跡が容易",
-      "完全無料で使えるRAG相当ツールとして最も手軽"
+      "オープンウェイト・商用利用可（無料・ライセンス条件あり）",
+      "10Mトークンという業界最大級コンテキスト（Scout）",
+      "ローカル環境やオンプレで自由展開可能",
+      "カスタムファインチューニングが容易"
     ],
     "weaknesses": [
-      "アップロードできるのはGoogleドライブ・PDF・Web URL等に限定",
-      "高度なカスタマイズや自動化フローとの統合は難しい",
-      "企業グレードのデータガバナンス（Workspace版は追加設定が必要）"
+      "自前インフラが必要（GPU環境・運用コスト）",
+      "Metaの最新旗艦はMuse Spark（API・自社製品で提供）に移り、Llama 4以降の更新は確認できない"
     ],
-    "best_for": "プログラミング不要で今すぐ試せる社内文書RAG。設備マニュアル・保全手順書・規格文書をアップロードして「このポンプのメンテ周期は？」と質問するだけで活用できる。製造業の技術者に最もおすすめの入門RAGツール。"
+    "best_for": "機密データを外部送信できない社内用途にオンプレ展開で使えるオープンウェイトLLM。LoRAによる社内ドメイン特化が可能。ローカルRAGシステムの基盤として有望。",
+    "checked_at": "2026-09-27",
+    "evidence": "search_excerpt",
+    "sources": [
+      "https://ai.meta.com/blog/llama-4-multimodal-intelligence/",
+      "https://about.fb.com/news/2026/04/introducing-muse-spark-meta-superintelligence-labs/",
+      "https://www.llama.com/"
+    ]
+  },
+  {
+    "name": "Gemini Notebook（旧NotebookLM）",
+    "provider": "Google",
+    "color": "#34a853",
+    "icon_label": "NLM",
+    "japanese_quality": "○",
+    "paid_plan": 0,
+    "main_models": [
+      "Gemini 3.5（バックエンド）"
+    ],
+    "context_window": "無料は最大50ソース、Google AIプランにより最大600ソース（1ソース50万語／200MBまで）",
+    "free_tier": "無料で利用可（1ノートブックあたり最大50ソース等の上限あり）",
+    "strengths": [
+      "アップロードした資料（PDF・Web・YouTube）を根拠に回答",
+      "回答がアップロード資料に根拠づけられ、ハルシネーションを抑制",
+      "Audio Overview機能でポッドキャスト形式の要約を自動生成",
+      "複数資料の横断検索・比較・要約が一括で可能",
+      "ノートブック内でコードを実行し、資料に基づくデータ分析が可能"
+    ],
+    "weaknesses": [
+      "回答は原則ノートブック内の資料に限定（Webソースの探索・追加は手動で選別）",
+      "資料追加・編集はノートブック単位で手動管理が必要",
+      "APIは法人向け（Google Cloud・alpha版）のみで、個人版にはなし"
+    ],
+    "best_for": "規格書・仕様書・技術文書・会議議事録など「手元資料の専門家」として活用。社内文書に特化したRAGを手軽に構築できる。設備投資稟議の根拠整理や電験3種テキスト横断学習にも有効。",
+    "checked_at": "2026-09-27",
+    "evidence": "search_excerpt",
+    "sources": [
+      "https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/",
+      "https://workspaceupdates.googleblog.com/2026/07/notebooklm-now-gemini-notebook.html",
+      "https://support.google.com/gemininotebook/answer/16215270?hl=en",
+      "https://docs.cloud.google.com/gemini/enterprise/notebooklm-enterprise/docs/overview"
+    ]
   },
   {
     "name": "DeepSeek",
-    "provider": "DeepSeek（中国）",
-    "color": "#6366f1",
-    "icon_label": "DS",
+    "provider": "DeepSeek AI（中国）",
+    "color": "#4f46e5",
+    "icon_label": "DSK",
     "japanese_quality": "○",
     "paid_plan": 0,
-    "main_models": ["DeepSeek V3", "DeepSeek R1（推論特化）"],
-    "context_window": "128,000トークン",
-    "free_tier": "chat.deepseek.comで無料利用可・APIは非常に低価格",
+    "main_models": [
+      "DeepSeek-V4.1-Flash",
+      "DeepSeek-V4-Pro",
+      "DeepSeek-V4-Flash（オープンウェイト）"
+    ],
+    "context_window": "1M tokens",
+    "free_tier": "DeepSeek.com・アプリで無料利用可",
     "strengths": [
-      "API価格がGPT-4o比で約1/10〜1/30と圧倒的コスト優位",
-      "R1モデルは推論・数学・コーディングでGPT-o1相当の性能",
-      "オープンソース版のモデルウェイトが公開されている",
-      "技術的な質問・コーディング支援の品質が高い"
+      "数学・科学・コーディングで高精度",
+      "MoEアーキテクチャでAPI料金が極めて安い（V4.1-Flash：出力$0.28/1M tokens）",
+      "オープンウェイト版（V4・MITライセンス）をローカル展開可能",
+      "1Mトークンのコンテキストが標準"
     ],
     "weaknesses": [
-      "中国企業のサービスのため、機密データ入力は企業ポリシー確認が必須",
-      "政治的・社会的センシティブなトピックに検閲があることが判明",
-      "日本語品質は高いが、ビジネス文章のニュアンスはGPT-4o比でやや劣る",
-      "企業での商用利用には法務・情報セキュリティ部門への確認が先決"
+      "データは中国国内サーバに保存され中国法令が適用（個人情報保護委員会が2025年2月に注意喚起）",
+      "機密情報・社内データのAPI送信は要注意（政府機関には業務利用の注意喚起あり）",
+      "企業向けSLAが未整備"
     ],
-    "best_for": "コスト最優先で大量のAPIコールを必要とするシステム開発・PoC段階。ただし機密情報を扱う製造業では情報セキュリティポリシーの確認後に使用すること。"
+    "best_for": "数学・推論・コーディング性能が高く価格が極めて安い。研究・学習・プロトタイプ用途で有効。ただし機密データはクラウド版へ送らず、オープンウェイト版をローカルで使う。",
+    "checked_at": "2026-09-27",
+    "evidence": "search_excerpt",
+    "sources": [
+      "https://api-docs.deepseek.com/quick_start/pricing/",
+      "https://api-docs.deepseek.com/updates/",
+      "https://www.deepseek.com/en/news/deepseek-v4-1-flash/",
+      "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
+      "https://www.ppc.go.jp/news/careful_information/250203_alert_deepseek/"
+    ]
+  },
+  {
+    "name": "Genspark",
+    "provider": "Genspark（MainFunc Inc.）",
+    "color": "#f59e0b",
+    "icon_label": "GSP",
+    "japanese_quality": "△",
+    "paid_plan": 24.99,
+    "main_models": [
+      "Mixture of Agents（GPT-5・Claude・Gemini・Grok等20以上を統合）"
+    ],
+    "context_window": "モデル依存（複数モデルを動的選択）",
+    "free_tier": "無料プランあり（毎日100クレジット付与）",
+    "strengths": [
+      "複数LLMを自動選択・組み合わせる Mixture of Agents 方式",
+      "Sparkpage：調査結果をまとめページとして自動生成",
+      "Super AgentがAIスライド・シート・ドキュメント作成を代行（Office用プラグインあり）",
+      "リアルタイムWeb検索＋複数モデルの回答を統合",
+      "AIブラウザのAutopilotやGenspark ClawでブラウザとPC操作を自動実行"
+    ],
+    "weaknesses": [
+      "技術的な深掘りや長文ドキュメント処理は専用LLMに劣る",
+      "日本語コンテンツのソース品質・応答精度にばらつきあり",
+      "法人向けTeam/Enterpriseプランはあるが、SLA等の詳細は要確認"
+    ],
+    "best_for": "調査・情報収集タスクを複数AIに並列実行させてSparkpageにまとめる用途に特化。市場調査・比較検討など「調べてまとめる」作業の自動化に向く。Plusは月払い$24.99（年払いは月$19.99相当）。",
+    "checked_at": "2026-09-27",
+    "evidence": "search_excerpt",
+    "sources": [
+      "https://www.genspark.ai/helpcenter/membership-plans",
+      "https://www.genspark.ai/helpcenter/team-enterprise-plans",
+      "https://www.genspark.ai/tools/ai-chat",
+      "https://www.genspark.ai/blog/genspark-ai-workspace-4"
+    ]
+  },
+  {
+    "name": "Gemini Enterprise",
+    "provider": "Google",
+    "color": "#1a73e8",
+    "icon_label": "GEnt",
+    "japanese_quality": "○",
+    "paid_plan": 21,
+    "main_models": [
+      "Gemini 3.8 Flash",
+      "Gemini 3.5 Flash",
+      "Gemini 3.1 Pro（プレビュー）"
+    ],
+    "context_window": "公式値未確認（モデル依存）",
+    "free_tier": "なし（各エディションに30日間の無料トライアルあり）",
+    "strengths": [
+      "Google Workspace・Microsoft 365（OneDrive・Outlook・SharePoint）・Jira等のコネクタで社内データを横断検索",
+      "Deep Research・Gemini Notebook などGoogle製エージェントを標準搭載",
+      "Workflow Builder でノーコードのカスタムエージェントを構築",
+      "企業向けセキュリティ（プロンプト・出力をGoogleのモデル学習に使用しない）"
+    ],
+    "weaknesses": [
+      "Business版は最大300席まで。Standard/Plus版は営業経由の契約",
+      "独自・サードパーティエージェントの追加はStandard/Plus版が必要",
+      "日本での価格・データ所在は公式で要確認（掲載価格は米ドル）"
+    ],
+    "best_for": "社内のGoogle Workspace・Microsoft 365双方のデータをAIエージェントが横断検索し、報告書・スライドまで作成できる。M365中心の会社でも選択肢になった。小規模はBusiness（1席月$21〜）、全社展開はStandard/Plus（1席月$30〜）。",
+    "checked_at": "2026-09-27",
+    "evidence": "page",
+    "sources": [
+      "https://cloud.google.com/gemini-enterprise",
+      "https://cloud.google.com/gemini-enterprise/faq"
+    ]
   },
   {
     "name": "Manus",
-    "provider": "Butterfly Effect",
-    "color": "#7c3aed",
+    "provider": "Manus（シンガポール拠点・2025年12月にMeta傘下入り後、独立運営に復帰）",
+    "color": "#6366f1",
     "icon_label": "MNS",
     "japanese_quality": "○",
     "paid_plan": 20,
-    "main_models": ["Claude 3.7 Sonnet", "Gemini 2.5 Pro"],
-    "context_window": "利用モデルに依存",
-    "free_tier": "無料プランあり（300クレジット/日、毎日リセット）",
+    "main_models": [
+      "Manus 1.6 Max",
+      "Manus 1.6",
+      "Manus 1.6 Lite"
+    ],
+    "context_window": "非公開",
+    "free_tier": "無料プランあり（毎日300クレジット・Manus 1.6 Liteのみ・同時実行1タスク）",
     "strengths": [
-      "完全自律型AIエージェント：ブラウジング・コード実行・ファイル操作を自動実行",
-      "GAIAベンチマークでOpenAI Deep Researchを上回るスコアを記録",
-      "タスクをバックグラウンドで非同期実行（離席中でも作業継続）",
-      "旅行計画・調査・レポート作成・Webアプリ構築まで幅広く対応",
-      "日本語での指示・出力に完全対応（UIも日本語化済み）"
+      "ブラウザ・PC操作の自動化（マルチステップタスクを自律実行）",
+      "Web検索・ファイル操作・コード実行を統合した複合タスク処理",
+      "自然言語の指示だけで複数サイト横断の情報収集・整形が可能",
+      "スライド生成・Webサイト作成・定期実行タスクに対応"
     ],
     "weaknesses": [
-      "クレジット消費型課金のため、複雑タスクでコストが予測しにくい",
-      "自律実行のため途中のプロセス確認・修正が難しい",
-      "企業機密データを扱う場合はセキュリティポリシー要確認（外部クラウドサービス）"
+      "ログイン認証が必要なサイトや動的サイトは対応困難な場合あり",
+      "運営体制の変更（Meta買収→独立復帰）に伴い2026年8月に一部ユーザーデータを削除。法人利用は規約・データ所在を要確認"
     ],
-    "best_for": "多段階の調査・分析・資料作成を一括して自動化したい場面。「〇〇についてリサーチしてレポートを作成して」と指示するだけでブラウジング〜文書生成まで自律実行。製造業では設備仕様の市場調査・技術動向レポートの自動生成に活用できる。"
+    "best_for": "複数ステップにまたがるブラウザ操作・データ収集の自動化。「このサイトから情報を集めてExcelにまとめて」という指示だけでエンドツーエンドのタスクを自律実行できる。運営体制が短期間に2度変わったため、業務データを預ける前に規約を確認すること。",
+    "checked_at": "2026-09-27",
+    "evidence": "search_excerpt",
+    "sources": [
+      "https://manus.im/pricing",
+      "https://help.manus.im/en/articles/11711111-what-is-the-current-membership-pricing-for-manus",
+      "https://manus.im/blog/manus-resumes-independent-operations",
+      "https://help.manus.im/en/articles/16147831-service-change-overview-what-s-happening-and-am-i-affected"
+    ]
+  },
+  {
+    "name": "Claude Cowork",
+    "provider": "Anthropic",
+    "color": "#c2410c",
+    "icon_label": "CWK",
+    "japanese_quality": "◎",
+    "paid_plan": 20,
+    "main_models": [
+      "Claude Opus 5.5",
+      "Claude Sonnet 5"
+    ],
+    "context_window": "最大1M tokens（モデルにより異なる）",
+    "free_tier": "なし（Pro・Max・Team・Enterprise の有料プランのみ）",
+    "strengths": [
+      "ターミナル不要でエージェント機能を事務作業に使える",
+      "ローカルファイルを直接読み書き（アップロード不要）",
+      "数式入りExcel・PowerPoint・整形済み文書を自動作成",
+      "定期タスクをクラウドで自動実行（PCの電源オフでも継続）",
+      "Enterprise向けにRBAC・予算上限・Compliance APIを提供"
+    ],
+    "weaknesses": [
+      "無料プランでは使えない",
+      "ローカルセッションの履歴はPC上に保存され、管理者が一元管理できない",
+      "ブラウザ操作・自動承認は社内ルールでの制御が必要"
+    ],
+    "best_for": "月次の保全実績集計の自動化。フォルダ内の点検記録Excel・日報をまとめて読ませ、故障件数・停止時間の集計表と報告用PowerPointを作らせる。定期タスクに登録すれば毎月の手作業がなくなる。",
+    "checked_at": "2026-09-27",
+    "evidence": "page",
+    "sources": [
+      "https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork",
+      "https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans",
+      "https://claude.com/blog/cowork-for-enterprise",
+      "https://claude.com/pricing"
+    ]
   }
 ]
